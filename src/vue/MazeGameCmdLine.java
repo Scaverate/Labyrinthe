@@ -17,18 +17,18 @@ import controler.controlerLocal.MazeGameControler;
  */
 
 /*
-public class ChessGameCmdLine implements Observer{
+public class MazeGameCmdLine implements Observer{
 
-	ChessGameControler chessGameControler;
+	MazeGameControler mazeGameControler;
 
-	public ChessGameCmdLine(ChessGameControler chessGameControler) {
-		this.chessGameControler = chessGameControler;
+	public MazeGameCmdLine(MazeGameControler mazeGameControler) {
+		this.MazeGameControler = mazeGameControler;
 	}
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		
-		System.out.println(chessGameControler.getMessage() + "\n");	
+		System.out.println(mazeGameControler.getMessage() + "\n");	
 
 		List<PieceIHM> piecesIHM = (List<PieceIHM>) arg1;
 
@@ -69,30 +69,30 @@ public class ChessGameCmdLine implements Observer{
 	public void go() {
 
 		System.out.print("\n Déplacement de 3,6 vers 3,4 = ");
-		chessGameControler.move(new Coord(3,6), new Coord(3, 4));	// true
+		mazeGameControler.move(new Coord(3,6), new Coord(3, 4));	// true
 		
 		// dans ce cas, update non appelé et pas d'affichage 
 		// controleur empêche le move car pas le bon joueur
 		System.out.print("\n Déplacement de 3,4 vers 3,6 = ");		
-		chessGameControler.move(new Coord(3,4), new Coord(3, 6));	// false 
+		mazeGameControler.move(new Coord(3,4), new Coord(3, 6));	// false 
 
 		System.out.print("\n Déplacement de 4,1 vers 4,3 = ");
-		chessGameControler.move(new Coord(4, 1), new Coord(4, 3));	// true
+		mazeGameControler.move(new Coord(4, 1), new Coord(4, 3));	// true
 
 		System.out.print("\n Déplacement de 3,4 vers 3,4 = ");
-		chessGameControler.move(new Coord(3, 4), new Coord(3, 4));	// false
+		mazeGameControler.move(new Coord(3, 4), new Coord(3, 4));	// false
 
 		System.out.print("\n Déplacement de 3,4 vers 4,3 = ");
-		chessGameControler.move(new Coord(3, 4), new Coord(4, 3));	// false
+		mazeGameControler.move(new Coord(3, 4), new Coord(4, 3));	// false
 		
 		System.out.print("\n Déplacement de 3,4 vers 3,3 = ");
-		System.out.print(chessGameControler.move(new Coord(3, 4), new Coord(3, 3))); // true	
+		System.out.print(mazeGameControler.move(new Coord(3, 4), new Coord(3, 3))); // true	
 		
 		System.out.print("\n Déplacement de 1,7 vers 2,5 = ");
-		System.out.print(chessGameControler.move(new Coord(1, 7), new Coord(2, 5))); // false	
+		System.out.print(mazeGameControler.move(new Coord(1, 7), new Coord(2, 5))); // false	
 		
 		System.out.print("\n Déplacement de 1,0 vers 2,2 = ");
-		System.out.print(chessGameControler.move(new Coord(1, 0), new Coord(2, 2))); // true
+		System.out.print(mazeGameControler.move(new Coord(1, 0), new Coord(2, 2))); // true
 
 	}
 }

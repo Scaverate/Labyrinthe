@@ -6,7 +6,6 @@ import model.observable.MazeGame;
 
 
 /**
- * @author francoise.perrin
  * 
  * le controleur illustre le DP Strategy vis-à-vis de la Vue
  * 
@@ -27,7 +26,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	}
 
 	/* (non-Javadoc)
-	 * @see controler.ChessGameControlers#move(model.Coord, model.Coord)
+	 * @see controler.MazeGameControlers#move(model.Coord, model.Coord)
 	 * 
 	 * Cette méthode illustre le DP "Template Method" 
 	 * avec une partie commune implémentée dans cette classe
@@ -50,7 +49,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	}
 
 	/* (non-Javadoc)
-	 * @see controler.AbstractChessGameControler#isPlayerOK(model.Coord)
+	 * @see controler.AbstractMazeGameControler#isPlayerOK(model.Coord)
 	 * 
 	 * cette méthode vérifie que la couleur de la pièce que l'utilisateur
 	 * tente de déplacer est bien celle du jeu courant
