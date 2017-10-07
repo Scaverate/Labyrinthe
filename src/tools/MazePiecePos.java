@@ -4,10 +4,10 @@ import model.Coord;
 import model.Couleur;
 
 public enum MazePiecePos {
-	PIONBLEU("PionBLEU", Couleur.BLEU, new Coord[] {new Coord(0,6)}),
-	PIONROUGE("PionROUGE", Couleur.ROUGE, new Coord[] {new Coord(0,0)}),
-	PIONJAUNE("PionJAUNE", Couleur.JAUNE, new Coord[] {new Coord(6,0)}), 
-	PIONVERT("PionVERT", Couleur.VERT, new Coord[] {new Coord(6,6)}); 
+	PIONBLEU("Pion", Couleur.BLEU, new Coord[] {new Coord(0,6)}),
+	PIONROUGE("Pion", Couleur.ROUGE, new Coord[] {new Coord(0,0)}),
+	PIONJAUNE("Pion", Couleur.JAUNE, new Coord[] {new Coord(6,0)}), 
+	PIONVERT("Pion", Couleur.VERT, new Coord[] {new Coord(6,6)}); 
 	public String nom;
 	public Couleur couleur;
 	public Coord[] coords = new Coord[8];  
