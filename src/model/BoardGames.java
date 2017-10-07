@@ -2,7 +2,6 @@ package model;
 
 
 /**
- * @author francoise.perrin
  * 
  * Cette interface défini le comportement attendu 
  * des jeux de plateaux

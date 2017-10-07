@@ -16,7 +16,7 @@ public class MazeGameControler extends AbstractMazeGameControler {
 	}
 
 	/* (non-Javadoc)
-	 * @see controler.AbstractChessGameControler#isPlayerOK(model.Coord)
+	 * @see controler.AbstractMazeGameControler#isPlayerOK(model.Coord)
 	 */
 	@Override
 	public boolean isPlayerOK(Coord initCoord) {
@@ -24,7 +24,7 @@ public class MazeGameControler extends AbstractMazeGameControler {
 	}
 	
 	/* (non-Javadoc)
-	 * @see controler.AbstractChessGameControler#endMove(model.Coord, model.Coord, java.lang.String)
+	 * @see controler.AbstractMazeGameControler#endMove(model.Coord, model.Coord, java.lang.String)
 	 * 
 	 * Pas d'action supplémentaire dans un contrôleur local en fin de move
 	 */

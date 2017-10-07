@@ -6,7 +6,7 @@ import java.util.Map;
 import model.Couleur;
 
 /**
- * Cette classe s'appuie sur ChessPieceImage
+ * Cette classe s'appuie sur MazePieceImage
  * pour fournir les noms des images des pièces
  * qui sont utilisées dans l'IHM 
  *  

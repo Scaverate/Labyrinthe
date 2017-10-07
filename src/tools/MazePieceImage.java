@@ -1,8 +1,6 @@
 package tools;
 
 public enum MazePieceImage {
-	PIONBLANC("PionBLANC", "pion.png"),
-	PIONNOIR("PionNOIR", "pion.png"),
 	PIONBLEU("PionBLEU", "pion_bleu.png"),
 	PIONROUGE("PionROUGE", "pion_rouge.png"),
 	PIONJAUNE("PionJAUNE", "pion_jaune.png"),
