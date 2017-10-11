@@ -37,8 +37,8 @@ public class MazeImageProvider {
 		ret = null;
 		key = pieceType + pieceCouleur.name();
 		value = mapImage.get(key);
-		File g=new File("");
-		ret = g.getAbsolutePath()+"/src/images/" + value;
+		File g = new File("");
+		ret = g.getAbsolutePath()+ "/src/images/" + value;
 		return ret;		
 	}
 }
