@@ -23,12 +23,11 @@ public class MazePiecesFactory {
 	 * @param pieceCouleur
 	 * @return liste de pieces
 	 */
-	public static List<Pieces> newPieces(Couleur pieceCouleur){
-
+	public static List<Pieces> newPieces(Couleur pieceCouleur) {
 		List<Pieces> pieces = null;
 		pieces = new LinkedList<Pieces>();
 
-		if (pieceCouleur != null){
+		if (pieceCouleur != null) {
 			for (int i = 0; i < MazePiecePos.values().length; i++) {
 				if (pieceCouleur.equals(MazePiecePos.values()[i].couleur)) {
 					for (int j = 0; j < (MazePiecePos.values()[i].coords).length; j++) {
