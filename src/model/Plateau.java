@@ -12,6 +12,7 @@ public class Plateau implements BoardGames {
 		jeuJaune = new Jeu(Couleur.JAUNE);
 		jeuCourant = null;
 		message = new String("");
+		this.couloirs = MazeCouloirsFactory.newPieces();
 	}
 	/*
 	 * Changement de joueur en respectant l'ordre des aiguilles d'une montre:
@@ -27,7 +28,7 @@ public class Plateau implements BoardGames {
 		else if(this.jeuCourant == this.jeuVert)
 			this.jeuCourant = this.jeuRouge;
 		else
-			System.out.println("Aucun jeu n'a a été trouvé!");
+			System.out.println("Aucun jeu n'a a ï¿½tï¿½ trouvï¿½!");
 			switch case throw */	
 	}
 	
@@ -49,6 +50,7 @@ public class Plateau implements BoardGames {
 			}
 		}
 		*/
+		canMove = true;
 		
 		return canMove;
 	}
@@ -297,5 +299,5 @@ public class Plateau implements BoardGames {
 	private Jeu jeuVert;
 	private Jeu jeuCourant;
 	private String message;
-
+	private List<Couloirs> couloirs;
 }
