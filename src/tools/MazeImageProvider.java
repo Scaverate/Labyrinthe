@@ -58,13 +58,13 @@ public class MazeImageProvider {
 	 * @param westOpened
 	 * @return nom fichier contenant image de la piece
 	 */
-	public static String getImageFile(String pieceType, int northOpened, int southOpened, int eastOpened, int westOpened){
+	public static String getImageFile(String pieceType, int northOpened, int southOpened, int eastOpened, int westOpened, boolean isGreyTone){
 		String ret, key, value, path;
 		ret = null;
 		key = pieceType + "_" + northOpened + "_" + eastOpened + "_" + southOpened + "_" + westOpened;
 		value = mapImageCouloirs.get(key);
 		File g = new File("");
-		path = "/src/images/couloirs/";
+		path = "/src/images/couloirs/" + (isGreyTone ? "greytone/" : "");
 		ret = g.getAbsolutePath()+ path + value;
 		return ret;
 	}

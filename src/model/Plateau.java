@@ -23,10 +23,11 @@ public class Plateau implements BoardGames {
 				jeuJaune = new Jeu(Couleur.JAUNE);
 				break;
 			default: 
-				System.out.println("La création des jeux a échoué");
+				System.out.println("La crï¿½ation des jeux a ï¿½chouï¿½");
 		}
 		jeuCourant = jeuRouge;
 		message = new String("");
+		this.couloirs = MazeCouloirsFactory.newPieces();
 	}
 	
 	/*
@@ -78,7 +79,6 @@ public class Plateau implements BoardGames {
 				this.jeuCourant = this.jeuBleu;
 			}
 		}
-		
 	}
 	
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
@@ -99,6 +99,7 @@ public class Plateau implements BoardGames {
 			}
 		}
 		*/
+		canMove = true;
 		
 		return canMove;
 	}
@@ -344,5 +345,5 @@ public class Plateau implements BoardGames {
 	private Jeu jeuVert;
 	private Jeu jeuCourant;
 	private String message;
-
+	private List<Couloirs> couloirs;
 }

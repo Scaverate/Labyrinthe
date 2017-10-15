@@ -12,7 +12,7 @@ public interface MazeGameControlers {
 	 */
 	public boolean move(Coord initCoord, Coord finalCoord);
 	
-	public boolean isMoveOk (int xInit, int yInit, int xFinal, int yFinal);
+	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal);
 
 	/**
 	 * @return message relatif aux déplacement, capture, etc.
