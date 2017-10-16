@@ -32,7 +32,7 @@ public class LauncherGUI {
 	
 		dim = new Dimension(700, 700);
 		
-		mazeGame = new MazeGame();
+		mazeGame = new MazeGame(2);
 		mazeGameControler = new MazeGameControler(mazeGame);
 		
 		frame = new MazeGameGUI("Jeu", mazeGameControler,  dim);

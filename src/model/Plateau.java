@@ -5,34 +5,84 @@ import java.util.List;
 
 public class Plateau implements BoardGames {
 	
-	public Plateau(){
-		jeuBleu = new Jeu(Couleur.BLEU);
-		jeuRouge = new Jeu(Couleur.ROUGE);
-		jeuVert = new Jeu(Couleur.VERT);
-		jeuJaune = new Jeu(Couleur.JAUNE);
-		jeuCourant = null;
+	public Plateau(int nbPlayer) {
+		switch (nbPlayer) {
+			case 2 : 
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuBleu = new Jeu(Couleur.BLEU);
+				break;
+			case 3 : 
+				jeuBleu = new Jeu(Couleur.BLEU);
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuJaune = new Jeu(Couleur.JAUNE);
+				break;
+			case 4 :
+				jeuBleu = new Jeu(Couleur.BLEU);
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuVert = new Jeu(Couleur.VERT);
+				jeuJaune = new Jeu(Couleur.JAUNE);
+				break;
+			default: 
+				System.out.println("La création des jeux a échoué");
+		}
+		jeuCourant = jeuRouge;
 		message = new String("");
 	}
+	
 	/*
 	 * Changement de joueur en respectant l'ordre des aiguilles d'une montre:
 	 * Rouge - Jaune - Bleu - Vert - Rouge - Jaune - ...
 	*/
 	public void switchJoueur(){
-		/*if(this.jeuCourant == this.jeuRouge)
-			this.jeuCourant = this.jeuJaune;
-		else if(this.jeuCourant == this.jeuJaune)
-			this.jeuCourant = this.jeuBleu;
-		else if(this.jeuCourant == this.jeuBleu)
-			this.jeuCourant = this.jeuVert;
-		else if(this.jeuCourant == this.jeuVert)
-			this.jeuCourant = this.jeuRouge;
-		else
-			System.out.println("Aucun jeu n'a a été trouvé!");
-			switch case throw */	
+		if(this.jeuCourant == this.jeuRouge) {
+			if(this.jeuJaune != null) { 
+				this.jeuCourant = this.jeuJaune;
+			} 
+			else if(this.jeuBleu != null){
+				this.jeuCourant = this.jeuBleu;
+			}
+			else if(this.jeuVert != null) {
+				this.jeuCourant = this.jeuVert;
+			}			
+		}
+		else if(this.jeuCourant == this.jeuJaune) {
+			if(this.jeuBleu != null) {
+				this.jeuCourant = this.jeuBleu;
+			}
+			else if(this.jeuVert != null) {
+				this.jeuCourant = this.jeuVert;
+			}
+			else if(this.jeuRouge != null) {
+				this.jeuCourant = this.jeuRouge;
+			}			
+		}
+		else if(this.jeuCourant == this.jeuBleu) {
+			if(this.jeuVert != null) {
+				this.jeuCourant = this.jeuVert;
+			}
+			else if (this.jeuRouge != null) {
+				this.jeuCourant = this.jeuRouge;
+			}
+			else if(this.jeuJaune != null) {
+				this.jeuCourant = this.jeuJaune;
+			}
+		}
+		else if(this.jeuCourant == this.jeuVert) {
+			if(this.jeuRouge != null) {
+				this.jeuCourant = this.jeuRouge;
+			}
+			else if(this.jeuJaune != null) {
+				this.jeuCourant = this.jeuJaune;
+			}
+			else if(this.jeuBleu != null) {
+				this.jeuCourant = this.jeuBleu;
+			}
+		}
+		
 	}
 	
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
-		boolean canMove = false;
+		boolean canMove = true;
 		
 		/*
 		boolean pieceHere = false;
@@ -155,14 +205,11 @@ public class Plateau implements BoardGames {
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean hasMoved = false;
 		
-		/*
 		if(this.jeuCourant != null){
 			hasMoved = jeuCourant.move(xInit, yInit, xFinal, yFinal);
 			if(hasMoved){
 			}
 		}
-		*/
-		
 		return hasMoved;
 	}
 
@@ -221,10 +268,10 @@ public class Plateau implements BoardGames {
 		if(this.jeuBleu != null){
 			list2 = this.jeuBleu.getPiecesIHM();
 		}
-		if(this.jeuBleu != null){
+		if(this.jeuJaune != null){
 			list3 = this.jeuJaune.getPiecesIHM();
 		}
-		if(this.jeuBleu != null){
+		if(this.jeuVert != null){
 			list4 = this.jeuVert.getPiecesIHM();
 		}
 		if(list1 != null && listFinale != null){

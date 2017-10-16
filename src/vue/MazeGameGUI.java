@@ -52,11 +52,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeBoard.setLayout( new GridLayout(7, 7) );
 		mazeBoard.setPreferredSize( boardSize );
 		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
-		 
+		mazeBoard.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		for (int i = 0; i < 49; i++) {
 			 JPanel square = new JPanel( new BorderLayout() );
+			 square.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 			 mazeBoard.add( square );
-			 square.setBackground(Color.white);
 		  }		  
 	  }
 	
@@ -149,12 +149,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			  JPanel panel = (JPanel) mazeBoard.getComponent(
 					  7 * piecesIHM.get(i).getY() + piecesIHM.get(i).getX()
 			  );
+			  
 			  panel.add(pieceLabel);
 		}
 		// reset board colors
 		for(int i = 0; i < mazeBoard.getComponents().length; i++){
 			mazeBoard.getComponent(i).setBackground(Color.white);
 		}
+		
+		
 		this.repaint();
 		this.revalidate();
 	 }
