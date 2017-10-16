@@ -15,14 +15,14 @@ public class LauncherCmdLine {
 	
 	public static void main(String[] args) {		
 		
-		ChessGame model;
-		ChessGameControler controler;	
-		ChessGameCmdLine vue;
+		MazeGame model;
+		MazeGameControler controler;	
+		MazeGameCmdLine vue;
 		
-		model = new ChessGame();	
-		controler = new ChessGameControler(model);
+		model = new MazeGame();	
+		controler = new MazeGameControler(model);
 		
-		vue = new ChessGameCmdLine(controler);
+		vue = new MazeGameCmdLine(controler);
 		model.addObserver((Observer) vue);
 		vue.go();
 	}

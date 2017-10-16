@@ -5,23 +5,84 @@ import java.util.List;
 
 public class Plateau implements BoardGames {
 	
-	public Plateau(){
-		/*
-		jeuBlanc = new Jeu(Couleur.BLANC);
-		jeuNoir = new Jeu(Couleur.NOIR);
-		*/
-		jeuCourant = null;
+	public Plateau(int nbPlayer) {
+		switch (nbPlayer) {
+			case 2 : 
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuBleu = new Jeu(Couleur.BLEU);
+				break;
+			case 3 : 
+				jeuBleu = new Jeu(Couleur.BLEU);
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuJaune = new Jeu(Couleur.JAUNE);
+				break;
+			case 4 :
+				jeuBleu = new Jeu(Couleur.BLEU);
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuVert = new Jeu(Couleur.VERT);
+				jeuJaune = new Jeu(Couleur.JAUNE);
+				break;
+			default: 
+				System.out.println("La création des jeux a échoué");
+		}
+		jeuCourant = jeuRouge;
 		message = new String("");
 	}
 	
+	/*
+	 * Changement de joueur en respectant l'ordre des aiguilles d'une montre:
+	 * Rouge - Jaune - Bleu - Vert - Rouge - Jaune - ...
+	*/
 	public void switchJoueur(){
-		/*
-		this.jeuCourant = (this.jeuCourant == this.jeuBlanc ? this.jeuNoir : this.jeuBlanc);
-		*/
+		if(this.jeuCourant == this.jeuRouge) {
+			if(this.jeuJaune != null) { 
+				this.jeuCourant = this.jeuJaune;
+			} 
+			else if(this.jeuBleu != null){
+				this.jeuCourant = this.jeuBleu;
+			}
+			else if(this.jeuVert != null) {
+				this.jeuCourant = this.jeuVert;
+			}			
+		}
+		else if(this.jeuCourant == this.jeuJaune) {
+			if(this.jeuBleu != null) {
+				this.jeuCourant = this.jeuBleu;
+			}
+			else if(this.jeuVert != null) {
+				this.jeuCourant = this.jeuVert;
+			}
+			else if(this.jeuRouge != null) {
+				this.jeuCourant = this.jeuRouge;
+			}			
+		}
+		else if(this.jeuCourant == this.jeuBleu) {
+			if(this.jeuVert != null) {
+				this.jeuCourant = this.jeuVert;
+			}
+			else if (this.jeuRouge != null) {
+				this.jeuCourant = this.jeuRouge;
+			}
+			else if(this.jeuJaune != null) {
+				this.jeuCourant = this.jeuJaune;
+			}
+		}
+		else if(this.jeuCourant == this.jeuVert) {
+			if(this.jeuRouge != null) {
+				this.jeuCourant = this.jeuRouge;
+			}
+			else if(this.jeuJaune != null) {
+				this.jeuCourant = this.jeuJaune;
+			}
+			else if(this.jeuBleu != null) {
+				this.jeuCourant = this.jeuBleu;
+			}
+		}
+		
 	}
 	
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
-		boolean canMove = false;
+		boolean canMove = true;
 		
 		/*
 		boolean pieceHere = false;
@@ -144,14 +205,11 @@ public class Plateau implements BoardGames {
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean hasMoved = false;
 		
-		/*
 		if(this.jeuCourant != null){
 			hasMoved = jeuCourant.move(xInit, yInit, xFinal, yFinal);
 			if(hasMoved){
 			}
 		}
-		*/
-		
 		return hasMoved;
 	}
 
@@ -173,15 +231,18 @@ public class Plateau implements BoardGames {
 	public Couleur getColorCurrentPlayer() {
 		Couleur couleur = null;
 		
-		/*
-		if(this.jeuCourant == this.jeuBlanc){
-			couleur = Couleur.BLANC;
+		if(this.jeuCourant == this.jeuBleu){
+			couleur = Couleur.BLEU;
 		}
-		else{
-			couleur = Couleur.NOIR;
+		else if(this.jeuCourant == this.jeuRouge){
+			couleur = Couleur.ROUGE;
 		}
-		*/
-		
+		else if(this.jeuCourant == this.jeuJaune) {
+			couleur = Couleur.JAUNE;
+		}
+		else if(this.jeuCourant == this.jeuVert) {
+			couleur = Couleur.VERT;
+		}		
 		return couleur;
 	}
 
@@ -192,18 +253,26 @@ public class Plateau implements BoardGames {
 	
 
 	public List<PieceIHMs> getPiecesIHM(){
-		/*
+		
 		List<PieceIHMs> list1 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list2 = new LinkedList<PieceIHMs>();
-		*/
+		List<PieceIHMs>	list3 = new LinkedList<PieceIHMs>();
+		List<PieceIHMs>	list4 = new LinkedList<PieceIHMs>();
+		
 		List<PieceIHMs> listFinale = new LinkedList<PieceIHMs>();
 		
-		/*
-		if(this.jeuBlanc != null){
-			list1 = this.jeuBlanc.getPiecesIHM();
+		
+		if(this.jeuRouge != null){
+			list1 = this.jeuRouge.getPiecesIHM();
 		}
-		if(this.jeuNoir != null){
-			list2 = this.jeuNoir.getPiecesIHM();
+		if(this.jeuBleu != null){
+			list2 = this.jeuBleu.getPiecesIHM();
+		}
+		if(this.jeuJaune != null){
+			list3 = this.jeuJaune.getPiecesIHM();
+		}
+		if(this.jeuVert != null){
+			list4 = this.jeuVert.getPiecesIHM();
 		}
 		if(list1 != null && listFinale != null){
 			listFinale.addAll(list1);
@@ -211,7 +280,13 @@ public class Plateau implements BoardGames {
 		if(list2 != null && listFinale != null){
 			listFinale.addAll(list2);
 		}
-		*/
+		if(list3 != null && listFinale != null){
+			listFinale.addAll(list3);
+		}
+		if(list4 != null && listFinale != null){
+			listFinale.addAll(list4);
+		}
+		
 		
 		return listFinale;
 	}
@@ -219,16 +294,22 @@ public class Plateau implements BoardGames {
 	public Couleur getJeuCourant(){
 		Couleur couleur = null;
 		
-		/*
+		
 		if(this.jeuCourant != null){
-			if(this.jeuCourant == jeuBlanc){
-				couleur = Couleur.BLANC;
+			if(this.jeuCourant == jeuBleu){
+				couleur = Couleur.BLEU;
 			}
-			else{
-				couleur = Couleur.NOIR;
+			else if(this.jeuCourant == jeuRouge){
+				couleur = Couleur.ROUGE;
+			}
+			else if(this.jeuCourant == jeuJaune) {
+				couleur = Couleur.JAUNE;
+			}
+			else if(this.jeuCourant == jeuVert) {
+				couleur = Couleur.VERT;
 			}
 		}
-		*/
+		
 		
 		return couleur;
 	}
@@ -236,26 +317,31 @@ public class Plateau implements BoardGames {
 	public String toString(){
 		String string = new String("");
 		
-		/*
-		if(jeuBlanc != null){
-			string += "Jeu blanc : " + jeuBlanc.toString();
+		
+		if(jeuRouge != null){
+			string += "Jeu blanc : " + jeuRouge.toString();
 		}
-		if(jeuNoir != null){
-			string += "\nJeu noir : " + jeuNoir.toString();
+		if(jeuBleu != null){
+			string += "\nJeu noir : " + jeuBleu.toString();
+		}
+		if(jeuJaune != null){
+			string += "\nJeu noir : " + jeuJaune.toString();
+		}
+		if(jeuVert != null){
+			string += "\nJeu noir : " + jeuVert.toString();
 		}
 		if(jeuCourant != null){
 			string += "\nJeu courant : " + this.getJeuCourant();
 		}
-		*/
+		
 		
 		return string;
 	}
 	
-	/*
-	private Jeu jeuBlanc;
-	private Jeu jeuNoir;
-	*/
-	
+	private Jeu jeuBleu;
+	private Jeu jeuRouge;
+	private Jeu jeuJaune;
+	private Jeu jeuVert;
 	private Jeu jeuCourant;
 	private String message;
 

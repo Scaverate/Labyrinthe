@@ -24,19 +24,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private static final long serialVersionUID = 1L;
 	
 	JLayeredPane layeredPane;
-	JPanel chessBoard;
-	JLabel chessPiece;
+	JPanel mazeBoard;
+	JLabel mazePiece;
 	int xAdjustment;
 	int yAdjustment;
 	int xOrigine;
 	int yOrigine;
-	MazeGameControlers chessGameControler;
+	MazeGameControlers mazeGameControler;
 	Couleur currentColor = null;
 	
-	public MazeGameGUI(String nom, MazeGameControlers chessGameControler, Dimension dim){
+	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim){
 			
 		Dimension boardSize = dim;
-		this.chessGameControler = chessGameControler;
+		this.mazeGameControler = mazeGameControler;
 		 
 		//  Use a Layered Pane for this this application
 		layeredPane = new JLayeredPane();
@@ -45,26 +45,24 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		layeredPane.addMouseListener(this);
 		layeredPane.addMouseMotionListener(this);
 		 
-		//Add a chess board to the Layered Pane 
+		//Add a maze board to the Layered Pane 
 		  
-		chessBoard = new JPanel();
-		layeredPane.add(chessBoard, JLayeredPane.DEFAULT_LAYER);
-		chessBoard.setLayout( new GridLayout(7, 7) );
-		chessBoard.setPreferredSize( boardSize );
-		chessBoard.setBounds(0, 0, boardSize.width, boardSize.height);
-		 
+		mazeBoard = new JPanel();
+		layeredPane.add(mazeBoard, JLayeredPane.DEFAULT_LAYER);
+		mazeBoard.setLayout( new GridLayout(7, 7) );
+		mazeBoard.setPreferredSize( boardSize );
+		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
+		mazeBoard.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		for (int i = 0; i < 49; i++) {
 			 JPanel square = new JPanel( new BorderLayout() );
-			 chessBoard.add( square );
-			 square.setBackground(Color.white);
-		  }
-		System.out.println("Fin de génération de l'échiquier");
-		  
+			 square.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+			 mazeBoard.add( square );
+		  }		  
 	  }
 	
 	public void mousePressed(MouseEvent e){
-		chessPiece = null;
-		Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
+		mazePiece = null;
+		Component c =  mazeBoard.findComponentAt(e.getX(), e.getY());
 		boolean isOkDest = false;
 		int xDest, yDest;
 		 
@@ -75,31 +73,31 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Point parentLocation = c.getParent().getLocation();
 		xAdjustment = parentLocation.x - e.getX();
 		yAdjustment = parentLocation.y - e.getY();
-		chessPiece = (JLabel) c;
+		mazePiece = (JLabel) c;
 		xOrigine = e.getX()/(layeredPane.getHeight()/7);
 		yOrigine = e.getY()/(layeredPane.getHeight()/7);
 		  
-		chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
-		chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
-		layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
-		for(Component component : chessBoard.getComponents()){
+		mazePiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+		mazePiece.setSize(mazePiece.getWidth(), mazePiece.getHeight());
+		layeredPane.add(mazePiece, JLayeredPane.DRAG_LAYER);
+		for(Component component : mazeBoard.getComponents()){
 			 xDest = component.getX()/(layeredPane.getHeight()/7);
 			 yDest = component.getY()/(layeredPane.getHeight()/7);
-			 isOkDest = this.chessGameControler.isMoveOk(xOrigine,yOrigine,xDest,yDest); //moche ne doit pas êter public
+			 isOkDest = this.mazeGameControler.isMoveOk(xOrigine,yOrigine,xDest,yDest); //moche ne doit pas êter public
 			 if(isOkDest){
 				 component.setBackground(Color.GREEN);
 			 }
 		}
 	}
 	
-	//Move the chess piece around
+	//Move the maze piece around
 	  
 	 public void mouseDragged(MouseEvent me) {
-		if (chessPiece == null) return;
-		chessPiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+		if (mazePiece == null) return;
+		mazePiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
 	 }
 	 
-	 //Drop the chess piece back onto the chess board
+	 //Drop the maze piece back onto the maze board
 	 
 	 public void mouseReleased(MouseEvent e) {
 		 //layeredPane.getHeight() donne la hauteur en pixels de la fenêtre 
@@ -108,12 +106,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 int destinationX = e.getX()/(layeredPane.getHeight()/7);
 		 int destinationY = e.getY()/(layeredPane.getHeight()/7);
 		  
-		 if(chessPiece == null) return;
+		 if(mazePiece == null) return;
 
-		 chessPiece.setVisible(false);
-		 //Component c =  chessBoard.findComponentAt(e.getX(), e.getY());
+		 mazePiece.setVisible(false);
+		 //Component c =  mazeBoard.findComponentAt(e.getX(), e.getY());
 		 
-		 boolean isMoveOK = chessGameControler.move(
+		 boolean isMoveOK = mazeGameControler.move(
 			 new Coord(xOrigine, yOrigine),
 			 new Coord(destinationX, destinationY)
 		 );
@@ -131,11 +129,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 	 @Override
 	 public void update(Observable o, Object arg) {
-		// debug
-		 //System.out.println("update");
+		
 		List<PieceIHM> piecesIHM = (List<PieceIHM>) arg;
 		for(int i = 0; i < piecesIHM.size(); i++){
-			  JPanel panel = (JPanel) chessBoard.getComponent(
+			  JPanel panel = (JPanel) mazeBoard.getComponent(
 					  7 * piecesIHM.get(i).getY() + piecesIHM.get(i).getX()
 			  );
 			  if(panel.getComponents().length != 0) {
@@ -149,15 +146,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					  piecesIHM.get(i).getCouleur())
 				  ) 
 			  );
-			  JPanel panel = (JPanel) chessBoard.getComponent(
+			  JPanel panel = (JPanel) mazeBoard.getComponent(
 					  7 * piecesIHM.get(i).getY() + piecesIHM.get(i).getX()
 			  );
+			  
 			  panel.add(pieceLabel);
 		}
 		// reset board colors
-		for(int i = 0; i < chessBoard.getComponents().length; i++){
-			chessBoard.getComponent(i).setBackground(Color.white);
+		for(int i = 0; i < mazeBoard.getComponents().length; i++){
+			mazeBoard.getComponent(i).setBackground(Color.white);
 		}
+		
+		
 		this.repaint();
 		this.revalidate();
 	 }

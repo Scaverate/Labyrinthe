@@ -80,7 +80,7 @@ public class Jeu implements Game {
 		List<PieceIHMs> list = new LinkedList<PieceIHMs>();
 		
 		for(Pieces piece : this.pieces){
-			// si la pièce est toujours en jeu
+			// si la piece est toujours en jeu
 			if(piece != null){
 				if(piece.getX() != -1) {
 					newPieceIHM = new PieceIHM(piece);
