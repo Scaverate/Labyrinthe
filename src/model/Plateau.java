@@ -27,7 +27,7 @@ public class Plateau implements BoardGames {
 		}
 		jeuCourant = jeuRouge;
 		message = new String("");
-		this.couloirs = MazeCouloirsFactory.newPieces();
+		// this.couloirs = MazeCouloirsFactory.newPieces();
 	}
 	
 	/*
