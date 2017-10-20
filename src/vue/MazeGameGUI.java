@@ -36,8 +36,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final int ROUGE_POS = 43;
 	private final int VERT_POS = 49;
 
-	private final int COULOIR_LAYER = 0;
-	private final int PAWN_LAYER = 1;
+	private final int COULOIR_LAYER = 1;
+	private final int PAWN_LAYER = 0;
 
 	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim) {
 		// récupération des dimensions de la fenetre
@@ -112,7 +112,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				this.pawn.setBounds(0, 0, 100, 100);
 				this.pawn.setOpaque(false);
 
-				layeredPane.add(this.pawn, PAWN_LAYER, 0);
+				//layeredPane.add(this.pawn, PAWN_LAYER, 0);
+				layeredPane.add(this.pawn, PAWN_LAYER);
 			}
 
 			// pour chaque case on ajoute paramètre dimension et position du couloir
@@ -121,7 +122,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			couloir.setBounds(0, 0, 100, 100);
 
 			// on ajoute le couloir en arrière-plan
-			layeredPane.add(couloir, new Integer(0), 0);
+			layeredPane.add(couloir, COULOIR_LAYER);
 
 			// on ajoute les différents plans au plateau
 			mazeBoard.add(layeredPane);
@@ -150,7 +151,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			return;
 		}
 		// on ne prend que la couche la plus haute
-		if(this.layeredPane.getLayer(componentPressed) < PAWN_LAYER) {
+		System.out.println(this.layeredPane.getLayer(componentPressed));
+		if(this.layeredPane.getLayer(componentPressed) > PAWN_LAYER) {
 			return;
 		}
 
@@ -174,7 +176,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				yDest = component.getY() / (parent.getHeight() / 7);
 				isOkDest = this.mazeGameControler.isMoveOk(xOrigine, yOrigine, xDest, yDest); // moche ne doit pas être public
 				if(isOkDest) {
-					((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
+					if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
+						((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
+					}
 				}
 			}
 		}
@@ -256,14 +260,29 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		if(destinationReached != null) {
 			JLayeredPane destinationPane = (JLayeredPane) destinationReached.getParent();
-			destinationPane.add(this.pawn, PAWN_LAYER);
+			//destinationPane.setBorder(BorderFactory.createLineBorder(Color.black));
+			/*for( Component component : destinationPane.getComponents()){
+				component.setVisible(false);
+			}
+			System.out.println(destinationPane.add(this.pawn, PAWN_LAYER));
+			System.out.println(destinationPane.getComponentCountInLayer(PAWN_LAYER));
+			*/
+			this.pawn.setVisible(true);
 		}
 		 	
+		
+		//FIXME
+		
+		
 	 	// on réautorise toutes les cases
+		/*
 		for (Component component : this.mazeBoard.getComponents()) {
-			((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(true);
+			if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
+				((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(true);
+			}
 		}
 		
+		*/
 		this.pawn.setVisible(true);
 		this.repaint();
 		this.revalidate();
