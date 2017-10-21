@@ -9,9 +9,7 @@ public class CouloirIHM implements CouloirIHMs {
         this.couloir = couloir;
     }
 
-    public int getX() {
-        return this.couloir.getX();
-    }
+    public int getX() { return this.couloir.getX(); }
     public int getY() {
         return this.couloir.getY();
     }

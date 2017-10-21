@@ -3,6 +3,8 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+import tools.MazeCouloirsFactory;
+
 public class Plateau implements BoardGames {
 	
 	public Plateau(int nbPlayer) {
@@ -23,11 +25,11 @@ public class Plateau implements BoardGames {
 				jeuJaune = new Jeu(Couleur.JAUNE);
 				break;
 			default: 
-				System.out.println("La cr�ation des jeux a �chou�");
+				System.out.println("La creation des jeux a echoue");
 		}
-		jeuCourant = jeuRouge;
-		message = new String("");
-		// this.couloirs = MazeCouloirsFactory.newPieces();
+		this.jeuCourant = jeuRouge;
+		this.message = new String("");
+		this.couloirs = MazeCouloirsFactory.newCouloirs();
 	}
 	
 	/*
@@ -291,6 +293,16 @@ public class Plateau implements BoardGames {
 		
 		return listFinale;
 	}
+
+	public List<CouloirIHM> getCouloirsIHMs() {
+		List<CouloirIHM> couloirIHMs = new LinkedList<CouloirIHM>();
+
+		for(Couloirs couloir : this.couloirs) {
+			couloirIHMs.add(new CouloirIHM(couloir));
+		}
+
+		return couloirIHMs;
+	}
 	
 	public Couleur getJeuCourant(){
 		Couleur couleur = null;
@@ -337,6 +349,14 @@ public class Plateau implements BoardGames {
 		
 		
 		return string;
+	}
+
+	// tests
+	public static void main(String [ ] args) {
+		Plateau plateau = new Plateau(4);
+		for(Couloirs couloir : plateau.couloirs) {
+			System.out.println(couloir);
+		}
 	}
 	
 	private Jeu jeuBleu;

@@ -1,12 +1,10 @@
 package model.observable;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import model.BoardGames;
-import model.Coord;
-import model.Couleur;
-import model.Plateau;
+import model.*;
 
 
 /**
@@ -100,6 +98,8 @@ public class MazeGame extends Observable implements BoardGames{
 	public Couleur getPieceColor(int x, int y){
 		return plateau.getPieceColor(x, y);
 	}
+
+	public List<CouloirIHM> getCouloirIHMs () { return plateau.getCouloirsIHMs(); }
 
 	/* (non-Javadoc)
 	 * @see java.util.Observable#notifyObservers(java.lang.Object)
