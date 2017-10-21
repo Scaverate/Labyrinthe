@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.Coord;
 import model.CouloirFixe;
+import model.CouloirAmovible;
 import model.Couloirs;
 
 /**
@@ -24,41 +25,47 @@ public class MazeCouloirsFactory {
      */
     public static List<Couloirs> newCouloirs() {
         List<Couloirs> couloirs = null;
-        List<Couloirs> couloirsFixes = null;
         String className;
         Coord couloirCoord;
+        Couloirs couloirGenerated;
         boolean isNorthOpened;
         boolean isSouthOpened;
         boolean isEastOpened;
         boolean isWestOpened;
 
         couloirs = new LinkedList<Couloirs>();
-        couloirsFixes = new LinkedList<Couloirs>();
 
-        // génération des couloirs fixes
+        // génération des couloirs
         for (int i = 0; i < MazeCouloirsPos.values().length; i++) {
-            className = "model." + MazeCouloirsPos.values()[i].nom; // attention au chemin
+            //className = "model." + MazeCouloirsPos.values()[i].nom;
             couloirCoord = MazeCouloirsPos.values()[i].coord;
             isNorthOpened = MazeCouloirsPos.values()[i].isNorthOpened;
             isSouthOpened = MazeCouloirsPos.values()[i].isSouthOpened;
             isEastOpened = MazeCouloirsPos.values()[i].isEastOpened;
             isWestOpened = MazeCouloirsPos.values()[i].isWestOpened;
 
-            couloirsFixes.add(
-                new CouloirFixe(
+            if(MazeCouloirsPos.values()[i].isFixed) {
+                couloirGenerated = new CouloirFixe(
                     couloirCoord,
                     isNorthOpened,
                     isEastOpened,
                     isSouthOpened,
                     isWestOpened
-                )
-            );
+                );
+            }
+            else {
+                couloirGenerated = new CouloirAmovible(
+                        couloirCoord,
+                        isNorthOpened,
+                        isEastOpened,
+                        isSouthOpened,
+                        isWestOpened
+                );
+            }
+            couloirs.add(couloirGenerated);
         }
 
-        // génération des couloirs amovibles (aléatoires)
-
         // fusion des deux listes
-        couloirs.addAll(couloirsFixes);
         return couloirs;
     }
 }
