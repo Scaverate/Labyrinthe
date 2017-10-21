@@ -45,14 +45,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
-		Icon disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
-			"Couloir", 1, 1, 0, 1, true
-		));
+		Icon imageIcon;
+		Icon disabledIcon;
+		List<CouloirIHM> couloirIHMs;
 
 		// on initialise le controleur
 		this.mazeGameControler = mazeGameControler;
-
-		System.out.println(mazeGameControler.getCouloirsIHMs());
+		couloirIHMs = mazeGameControler.getCouloirsIHMs();
 
 		// on crée un conteneur general qui acceuillera le tableau de jeu + l'element draggé
 		mazeContainer = new JLayeredPane();
@@ -68,6 +67,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
 
 		// pour chaque case - à améliorer avec des variables si jamais on veut changer la dimension du jeu
+
+		/* en dur
 		for(int i = 1; i <= 49; i++) {
 
 			// on crée un panneau contenant différents plans
@@ -129,11 +130,55 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				layeredPane.add(this.pawn, PAWN_LAYER);
 			}
 
+
 			// on ajoute les différents plans au plateau
 			mazeBoard.add(layeredPane);
 		}
+		*/
 
-		mazeContainer.add(mazeBoard, 0);
+		for(CouloirIHM couloirIHM : couloirIHMs) {
+
+			// on crée un panneau contenant différents plans
+			this.layeredPane = new JLayeredPane();
+			this.layeredPane.setPreferredSize(new Dimension(100, 100));
+
+			// on crée une image de couloir
+			imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+				"Couloir",
+				couloirIHM.isNorthOpened(),
+				couloirIHM.isSouthOpened(),
+				couloirIHM.isEastOpened(),
+				couloirIHM.isWestOpened(),
+				false
+			));
+			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+					"Couloir",
+					couloirIHM.isNorthOpened(),
+					couloirIHM.isSouthOpened(),
+					couloirIHM.isEastOpened(),
+					couloirIHM.isWestOpened(),
+					true
+			));
+			this.couloir = new JLabel(imageIcon);
+			this.couloir.setDisabledIcon(disabledIcon);
+
+			if(couloirIHM.isFixed()) {
+				this.couloir.setBorder(BorderFactory.createLineBorder(Color.red));
+			}
+
+			// pour chaque case on ajoute paramètre dimension et position du couloir
+			//couloir.setBorder(BorderFactory.createLineBorder(Color.yellow)); //debug
+			this.couloir.setPreferredSize(new Dimension(100, 100));
+			this.couloir.setBounds(0, 0, 100, 100);
+
+			// on ajoute le couloir en arrière-plan
+			this.layeredPane.add(this.couloir, COULOIR_LAYER);
+
+			// on ajoute les différents plans au plateau
+			this.mazeBoard.add(this.layeredPane);
+		}
+
+		mazeContainer.add(mazeBoard, new Integer(0));
 		
 		// TODO n'écouter que les pions éventuellement
 		mazeBoard.addMouseListener(this);
