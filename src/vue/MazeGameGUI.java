@@ -22,48 +22,106 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 	JLayeredPane layeredPane;
 	JPanel mazeBoard;
-	JLabel mazePiece;
+	JLabel couloir;
+	JLabel pawn;
 	int xAdjustment;
 	int yAdjustment;
 	int xOrigine;
 	int yOrigine;
 	MazeGameControlers mazeGameControler;
 	Couleur currentColor = null;
-	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim){
+	final int BLEU_POS = 1;
+	final int JAUNE_POS = 7;
+	final int ROUGE_POS = 43;
+	final int VERT_POS = 49;
+	
+	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim) {
+		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
 
 		// on initialise le controleur
 		this.mazeGameControler = mazeGameControler;
+		 
+		// On crée une grille de 7 par 7 (49 cases)
+		mazeBoard = new JPanel(new GridLayout(7,7));
+		getContentPane().add(mazeBoard); // on l'ajoute à la fenetre principale
 
-		//  Use a Layered Pane for this this application
-		layeredPane = new JLayeredPane();
-		getContentPane().add(layeredPane);
-		layeredPane.setPreferredSize(boardSize);
-		layeredPane.addMouseListener(this);
-		layeredPane.addMouseMotionListener(this);
-
-		//Add a maze board to the Layered Pane
-		mazeBoard = new JPanel();
-		layeredPane.add(mazeBoard, JLayeredPane.DEFAULT_LAYER);
-		mazeBoard.setLayout(new GridLayout(7, 7));
-		mazeBoard.setPreferredSize( boardSize );
+		// position et taille du plateau de jeu -> on récupère les dimensions passées en paramètres
+		mazeBoard.setPreferredSize(boardSize);
 		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
-		// generation du plateau de jeu
-		for (int i = 0; i < 49; i++) {
-		 	JPanel square = new JPanel(new BorderLayout());
-			mazeBoard.add(square);
-			//square.setBackground(Color.white);
-			JLabel couloir = new JLabel(
+
+		// pour chaque case - à améliorer avec des variables si jamais on veut changer la dimension du jeu
+		for(int i = 1; i <= 49; i++) {
+
+			// on crée un panneau contenant différents plans
+			layeredPane = new JLayeredPane();
+			layeredPane.setPreferredSize(new Dimension(100, 100));
+			layeredPane.addMouseListener(this);
+			layeredPane.addMouseMotionListener(this);
+
+			// on crée une image de couloir
+			couloir = new JLabel(
 				new ImageIcon(MazeImageProvider.getRandomImageFile(
 					"Couloir"
 				))
 			);
 
-			square.add(couloir);
-		  }
+			// en dur pour l'instant - gestion des pions
+			// on crée un pion à chaque coin du jeu
+			if(i == BLEU_POS || i == JAUNE_POS || i == ROUGE_POS || i == VERT_POS) {
+				switch(i){
+					case BLEU_POS : {
+						currentColor = Couleur.BLEU;
+						break;
+					}
+					case JAUNE_POS : {
+						currentColor = Couleur.JAUNE;
+						break;
+					}
+					case ROUGE_POS : {
+						currentColor = Couleur.ROUGE;
+						break;
+					}
+					case VERT_POS : {
+						currentColor = Couleur.VERT;
+						break;
+					}
+					default : { break; }
+				}
+				pawn = new JLabel(
+					new ImageIcon(MazeImageProvider.getImageFile(
+						"Pion",
+						currentColor
+					))
+				);
+
+				// on ajoute paramètre dimension et position du couloir
+				//pawn.setBorder(BorderFactory.createLineBorder(Color.red)); // debug
+				pawn.setPreferredSize(new Dimension(100, 100));
+				pawn.setBounds(0, 0, 100, 100);
+				pawn.setOpaque(false);
+
+				layeredPane.add(pawn, new Integer(1), 0);
+			}
+
+			// pour chaque case on ajoute paramètre dimension et position du couloir
+			//couloir.setBorder(BorderFactory.createLineBorder(Color.yellow)); //debug
+			couloir.setPreferredSize(new Dimension(100, 100));
+			couloir.setBounds(0, 0, 100, 100);
+
+			// on ajoute le couloir en arrière-plan
+			layeredPane.add(couloir, new Integer(0), 0);
+
+			// on ajoute les différents plans au plateau
+			mazeBoard.add(layeredPane);
+		}
+
+		// histoire d'utiliser le nom
+		System.out.println(nom);
 	  }
 
 	public void mousePressed(MouseEvent e){
+		/*
 		mazePiece = null;
 		Component c =  mazeBoard.findComponentAt(e.getX(), e.getY());
 		boolean isOkDest = false;
@@ -100,17 +158,20 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 			}
 		}
+		*/
 	}
 
 	 public void mouseDragged(MouseEvent me) {
-		if (pawn == null) {
-			return;
-		}
-		 pawn.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+		 /*
+		if (mazePiece == null) return;
+		mazePiece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+		*/
 	 }
 
 	 public void mouseReleased(MouseEvent e) {
-		 //mazeBoard.getHeight() donne la hauteur en pixels de la fenêtre
+		 /*
+		 //layeredPane.getHeight() donne la hauteur en pixels de la fenêtre 
+		 //getX() donne X en pixels
 		 //on divise getX() par layeredPane.getHeight()/7 pour savoir dans quelle case on a déplacé la pièce
 		 int destinationX = e.getX()/(mazeBoard.getHeight()/7);
 		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
@@ -130,6 +191,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 if(isMoveOK) {
 		 	System.out.println("déplacement OK");
 		 }
+		 */
 	 }
 
 	 public void mouseClicked(MouseEvent e) {}
