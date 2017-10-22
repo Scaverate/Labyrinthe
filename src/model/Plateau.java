@@ -229,7 +229,6 @@ public class Plateau implements BoardGames {
 	@Override
 	public Couleur getColorCurrentPlayer() {
 		Couleur couleur = null;
-
 		if(this.jeuCourant == this.jeuBleu){
 			couleur = Couleur.BLEU;
 		}
@@ -252,15 +251,11 @@ public class Plateau implements BoardGames {
 
 
 	public List<PieceIHMs> getPiecesIHM(){
-
 		List<PieceIHMs> list1 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list2 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list3 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list4 = new LinkedList<PieceIHMs>();
-
 		List<PieceIHMs> listFinale = new LinkedList<PieceIHMs>();
-
-
 		if(this.jeuRouge != null){
 			list1 = this.jeuRouge.getPiecesIHM();
 		}
@@ -285,8 +280,6 @@ public class Plateau implements BoardGames {
 		if(list4 != null && listFinale != null){
 			listFinale.addAll(list4);
 		}
-
-
 		return listFinale;
 	}
 
@@ -330,8 +323,6 @@ public class Plateau implements BoardGames {
 
 	public Couleur getJeuCourant(){
 		Couleur couleur = null;
-
-
 		if(this.jeuCourant != null){
 			if(this.jeuCourant == jeuBleu){
 				couleur = Couleur.BLEU;
@@ -346,15 +337,11 @@ public class Plateau implements BoardGames {
 				couleur = Couleur.VERT;
 			}
 		}
-
-
 		return couleur;
 	}
 
 	public String toString(){
 		String string = new String("");
-
-
 		if(jeuRouge != null){
 			string += "Jeu blanc : " + jeuRouge.toString();
 		}
@@ -370,8 +357,6 @@ public class Plateau implements BoardGames {
 		if(jeuCourant != null){
 			string += "\nJeu courant : " + this.getJeuCourant();
 		}
-
-
 		return string;
 	}
 

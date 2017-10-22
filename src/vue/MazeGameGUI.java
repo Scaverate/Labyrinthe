@@ -213,7 +213,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		 // on cache le composant avant la mise à jour de la vue dans "update"
 		 //pawn.setVisible(false);
-
 		 boolean isMoveOK = mazeGameControler.move(
 			 new Coord(xOrigine, yOrigine),
 			 new Coord(destinationX, destinationY)
