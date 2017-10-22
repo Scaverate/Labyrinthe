@@ -2,6 +2,7 @@ package controler;
 
 import model.Coord;
 import model.CouloirIHM;
+import model.PieceIHMs;
 
 import java.util.List;
 
@@ -35,5 +36,6 @@ public interface MazeGameControlers {
 	public boolean isPlayerOK(Coord initCoord);
 
 	public List<CouloirIHM> getCouloirsIHMs();
+	public List<PieceIHMs> getPiecesIHMs();
 
 }

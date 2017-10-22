@@ -5,6 +5,7 @@ import java.util.List;
 import model.Coord;
 import model.Couleur;
 import model.CouloirIHM;
+import model.PieceIHMs;
 import model.observable.MazeGame;
 
 
@@ -42,7 +43,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 
 	final public boolean move(Coord initCoord, Coord finalCoord) {
 		boolean ret = false;
-		String promotionType = null; 
+		String promotionType = null;
 		
 		ret = this.moveModel(initCoord, finalCoord);
 		if (ret) {
@@ -61,7 +62,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	public abstract boolean isPlayerOK(Coord initCoord);
 
 	// Déplacement métier
-	protected boolean moveModel(Coord initCoord, Coord finalCoord) {	
+	protected boolean moveModel(Coord initCoord, Coord finalCoord) {
 		return mazeGame.move(initCoord.x, initCoord.y, finalCoord.x, finalCoord.y);	
 	}
 
@@ -93,4 +94,5 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	}
 
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
+	public List<PieceIHMs> getPiecesIHMs() { return this.mazeGame.getPiecesIHMs(); }
 }
