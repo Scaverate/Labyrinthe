@@ -18,14 +18,14 @@ import model.Plateau;
 public class MazeGame extends Observable implements BoardGames{
 
 	private Plateau plateau;
-
+	private int nbPlayer;
 	/**
 	 * Cree une instance de la classe Echiquier
 	 * et notifie ses observateurs
 	 */
-	public MazeGame() {
+	public MazeGame(int nbPlayer) {
 		super();
-		this.plateau = new Plateau();
+		this.plateau = new Plateau(nbPlayer);
 		this.notifyObservers(plateau.getPiecesIHM());
 	}
 
@@ -68,7 +68,9 @@ public class MazeGame extends Observable implements BoardGames{
 		ret = plateau.isMoveOk(xInit, yInit, xFinal, yFinal);
 		if (ret){
 			ret = plateau.move(xInit, yInit, xFinal, yFinal);
-			plateau.switchJoueur();
+			if(ret) {
+				plateau.switchJoueur();
+			}
 		}
 		this.notifyObservers(plateau.getPiecesIHM());
 		return ret;	
