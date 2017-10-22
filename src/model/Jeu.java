@@ -77,7 +77,7 @@ public class Jeu implements Game {
 	 */
 	public List<PieceIHMs> getPiecesIHM(){
 		PieceIHMs newPieceIHM = null;
-		List<PieceIHMs> list = new LinkedList<PieceIHMs>();
+		List<PieceIHMs> list = new LinkedList<>();
 		
 		for(Pieces piece : this.pieces){
 			// si la piece est toujours en jeu

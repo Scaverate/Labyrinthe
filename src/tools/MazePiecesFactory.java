@@ -24,8 +24,7 @@ public class MazePiecesFactory {
 	 * @return liste de pieces
 	 */
 	public static List<Pieces> newPieces(Couleur pieceCouleur) {
-		List<Pieces> pieces = null;
-		pieces = new LinkedList<Pieces>();
+		List<Pieces> pieces = new LinkedList<>();
 
 		if (pieceCouleur != null) {
 			for (int i = 0; i < MazePiecePos.values().length; i++) {

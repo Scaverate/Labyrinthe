@@ -79,27 +79,28 @@ public class MazeGame extends Observable implements BoardGames{
 	}
 
 	public boolean isEnd(){
-		return plateau.isEnd();		
+		return this.plateau.isEnd();
 	}
 
 	public String getMessage() {
-		return plateau.getMessage();
+		return this.plateau.getMessage();
 	}
 	
 	public void setMessage(String message) {
-		plateau.setMessage(message);
+		this.plateau.setMessage(message);
 	}
 
 
 	public Couleur getColorCurrentPlayer(){		
-		return plateau.getColorCurrentPlayer();		
+		return this.plateau.getColorCurrentPlayer();
 	}
 
 	public Couleur getPieceColor(int x, int y){
-		return plateau.getPieceColor(x, y);
+		return this.plateau.getPieceColor(x, y);
 	}
 
-	public List<CouloirIHM> getCouloirIHMs () { return plateau.getCouloirsIHMs(); }
+	public List<CouloirIHM> getCouloirIHMs () { return this.plateau.getCouloirsIHMs(); }
+	public List<PieceIHMs> getPiecesIHMs() { return this.plateau.getPiecesIHMs(); }
 
 	/* (non-Javadoc)
 	 * @see java.util.Observable#notifyObservers(java.lang.Object)

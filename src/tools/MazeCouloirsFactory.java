@@ -48,18 +48,18 @@ public class MazeCouloirsFactory {
                 couloirGenerated = new CouloirFixe(
                     couloirCoord,
                     isNorthOpened,
-                    isEastOpened,
                     isSouthOpened,
+                    isEastOpened,
                     isWestOpened
                 );
             }
             else {
                 couloirGenerated = new CouloirAmovible(
-                        couloirCoord,
-                        isNorthOpened,
-                        isEastOpened,
-                        isSouthOpened,
-                        isWestOpened
+                    couloirCoord,
+                    isNorthOpened,
+                    isSouthOpened,
+                    isEastOpened,
+                    isWestOpened
                 );
             }
             couloirs.add(couloirGenerated);

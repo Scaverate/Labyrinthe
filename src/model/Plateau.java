@@ -204,7 +204,6 @@ public class Plateau implements BoardGames {
 	@Override
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean hasMoved = false;
-
 		if(this.jeuCourant != null){
 			hasMoved = jeuCourant.move(xInit, yInit, xFinal, yFinal);
 			if(hasMoved){
@@ -299,6 +298,34 @@ public class Plateau implements BoardGames {
 		}
 
 		return couloirIHMs;
+	}
+
+	public List<PieceIHMs> getPiecesIHMs() {
+		List<PieceIHMs> pieceIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuBleuIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuRougeIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuJauneIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuVertIHMs = new LinkedList<>();
+
+		if(this.jeuBleu != null) {
+			jeuBleuIHMs = this.jeuBleu.getPiecesIHM();
+		}
+		if(this.jeuRouge != null) {
+			jeuRougeIHMs = this.jeuRouge.getPiecesIHM();
+		}
+		if(this.jeuJaune != null) {
+			jeuJauneIHMs = this.jeuJaune.getPiecesIHM();
+		}
+		if(this.jeuVert != null) {
+			jeuVertIHMs = this.jeuVert.getPiecesIHM();
+		}
+
+		pieceIHMs.addAll(jeuBleuIHMs);
+		pieceIHMs.addAll(jeuRougeIHMs);
+		pieceIHMs.addAll(jeuJauneIHMs);
+		pieceIHMs.addAll(jeuVertIHMs);
+
+		return pieceIHMs;
 	}
 
 	public Couleur getJeuCourant(){
