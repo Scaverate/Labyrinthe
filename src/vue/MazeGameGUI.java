@@ -29,10 +29,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	int yOrigine;
 	MazeGameControlers mazeGameControler;
 	Couleur currentColor = null;
-
 	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim){
-
 		Dimension boardSize = dim;
+
+		// on initialise le controleur
 		this.mazeGameControler = mazeGameControler;
 
 		//  Use a Layered Pane for this this application
@@ -43,17 +43,23 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		layeredPane.addMouseMotionListener(this);
 
 		//Add a maze board to the Layered Pane
-
 		mazeBoard = new JPanel();
 		layeredPane.add(mazeBoard, JLayeredPane.DEFAULT_LAYER);
-		mazeBoard.setLayout( new GridLayout(7, 7) );
+		mazeBoard.setLayout(new GridLayout(7, 7));
 		mazeBoard.setPreferredSize( boardSize );
 		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
+		// generation du plateau de jeu
 		for (int i = 0; i < 49; i++) {
-			 JPanel square = new JPanel( new BorderLayout() );
-			 square.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
-			 mazeBoard.add( square );
-			 square.setBackground(Color.white);
+		 	JPanel square = new JPanel(new BorderLayout());
+			mazeBoard.add(square);
+			//square.setBackground(Color.white);
+			JLabel couloir = new JLabel(
+				new ImageIcon(MazeImageProvider.getRandomImageFile(
+					"Couloir"
+				))
+			);
+
+			square.add(couloir);
 		  }
 	  }
 
