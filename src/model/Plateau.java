@@ -3,15 +3,32 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+import tools.MazeCouloirsFactory;
+
 public class Plateau implements BoardGames {
-	public Plateau(){
-		jeuBleu = new Jeu(Couleur.BLEU);
-		jeuRouge = new Jeu(Couleur.ROUGE);
-		jeuVert = new Jeu(Couleur.VERT);
-		jeuJaune = new Jeu(Couleur.JAUNE);
-		jeuCourant = null;
-		message = new String("");
-		// this.couloirs = MazeCouloirsFactory.newPieces();
+	public Plateau(int nbPlayer) {
+		switch (nbPlayer) {
+			case 2 :
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuBleu = new Jeu(Couleur.BLEU);
+				break;
+			case 3 :
+				jeuBleu = new Jeu(Couleur.BLEU);
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuJaune = new Jeu(Couleur.JAUNE);
+				break;
+			case 4 :
+				jeuBleu = new Jeu(Couleur.BLEU);
+				jeuRouge = new Jeu(Couleur.ROUGE);
+				jeuVert = new Jeu(Couleur.VERT);
+				jeuJaune = new Jeu(Couleur.JAUNE);
+				break;
+			default:
+				System.out.println("La creation des jeux a echoue");
+		}
+		this.jeuCourant = jeuRouge;
+		this.message = new String("");
+		this.couloirs = MazeCouloirsFactory.newCouloirs();
 	}
 	
 	/*
@@ -274,6 +291,16 @@ public class Plateau implements BoardGames {
 		return listFinale;
 	}
 
+	public List<CouloirIHM> getCouloirsIHMs() {
+		List<CouloirIHM> couloirIHMs = new LinkedList<CouloirIHM>();
+
+		for(Couloirs couloir : this.couloirs) {
+			couloirIHMs.add(new CouloirIHM(couloir));
+		}
+
+		return couloirIHMs;
+	}
+
 	public Couleur getJeuCourant(){
 		Couleur couleur = null;
 
@@ -319,6 +346,14 @@ public class Plateau implements BoardGames {
 
 
 		return string;
+	}
+
+	// tests
+	public static void main(String [ ] args) {
+		Plateau plateau = new Plateau(4);
+		for(Couloirs couloir : plateau.couloirs) {
+			System.out.println(couloir);
+		}
 	}
 
 	private Jeu jeuBleu;

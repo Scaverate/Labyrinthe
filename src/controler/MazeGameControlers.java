@@ -1,6 +1,9 @@
 package controler;
 
 import model.Coord;
+import model.CouloirIHM;
+
+import java.util.List;
 
 public interface MazeGameControlers {
 
@@ -30,5 +33,7 @@ public interface MazeGameControlers {
 	 * pour empêcher tout déplacement sur le damier
 	 */
 	public boolean isPlayerOK(Coord initCoord);
+
+	public List<CouloirIHM> getCouloirsIHMs();
 
 }
