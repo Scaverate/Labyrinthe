@@ -6,8 +6,8 @@ import model.Coord;
 import model.Treasure;
 
 /**
- * Classe qui fabrique 1 pièce
- * de la couleur, du type et aux coordonnées
+ * Classe qui fabrique 1 trésor
+ * du nom et aux coordonnées
  * passées en paramètre
  *
  */

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tools.MazePiecesFactory;
+import tools.MazeTreasureFactory;
 
 public class Jeu implements Game {
 	
