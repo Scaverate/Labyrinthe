@@ -3,15 +3,16 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+import tools.MazeCouloirsFactory;
+
 public class Plateau implements BoardGames {
-	
 	public Plateau(int nbPlayer) {
 		switch (nbPlayer) {
-			case 2 : 
+			case 2 :
 				jeuRouge = new Jeu(Couleur.ROUGE);
 				jeuBleu = new Jeu(Couleur.BLEU);
 				break;
-			case 3 : 
+			case 3 :
 				jeuBleu = new Jeu(Couleur.BLEU);
 				jeuRouge = new Jeu(Couleur.ROUGE);
 				jeuJaune = new Jeu(Couleur.JAUNE);
@@ -22,11 +23,12 @@ public class Plateau implements BoardGames {
 				jeuVert = new Jeu(Couleur.VERT);
 				jeuJaune = new Jeu(Couleur.JAUNE);
 				break;
-			default: 
-				System.out.println("La création des jeux a échoué");
+			default:
+				System.out.println("La creation des jeux a echoue");
 		}
-		jeuCourant = jeuRouge;
-		message = new String("");
+		this.jeuCourant = jeuRouge;
+		this.message = new String("");
+		this.couloirs = MazeCouloirsFactory.newCouloirs();
 	}
 	
 	/*
@@ -78,12 +80,10 @@ public class Plateau implements BoardGames {
 				this.jeuCourant = this.jeuBleu;
 			}
 		}
-		
 	}
-	
+
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
 		boolean canMove = true;
-		
 		/*
 		boolean pieceHere = false;
 		if(this.jeuCourant != null){
@@ -99,22 +99,22 @@ public class Plateau implements BoardGames {
 			}
 		}
 		*/
-		
+		canMove = true;
 		return canMove;
 	}
-	
+
 	private boolean isPieceAnyColor(int coord1, int coord2){
 		boolean ret = false;
-		
+
 		/*
 		if (jeuBlanc.isPieceHere(coord1, coord2) || jeuNoir.isPieceHere(coord1, coord2)) {
 			ret = true;
 		}
 		*/
-		
+
 		return ret;
 	}
-	
+
 	private boolean pieceOnTraject(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean pieceOnTraject = false;
 
@@ -130,16 +130,16 @@ public class Plateau implements BoardGames {
 				}
 			}
 			// si vers Y decroissants
-			if (yFinal < yInit) {				
+			if (yFinal < yInit) {
 				for (int i = yInit - 1; i >= yFinal; i--) {
 					pieceOnTraject = isPieceAnyColor(xInit,i);
 					if(pieceOnTraject){ break; }
 				}
 			}
-		} 
+		}
 		else {
 			// Mouvement rectiligne le long de l'axe X
-			if (yInit == yFinal) { 
+			if (yInit == yFinal) {
 				// si vers X croissants
 				if (xFinal > xInit) {
 					for (int i = xInit + 1; i <= xFinal; i++) {
@@ -154,9 +154,9 @@ public class Plateau implements BoardGames {
 						if(pieceOnTraject){ break; }
 					}
 				}
-			} 
+			}
 			else {
-				// Mouvement en diagonale 
+				// Mouvement en diagonale
 				if (Math.abs(yInit - yFinal) == Math.abs(xInit - xFinal)) {
 					int ecart = Math.abs(yInit - yFinal);
 
@@ -164,32 +164,32 @@ public class Plateau implements BoardGames {
 					if ((xFinal - xInit > 0) && (yFinal - yInit > 0)) {
 						for (int i = 1; i <= ecart; i++) {
 							pieceOnTraject = isPieceAnyColor(xInit + i,yInit + i);
-							if(pieceOnTraject){ break; }			
+							if(pieceOnTraject){ break; }
 						}
 					}
 					// X croissant, Y decroissant
 					if ((xFinal - xInit > 0) && (yFinal - yInit < 0)) {
 						for (int i = 1; i <= ecart; i++) {
 							pieceOnTraject = isPieceAnyColor(xInit + i,yInit - i);
-							if(pieceOnTraject){ break; }					
+							if(pieceOnTraject){ break; }
 						}
 					}
 					// X decroissant, Y decroissant
 					if ((xFinal - xInit < 0) && (yFinal - yInit < 0)) {
 						for (int i = 1; i <= ecart; i++) {
 							pieceOnTraject = isPieceAnyColor(xInit - i,yInit - i);
-							if(pieceOnTraject){ break; }							
+							if(pieceOnTraject){ break; }
 						}
-					}					
+					}
 
 					// X decroissant, Y croissant
 					if ((xFinal - xInit < 0) && (yFinal - yInit > 0)) {
 						for (int i = 1; i <= ecart; i++) {
 							pieceOnTraject = isPieceAnyColor(xInit - i,yInit + i);
-							if(pieceOnTraject){ break; }						
+							if(pieceOnTraject){ break; }
 						}
 					}
-				} 
+				}
 				else {
 					// Dans tous les autres cas de mouvement
 					// la piece au coordonnÃ©es initiale est un cavalier
@@ -204,7 +204,6 @@ public class Plateau implements BoardGames {
 	@Override
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
 		boolean hasMoved = false;
-		
 		if(this.jeuCourant != null){
 			hasMoved = jeuCourant.move(xInit, yInit, xFinal, yFinal);
 			if(hasMoved){
@@ -222,7 +221,7 @@ public class Plateau implements BoardGames {
 	public String getMessage() {
 		return this.message;
 	}
-	
+
 	public void setMessage(String message){
 		this.message = message;
 	}
@@ -230,7 +229,6 @@ public class Plateau implements BoardGames {
 	@Override
 	public Couleur getColorCurrentPlayer() {
 		Couleur couleur = null;
-		
 		if(this.jeuCourant == this.jeuBleu){
 			couleur = Couleur.BLEU;
 		}
@@ -242,7 +240,7 @@ public class Plateau implements BoardGames {
 		}
 		else if(this.jeuCourant == this.jeuVert) {
 			couleur = Couleur.VERT;
-		}		
+		}
 		return couleur;
 	}
 
@@ -250,18 +248,14 @@ public class Plateau implements BoardGames {
 	public Couleur getPieceColor(int x, int y) {
 		return this.jeuCourant.getPieceColor(x,y);
 	}
-	
+
 
 	public List<PieceIHMs> getPiecesIHM(){
-		
 		List<PieceIHMs> list1 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list2 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list3 = new LinkedList<PieceIHMs>();
 		List<PieceIHMs>	list4 = new LinkedList<PieceIHMs>();
-		
 		List<PieceIHMs> listFinale = new LinkedList<PieceIHMs>();
-		
-		
 		if(this.jeuRouge != null){
 			list1 = this.jeuRouge.getPiecesIHM();
 		}
@@ -286,15 +280,49 @@ public class Plateau implements BoardGames {
 		if(list4 != null && listFinale != null){
 			listFinale.addAll(list4);
 		}
-		
-		
 		return listFinale;
 	}
-	
+
+	public List<CouloirIHM> getCouloirsIHMs() {
+		List<CouloirIHM> couloirIHMs = new LinkedList<CouloirIHM>();
+
+		for(Couloirs couloir : this.couloirs) {
+			couloirIHMs.add(new CouloirIHM(couloir));
+		}
+
+		return couloirIHMs;
+	}
+
+	public List<PieceIHMs> getPiecesIHMs() {
+		List<PieceIHMs> pieceIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuBleuIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuRougeIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuJauneIHMs = new LinkedList<>();
+		List<PieceIHMs> jeuVertIHMs = new LinkedList<>();
+
+		if(this.jeuBleu != null) {
+			jeuBleuIHMs = this.jeuBleu.getPiecesIHM();
+		}
+		if(this.jeuRouge != null) {
+			jeuRougeIHMs = this.jeuRouge.getPiecesIHM();
+		}
+		if(this.jeuJaune != null) {
+			jeuJauneIHMs = this.jeuJaune.getPiecesIHM();
+		}
+		if(this.jeuVert != null) {
+			jeuVertIHMs = this.jeuVert.getPiecesIHM();
+		}
+
+		pieceIHMs.addAll(jeuBleuIHMs);
+		pieceIHMs.addAll(jeuRougeIHMs);
+		pieceIHMs.addAll(jeuJauneIHMs);
+		pieceIHMs.addAll(jeuVertIHMs);
+
+		return pieceIHMs;
+	}
+
 	public Couleur getJeuCourant(){
 		Couleur couleur = null;
-		
-		
 		if(this.jeuCourant != null){
 			if(this.jeuCourant == jeuBleu){
 				couleur = Couleur.BLEU;
@@ -309,15 +337,11 @@ public class Plateau implements BoardGames {
 				couleur = Couleur.VERT;
 			}
 		}
-		
-		
 		return couleur;
 	}
-	
+
 	public String toString(){
 		String string = new String("");
-		
-		
 		if(jeuRouge != null){
 			string += "Jeu blanc : " + jeuRouge.toString();
 		}
@@ -333,16 +357,22 @@ public class Plateau implements BoardGames {
 		if(jeuCourant != null){
 			string += "\nJeu courant : " + this.getJeuCourant();
 		}
-		
-		
 		return string;
 	}
-	
+
+	// tests
+	public static void main(String [ ] args) {
+		Plateau plateau = new Plateau(4);
+		for(Couloirs couloir : plateau.couloirs) {
+			System.out.println(couloir);
+		}
+	}
+
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;
 	private Jeu jeuJaune;
 	private Jeu jeuVert;
 	private Jeu jeuCourant;
 	private String message;
-
+	private List<Couloirs> couloirs;
 }

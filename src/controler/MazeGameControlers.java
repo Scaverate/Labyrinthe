@@ -1,6 +1,10 @@
 package controler;
 
 import model.Coord;
+import model.CouloirIHM;
+import model.PieceIHMs;
+
+import java.util.List;
 
 public interface MazeGameControlers {
 
@@ -12,7 +16,7 @@ public interface MazeGameControlers {
 	 */
 	public boolean move(Coord initCoord, Coord finalCoord);
 	
-	public boolean isMoveOk (int xInit, int yInit, int xFinal, int yFinal);
+	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal);
 
 	/**
 	 * @return message relatif aux déplacement, capture, etc.
@@ -30,5 +34,8 @@ public interface MazeGameControlers {
 	 * pour empêcher tout déplacement sur le damier
 	 */
 	public boolean isPlayerOK(Coord initCoord);
+
+	public List<CouloirIHM> getCouloirsIHMs();
+	public List<PieceIHMs> getPiecesIHMs();
 
 }

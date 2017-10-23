@@ -27,7 +27,7 @@ public class MazeSinglePieceFactory {
 
 		Pieces piece = null;
 		
-		String className = "model." + type;	// attention au chemin
+		String className = "model." + type; // attention au chemin
 		Coord pieceCoord = new Coord(x, y);
 		
 		piece = (Pieces) Introspection.newInstance (className,
