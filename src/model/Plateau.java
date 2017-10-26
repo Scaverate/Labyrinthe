@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tools.MazeCouloirsFactory;
+import tools.MazeTreasureFactory;
 
 public class Plateau implements BoardGames {
 	public Plateau(int nbPlayer) {
@@ -29,6 +30,7 @@ public class Plateau implements BoardGames {
 		this.jeuCourant = jeuRouge;
 		this.message = new String("");
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
+		this.treasures = MazeTreasureFactory.newTreasure();
 	}
 	
 	/*
@@ -292,6 +294,16 @@ public class Plateau implements BoardGames {
 
 		return couloirIHMs;
 	}
+	
+	public List<TreasureIHM> getTreasuresIHMs() {
+		List<TreasureIHM> treasureIHMs = new LinkedList<TreasureIHM>();
+
+		for(Treasures treasure : this.treasures) {
+			treasureIHMs.add(new TreasureIHM(treasure));
+		}
+
+		return treasureIHMs;
+	}
 
 	public List<PieceIHMs> getPiecesIHMs() {
 		List<PieceIHMs> pieceIHMs = new LinkedList<>();
@@ -375,4 +387,7 @@ public class Plateau implements BoardGames {
 	private Jeu jeuCourant;
 	private String message;
 	private List<Couloirs> couloirs;
+	private List<Treasures> treasures;
+	//vue/mazegameGUI
+	//boucle for couloirs ihm qui permet de poser les images 
 }

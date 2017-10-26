@@ -4,12 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Coord;
-import model.Couleur;
-import model.Pieces;
 import model.Treasure;
+import model.Treasures;
 
 /**
- * Classe qui fabrique une liste de pieces 
+ * Classe qui fabrique une liste de tresors 
  * de la couleur passee en parametre
  *
  */
@@ -24,22 +23,16 @@ public class MazeTreasureFactory {
 	 * @param pieceCouleur
 	 * @return liste de pieces
 	 */
-	public static List<Treasure> newTreasure(String nom){
+	public static List<Treasures> newTreasure(){
 
-		List<Treasure> treasures = null;
-		treasures = new LinkedList<Treasure>();
-
-		if (nom != ""){
-			for (int i = 0; i < MazeTreasurePos.values().length; i++) {
-				String test = MazeTreasurePos.values()[i].nom;
-				if (nom.equals(MazeTreasurePos.values()[i].nom)) {
-					for (int j = 0; j < (MazePiecePos.values()[i].coords).length; j++) {
-						String className = "model." + MazeTreasurePos.values()[i].nom;	// attention au chemin
-						Coord pieceCoord = MazeTreasurePos.values()[i].coords[j];
-						treasures.add((Treasure) Introspection.newInstance (className,
-								new Object[] {nom, pieceCoord}));
-					}
-				}
+		List<Treasures> treasures = null;
+		treasures = new LinkedList<Treasures>();
+		for (int i = 0; i < MazeTreasurePos.values().length; i++) {
+			for (int j = 0; j < (MazePiecePos.values()[i].coords).length; j++) {
+				//String className = "model." + MazeTreasurePos.values()[i].nom;	// attention au chemin
+				Coord pieceCoord = MazeTreasurePos.values()[i].coords[j];
+				Treasure theTreasure = new Treasure(pieceCoord.x,pieceCoord.y,MazeTreasurePos.values()[i].nom,false);
+				treasures.add(theTreasure);
 			}
 		}
 		return treasures;

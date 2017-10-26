@@ -98,7 +98,8 @@ public class MazeGame extends Observable implements BoardGames{
 	public Couleur getPieceColor(int x, int y){
 		return this.plateau.getPieceColor(x, y);
 	}
-
+	
+	public List<TreasureIHM> getTreasureIHMs () { return this.plateau.getTreasuresIHMs(); }
 	public List<CouloirIHM> getCouloirIHMs () { return this.plateau.getCouloirsIHMs(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.plateau.getPiecesIHMs(); }
 

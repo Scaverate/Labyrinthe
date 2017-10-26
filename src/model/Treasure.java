@@ -1,7 +1,8 @@
 package model;
 
-public interface Treasure {
-	public int getTreasureX();
-	public int getTreasureY();
-	public String getTreasureName();
+public class Treasure extends AbstractTreasure {
+	
+	public Treasure(int x, int y, String nom, boolean catchOk) {
+		super(x, y, nom, catchOk);
+	}
 }

@@ -1,7 +1,5 @@
 package model;
 
-import model.Pieces;
-
 /**
  * Classe qui permet de retourner des informations sur les pièces
  * en vue d'une utilisation par une IHM
@@ -11,9 +9,9 @@ import model.Pieces;
  */
 public  class TreasureIHM  implements TreasureIHMs {
 	 
-	Treasure treasure;
+	Treasures treasure;
 	
-	public TreasureIHM(Treasure treasure) {
+	public TreasureIHM(Treasures treasure) {
 		this.treasure = treasure;
 	}
 
