@@ -24,9 +24,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	
 	private JLayeredPane layeredPane;
 	private JLayeredPane mazeContainer;
+	private JPanel generalBoard;
 	private JPanel mazeBoard;
 	private JLabel couloir;
+<<<<<<< HEAD
 	private JLabel treasure;
+=======
+	private JLabel cardStack;
+	private JLabel extraCard;
+>>>>>>> agrandissement de la fenetre de jeu
 	private JLabel pawn = null;
 	private int xAdjustment;
 	private int yAdjustment;
@@ -48,6 +54,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
+		Dimension windowSize = new Dimension(850,850);
 		Icon imageIcon;
 		Icon disabledIcon;
 		Icon imageIconTreasure;
@@ -64,12 +71,23 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// on crée un conteneur general qui acceuillera le tableau de jeu + l'element draggé
 		mazeContainer = new JLayeredPane();
-		mazeContainer.setPreferredSize(boardSize);
-		mazeContainer.setBounds(0, 0, boardSize.width, boardSize.height);
+		mazeContainer.setPreferredSize(windowSize);
+		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
 		getContentPane().add(mazeContainer); // on l'ajoute à la fenetre principale
+		
+		//On crée une grille de 2 par 2 (4 cases)
+		//Le plateau sera dans la première case, les éléments de jeu dans les autres
+		generalBoard = new JPanel(new GridLayout(2,2));
 
 		// On crée une grille de 7 par 7 (49 cases)
 		mazeBoard = new JPanel(new GridLayout(7,7));
+		
+		//On définit la taille de la grille générale
+		generalBoard.setPreferredSize(windowSize);
+		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
+		
+		//On crée la zone pour la pile de cartes
+		cardStack = new JLabel();
 
 		// position et taille du plateau de jeu -> on récupère les dimensions passées en paramètres
 		mazeBoard.setPreferredSize(boardSize);
