@@ -27,12 +27,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel generalBoard;
 	private JPanel mazeBoard;
 	private JLabel couloir;
-<<<<<<< HEAD
 	private JLabel treasure;
-=======
 	private JLabel cardStack;
-	private JLabel extraCard;
->>>>>>> agrandissement de la fenetre de jeu
+	private CouloirIHM extraCard;
+	private JLayeredPane extraCardPane;
+	private JLabel extraCardImage;
 	private JLabel pawn = null;
 	private int xAdjustment;
 	private int yAdjustment;
@@ -54,7 +53,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
-		Dimension windowSize = new Dimension(850,850);
+		Dimension windowSize = new Dimension(950,900);
 		Icon imageIcon;
 		Icon disabledIcon;
 		Icon imageIconTreasure;
@@ -88,6 +87,43 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		//On crée la zone pour la pile de cartes
 		cardStack = new JLabel();
+		
+		//On crée la carte supplémentaire, récupérant la deuxième pièce de la liste
+		//On garde le côté aléatoire comme la liste est aléatoire
+		//Il faut la deuxième car la première est un angle de départ
+		extraCard = couloirIHMs.get(1);
+		// on crée un panneau contenant différents plans
+		extraCardPane = new JLayeredPane();
+		extraCardPane.setPreferredSize(new Dimension(100, 100));
+
+		// on crée une image de couloir
+		imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			"Couloir",
+			extraCard.isNorthOpened(),
+			extraCard.isSouthOpened(),
+			extraCard.isEastOpened(),
+			extraCard.isWestOpened(),
+			false
+		));
+		disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			"Couloir",
+			extraCard.isNorthOpened(),
+			extraCard.isSouthOpened(),
+			extraCard.isEastOpened(),
+			extraCard.isWestOpened(),
+			true
+		));
+		extraCardImage = new JLabel(imageIcon);
+		extraCardImage.setDisabledIcon(disabledIcon);	
+		
+		// on paramètre la taille et la position de la pièce supplémentaire
+		extraCardImage.setPreferredSize(new Dimension(100, 100));
+		extraCardImage.setBounds(0, 0, 100, 100);
+
+		// on ajoute le couloir en arrière-plan
+		extraCardPane.add(extraCardImage, COULOIR_LAYER);
+		
+		
 
 		// position et taille du plateau de jeu -> on récupère les dimensions passées en paramètres
 		mazeBoard.setPreferredSize(boardSize);
@@ -171,6 +207,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(this.treasure, TREASURE_LAYER);
 		}
 
+		//On ajoute le generalBoard dans le mazeContainer, et le mazeBoard dans le generalBoard
+//		generalBoard.add(mazeBoard, new Integer(0));
+//		generalBoard.add(extraCardPane, new Integer(0));
+//		mazeContainer.add(generalBoard, new Integer(0));
 		mazeContainer.add(mazeBoard, new Integer(0));
 
 		// TODO n'écouter que les pions éventuellement
