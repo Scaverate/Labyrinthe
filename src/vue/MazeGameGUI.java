@@ -11,6 +11,7 @@ import tools.MazeImageProvider;
 import model.Coord;
 import model.Couleur;
 import model.PieceIHMs;
+import net.miginfocom.swing.MigLayout;
 import model.CouloirIHM;
 import model.TreasureIHM;
 import controler.MazeGameControlers;
@@ -29,6 +30,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel couloir;
 	private JLabel treasure;
 	private JLabel cardStack;
+	private JLabel tresorCard;
+	private JLabel tresorCardTwo;
 	private CouloirIHM extraCard;
 	private JLayeredPane extraCardPane;
 	private JLabel extraCardImage;
@@ -53,7 +56,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
-		Dimension windowSize = new Dimension(950,900);
+		Dimension windowSize = new Dimension(950,1000);
 		Icon imageIcon;
 		Icon disabledIcon;
 		Icon imageIconTreasure;
@@ -76,7 +79,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		//On crée une grille de 2 par 2 (4 cases)
 		//Le plateau sera dans la première case, les éléments de jeu dans les autres
-		generalBoard = new JPanel(new GridLayout(2,2));
+		generalBoard = new JPanel(new MigLayout());
 
 		// On crée une grille de 7 par 7 (49 cases)
 		mazeBoard = new JPanel(new GridLayout(7,7));
@@ -85,8 +88,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.setPreferredSize(windowSize);
 		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
 		
+		
+		//On crée une image pour la pile des cartes des trésors
+		imageIcon = new ImageIcon(MazeImageProvider.getImageFile("DosJeu"));
 		//On crée la zone pour la pile de cartes
-		cardStack = new JLabel();
+		tresorCard = new JLabel(imageIcon);
+		
+		//On crée une image pour la pile des cartes des trésors
+		imageIcon = new ImageIcon(MazeImageProvider.getImageFile("TresorTrois"));
+		//On crée la zone pour la pile de cartes
+		tresorCardTwo = new JLabel(imageIcon);
 		
 		//On crée la carte supplémentaire, récupérant la deuxième pièce de la liste
 		//On garde le côté aléatoire comme la liste est aléatoire
@@ -96,7 +107,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCardPane = new JLayeredPane();
 		extraCardPane.setPreferredSize(new Dimension(100, 100));
 
-		// on crée une image de couloir
+		// on crée une image de couloir pour la pièce supplémentaire
 		imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
 			"Couloir",
 			extraCard.isNorthOpened(),
@@ -211,8 +222,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 //		generalBoard.add(mazeBoard, new Integer(0));
 //		generalBoard.add(extraCardPane, new Integer(0));
 //		mazeContainer.add(generalBoard, new Integer(0));
-		mazeContainer.add(mazeBoard, new Integer(0));
-
+//		mazeContainer.add(mazeBoard, new Integer(0));
+		generalBoard.add(mazeBoard, "pos 0 0");
+		generalBoard.add(tresorCard, "pos 0.9al 0.9al");
+		generalBoard.add(tresorCard, "pos 0.8al 0.9al");
+		generalBoard.add(tresorCardTwo, "pos 0.5al 0.9al");
+		generalBoard.add(extraCardPane, "pos 0.9al 0.3al"); //AbsoluteLayout : on positionne à 90% en x et 30% en y
+		mazeContainer.add(generalBoard);
 		// TODO n'écouter que les pions éventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
