@@ -40,8 +40,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final int VERT_POS = 49;
 
 	private final Integer COULOIR_LAYER = new Integer(0);
-	private final Integer PAWN_LAYER = new Integer(1);
-	private final Integer TREASURE_LAYER = new Integer(2);
+	private final Integer TREASURE_LAYER = new Integer(1);
+	private final Integer PAWN_LAYER = new Integer(2);
 
 
 	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim) {
@@ -151,7 +151,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			this.treasure.setPreferredSize(new Dimension(100, 100));
 			this.treasure.setBounds(0, 0, 100, 100);
 			this.treasure.setOpaque(false);
-
+			System.out.println(this.treasure.getIcon().toString());
 			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(this.treasure, TREASURE_LAYER);
 		}

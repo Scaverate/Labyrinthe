@@ -1,10 +1,10 @@
 package tools;
 
 public enum MazeTreasureImage {
-	COFFRE("Tresor1", "treasure.png"),
-	BOUTEILLERHUM("Tresor2", "treasure.png"),
-	CROCODILE("Tresor3", "treasure.png"),
-	BATEAUX("Tresor4", "treasure.png");
+	COFFRE("TresorAmovible", "treasure.png"),
+	BOUTEILLERHUM("TresorAmovible", "treasure.png"),
+	CROCODILE("TresorFixe", "treasure.png"),
+	BATEAUX("TresorFixe", "treasure.png");
 	
 	public String nom;
 	public String imageFile;   
