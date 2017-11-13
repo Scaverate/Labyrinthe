@@ -144,14 +144,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		for(TreasureIHM treasureIHM : treasureIHMs){
 			System.out.println(treasureIHM);
-			// si on est sur la position d'un tresor
-			// on crée un tresor à leur emplacement dans MazeTreasurePos
 			this.treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
 
 			this.treasure.setPreferredSize(new Dimension(100, 100));
 			this.treasure.setBounds(0, 0, 100, 100);
 			this.treasure.setOpaque(false);
-			System.out.println(this.treasure.getIcon().toString());
 			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(this.treasure, TREASURE_LAYER);
 		}

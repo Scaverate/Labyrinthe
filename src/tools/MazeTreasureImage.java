@@ -1,6 +1,7 @@
 package tools;
 
 public enum MazeTreasureImage {
+	//Creation des images
 	COFFRE("TresorAmovible", "treasure.png"),
 	BOUTEILLERHUM("TresorAmovible", "treasure.png"),
 	CROCODILE("TresorFixe", "treasure.png"),

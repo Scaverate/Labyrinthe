@@ -4,6 +4,7 @@ import model.Coord;
 
 public enum MazeTreasurePos {
 	//Création 24 objets
+	//Les objets sur les couloirs fixes ont les bonnes coordonnees
 	COFFRE("TresorFixe",new Coord(0,2)),
 	BOUTEILLERHUM("TresorFixe", new Coord(0,4)),
 	CROCODILE("TresorFixe", new Coord(2,0)), 
