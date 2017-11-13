@@ -1,5 +1,6 @@
 package model.observable;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -24,7 +25,22 @@ public class MazeGame extends Observable implements BoardGames{
 	public MazeGame(int nbPlayer) {
 		super();
 		this.plateau = new Plateau(nbPlayer);
-		this.notifyObservers(plateau.getPiecesIHM());
+		
+		/* tests */
+
+		List<Couloirs> deplacementOK = new LinkedList<>();
+		List<Couloirs> depOK = new LinkedList<>();
+		Couloirs couloir = this.plateau.getCouloirs().get(17);
+		
+		
+		depOK = plateau.rechercheChemin(couloir, this.plateau.getCouloirs(), deplacementOK);
+		
+		System.out.println(depOK);
+		System.out.println(depOK.size());
+		
+		/* fin tests */
+		
+		this.notifyObservers(this.plateau.getPiecesIHM());
 	}
 
 

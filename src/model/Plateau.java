@@ -371,13 +371,74 @@ public class Plateau implements BoardGames {
 		}
 		return string;
 	}
+	
+	// a suppr je pense
+	public List<Couloirs> getCouloirs(){ return this.couloirs; }
+	
+	/**
+	 * Recherche les chemins possibles à partir d'un couloir
+	 * 
+	 * @param  Couloirs 	  c
+	 * @param  List<Couloirs> couloirs 
+	 * 
+	 * @return List<Couloirs> deplacementOK
+	 */
+	public List<Couloirs> rechercheChemin(Couloirs c, List<Couloirs> couloirs, List<Couloirs> deplacementOK) {
+		deplacementOK.add(c);
+		
+		if (c.isNorthOpened()) {
+	        Couloirs voisin = null;
+	        for (Couloirs couloir : couloirs) {
+	            if (couloir.getX() == c.getX() && couloir.getY() == c.getY()-1) {
+	                voisin = couloir;
+	            }
+	        }
+	        
+	        if (voisin != null && voisin.isSouthOpened() && !deplacementOK.contains(voisin)) {
+	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        }
+	    }
+		
+		if (c.isEastOpened()) {
+	        Couloirs voisin = null;
+	        for (Couloirs couloir : couloirs) {
+	            if (couloir.getX() == c.getX()+1 && couloir.getY() == c.getY()) {
+	                voisin = couloir;
+	            }
+	        }
+	        
+	        if (voisin != null && voisin.isWestOpened() && !deplacementOK.contains(voisin)) {
+	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        }
+	    }
+		
+		if (c.isSouthOpened()) {
+	        Couloirs voisin = null;
+	        for (Couloirs couloir : couloirs) {
+	            if (couloir.getX() == c.getX() && couloir.getY() == c.getY()+1) {
+	                voisin = couloir;
+	            }
+	        }
+	        
+	        if (voisin != null && voisin.isNorthOpened() && !deplacementOK.contains(voisin)) {
+	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        }
+	    }
+		
+		if (c.isWestOpened()) {
+	        Couloirs voisin = null;
+	        for (Couloirs couloir : couloirs) {
+	            if (couloir.getX() == c.getX()-1 && couloir.getY() == c.getY()) {
+	                voisin = couloir;
+	            }
+	        }
+	        
+	        if (voisin != null && voisin.isEastOpened() && !deplacementOK.contains(voisin)) {
+	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        }
+	    }
 
-	// tests
-	public static void main(String [ ] args) {
-		Plateau plateau = new Plateau(4);
-		for(Couloirs couloir : plateau.couloirs) {
-			System.out.println(couloir);
-		}
+		return deplacementOK;
 	}
 
 	private Jeu jeuBleu;
