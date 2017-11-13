@@ -183,7 +183,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			JLayeredPane destinationPane = (JLayeredPane) componentPressed.getParent();
 
 			// on ne prend que la couche la plus haute
-			if(destinationPane.getLayer(componentPressed) == COULOIR_LAYER) {
+			if(destinationPane.getLayer(componentPressed) == COULOIR_LAYER || destinationPane.getLayer(componentPressed) == TREASURE_LAYER) {
 				return;
 			}
 
