@@ -372,9 +372,6 @@ public class Plateau implements BoardGames {
 		return string;
 	}
 	
-	// a suppr je pense
-	public List<Couloirs> getCouloirs(){ return this.couloirs; }
-	
 	/**
 	 * Recherche les chemins possibles à partir d'un couloir
 	 * 
@@ -383,62 +380,62 @@ public class Plateau implements BoardGames {
 	 * 
 	 * @return List<Couloirs> deplacementOK
 	 */
-	public List<Couloirs> rechercheChemin(Couloirs c, List<Couloirs> couloirs, List<Couloirs> deplacementOK) {
-		deplacementOK.add(c);
+	public List<Couloirs> findPath(Couloirs c, List<Couloirs> corridors, List<Couloirs> reachableCorridors) {
+		reachableCorridors.add(c);
 		
 		if (c.isNorthOpened()) {
-	        Couloirs voisin = null;
-	        for (Couloirs couloir : couloirs) {
-	            if (couloir.getX() == c.getX() && couloir.getY() == c.getY()-1) {
-	                voisin = couloir;
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX() && corridor.getY() == c.getY()-1) {
+	                neighbor = corridor;
 	            }
 	        }
 	        
-	        if (voisin != null && voisin.isSouthOpened() && !deplacementOK.contains(voisin)) {
-	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        if (neighbor != null && neighbor.isSouthOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
 	        }
 	    }
 		
 		if (c.isEastOpened()) {
-	        Couloirs voisin = null;
-	        for (Couloirs couloir : couloirs) {
-	            if (couloir.getX() == c.getX()+1 && couloir.getY() == c.getY()) {
-	                voisin = couloir;
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX()+1 && corridor.getY() == c.getY()) {
+	            	neighbor = corridor;
 	            }
 	        }
 	        
-	        if (voisin != null && voisin.isWestOpened() && !deplacementOK.contains(voisin)) {
-	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        if (neighbor != null && neighbor.isWestOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
 	        }
 	    }
 		
 		if (c.isSouthOpened()) {
-	        Couloirs voisin = null;
-	        for (Couloirs couloir : couloirs) {
-	            if (couloir.getX() == c.getX() && couloir.getY() == c.getY()+1) {
-	                voisin = couloir;
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX() && corridor.getY() == c.getY()+1) {
+	            	neighbor = corridor;
 	            }
 	        }
 	        
-	        if (voisin != null && voisin.isNorthOpened() && !deplacementOK.contains(voisin)) {
-	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        if (neighbor != null && neighbor.isNorthOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
 	        }
 	    }
 		
 		if (c.isWestOpened()) {
-	        Couloirs voisin = null;
-	        for (Couloirs couloir : couloirs) {
-	            if (couloir.getX() == c.getX()-1 && couloir.getY() == c.getY()) {
-	                voisin = couloir;
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX()-1 && corridor.getY() == c.getY()) {
+	            	neighbor = corridor;
 	            }
 	        }
 	        
-	        if (voisin != null && voisin.isEastOpened() && !deplacementOK.contains(voisin)) {
-	            rechercheChemin(voisin, couloirs, deplacementOK);
+	        if (neighbor != null && neighbor.isEastOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
 	        }
 	    }
 
-		return deplacementOK;
+		return reachableCorridors;
 	}
 
 	private Jeu jeuBleu;
