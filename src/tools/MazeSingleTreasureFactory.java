@@ -22,11 +22,11 @@ public class MazeSingleTreasureFactory {
 	 * @param pieceCouleur
 	 * @return liste de pi�ces de jeu d'�chec
 	 */
-	public static Treasures newTreasure(int x, int y, String nom) {
+	public static Treasures newTreasure(int x, int y, String name) {
 
 		Treasures treasure = null;
 		
-		String className = "model." + nom;	// attention au chemin
+		String className = "model." + name;	// attention au chemin
 		Coord treasureCoord = new Coord(x, y);
 		
 		treasure = (Treasures) Introspection.newInstance (className,

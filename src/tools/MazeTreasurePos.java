@@ -17,19 +17,19 @@ public enum MazeTreasurePos {
 	DIAMAND("TreasureFixed", new Coord(4,6)),
 	TABLEAU("TreasureFixed", new Coord(6,2)),
 	SABLIER("TreasureFixed", new Coord(6,4)),
-	POMME("TreasureRemovable", new Coord(0,0)),
-	POIRE("TreasureRemovable", new Coord(0,0)),
-	PECHE("TreasureRemovable", new Coord(0,0)),
-	ABRICOT("TreasureRemovable", new Coord(0,0)),
-	BANANE("TreasureRemovable", new Coord(0,0)),
-	CLEMENTINE("TreasureRemovable", new Coord(0,0)),
-	ORANGE("TreasureRemovable", new Coord(0,0)),
-	FRAISE("TreasureRemovable", new Coord(0,0)),
-	FRAMBOISE("TreasureRemovable", new Coord(0,0)),
-	CERISE("TreasureRemovable", new Coord(0,0)),
-	PAMPLEMOUSSE("TreasureRemovable", new Coord(0,0)),
-	RAISIN("TreasureRemovable", new Coord(0,0)),
-	TOMATE("TreasureRemovable", new Coord(0,0));
+	POMME("TreasureMoveable", new Coord(0,0)),
+	POIRE("TreasureMoveable", new Coord(0,0)),
+	PECHE("TreasureMoveable", new Coord(0,0)),
+	ABRICOT("TreasureMoveable", new Coord(0,0)),
+	BANANE("TreasureMoveable", new Coord(0,0)),
+	CLEMENTINE("TreasureMoveable", new Coord(0,0)),
+	ORANGE("TreasureMoveable", new Coord(0,0)),
+	FRAISE("TreasureMoveable", new Coord(0,0)),
+	FRAMBOISE("TreasureMoveable", new Coord(0,0)),
+	CERISE("TreasureMoveable", new Coord(0,0)),
+	PAMPLEMOUSSE("TreasureMoveable", new Coord(0,0)),
+	RAISIN("TreasureMoveable", new Coord(0,0)),
+	TOMATE("TreasureMoveable", new Coord(0,0));
 	
 	public String name;
 	public Coord coord;
