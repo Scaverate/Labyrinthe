@@ -62,7 +62,7 @@ public enum MazeCouloirsPos {
 	COULOIRFIXE16("CouloirFixe", new Coord(6, 6), true, false, false, true)
 	;
 
-	public String nom;
+	public String name;
 	public Coord coord;
 	public boolean isNorthOpened;
 	public boolean isSouthOpened;
@@ -154,8 +154,8 @@ public enum MazeCouloirsPos {
 		return booleanSetList.get(random.nextInt(booleanSetList.size()));
 	}
 
-	MazeCouloirsPos( String nom, Coord coord, boolean isNorthOpened, boolean isEastOpened, boolean isSouthOpened, boolean isWestOpened) {
-		this.nom = nom;
+	MazeCouloirsPos( String name, Coord coord, boolean isNorthOpened, boolean isEastOpened, boolean isSouthOpened, boolean isWestOpened) {
+		this.name = name;
 		this.coord = coord;
 		this.isNorthOpened = isNorthOpened;
 		this.isSouthOpened = isSouthOpened;
@@ -164,8 +164,8 @@ public enum MazeCouloirsPos {
 		this.isFixed = true;
 	}
 
-	MazeCouloirsPos(String nom, Coord coord, ArrayList<Boolean> booleans) {
-		this.nom = nom;
+	MazeCouloirsPos(String name, Coord coord, ArrayList<Boolean> booleans) {
+		this.name = name;
 		this.coord = coord;
 		this.isNorthOpened = booleans.get(0);
 		this.isSouthOpened = booleans.get(2);

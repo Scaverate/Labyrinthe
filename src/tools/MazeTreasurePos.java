@@ -5,37 +5,37 @@ import model.Coord;
 public enum MazeTreasurePos {
 	//Création 24 objets
 	//Les objets sur les couloirs fixes ont les bonnes coordonnees
-	COFFRE("TresorFixe",new Coord(0,2)),
-	BOUTEILLERHUM("TresorFixe", new Coord(0,4)),
-	CROCODILE("TresorFixe", new Coord(2,0)), 
-	BATEAUX("TresorFixe", new Coord(2,2)),
-	COURONNE("TresorFixe", new Coord(2,4)),
-	CORNE("TresorFixe", new Coord(2,6)),
-	MAGE("TresorFixe", new Coord(4,0)),
-	PAPYRUS("TresorFixe", new Coord(4,2)),
-	EPEE("TresorFixe", new Coord(4,4)),
-	DIAMAND("TresorFixe", new Coord(4,6)),
-	TABLEAU("TresorFixe", new Coord(6,2)),
-	SABLIER("TresorFixe", new Coord(6,4)),
-	POMME("TresorAmovible", new Coord(0,0)),
-	POIRE("TresorAmovible", new Coord(0,0)),
-	PECHE("TresorAmovible", new Coord(0,0)),
-	ABRICOT("TresorAmovible", new Coord(0,0)),
-	BANANE("TresorAmovible", new Coord(0,0)),
-	CLEMENTINE("TresorAmovible", new Coord(0,0)),
-	ORANGE("TresorAmovible", new Coord(0,0)),
-	FRAISE("TresorAmovible", new Coord(0,0)),
-	FRAMBOISE("TresorAmovible", new Coord(0,0)),
-	CERISE("TresorAmovible", new Coord(0,0)),
-	PAMPLEMOUSSE("TresorAmovible", new Coord(0,0)),
-	RAISIN("TresorAmovible", new Coord(0,0)),
-	TOMATE("TresorAmovible", new Coord(0,0));
+	COFFRE("TreasureFixed",new Coord(0,2)),
+	BOUTEILLERHUM("TreasureFixed", new Coord(0,4)),
+	CROCODILE("TreasureFixed", new Coord(2,0)), 
+	BATEAUX("TreasureFixed", new Coord(2,2)),
+	COURONNE("TreasureFixed", new Coord(2,4)),
+	CORNE("TreasureFixed", new Coord(2,6)),
+	MAGE("TreasureFixed", new Coord(4,0)),
+	PAPYRUS("TreasureFixed", new Coord(4,2)),
+	EPEE("TreasureFixed", new Coord(4,4)),
+	DIAMAND("TreasureFixed", new Coord(4,6)),
+	TABLEAU("TreasureFixed", new Coord(6,2)),
+	SABLIER("TreasureFixed", new Coord(6,4)),
+	POMME("TreasureRemovable", new Coord(0,0)),
+	POIRE("TreasureRemovable", new Coord(0,0)),
+	PECHE("TreasureRemovable", new Coord(0,0)),
+	ABRICOT("TreasureRemovable", new Coord(0,0)),
+	BANANE("TreasureRemovable", new Coord(0,0)),
+	CLEMENTINE("TreasureRemovable", new Coord(0,0)),
+	ORANGE("TreasureRemovable", new Coord(0,0)),
+	FRAISE("TreasureRemovable", new Coord(0,0)),
+	FRAMBOISE("TreasureRemovable", new Coord(0,0)),
+	CERISE("TreasureRemovable", new Coord(0,0)),
+	PAMPLEMOUSSE("TreasureRemovable", new Coord(0,0)),
+	RAISIN("TreasureRemovable", new Coord(0,0)),
+	TOMATE("TreasureRemovable", new Coord(0,0));
 	
-	public String nom;
+	public String name;
 	public Coord coord;
 	
-	MazeTreasurePos( String nom, Coord coords) {
-		this.nom = nom;
+	MazeTreasurePos( String name, Coord coords) {
+		this.name = name;
 		this.coord = coords;
 	}
 }

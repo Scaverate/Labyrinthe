@@ -2,16 +2,16 @@ package tools;
 
 public enum MazeTreasureImage {
 	//Creation des images
-	COFFRE("TresorAmovible", "treasure.png"),
-	BOUTEILLERHUM("TresorAmovible", "treasure.png"),
-	CROCODILE("TresorFixe", "treasure.png"),
-	BATEAUX("TresorFixe", "treasure.png");
+	COFFRE("TreasureRemovable", "treasure.png"),
+	BOUTEILLERHUM("TreasureRemovable", "treasure.png"),
+	CROCODILE("TreasureFixed", "treasure.png"),
+	BATEAUX("TreasureFixed", "treasure.png");
 	
-	public String nom;
+	public String name;
 	public String imageFile;   
 
-	MazeTreasureImage(String nom, String imageFile) { 
-		this.nom = nom;
+	MazeTreasureImage(String name, String imageFile) { 
+		this.name = name;
 		this.imageFile = imageFile;
 	}
 }

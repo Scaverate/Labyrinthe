@@ -3,14 +3,14 @@ package model;
 public abstract class AbstractTreasure implements Treasures {
 	private int x;
 	private int y;
-	private String nom;
-	private boolean catchOk;
+	private String name;
+	private boolean isCatched;
 	
-	public AbstractTreasure(int x, int y, String nom, boolean catchOk) {
+	public AbstractTreasure(int x, int y, String name, boolean isCatched) {
 		this.x = x;
 		this.y = y;
-		this.nom = new String(nom);
-		this.catchOk = false;
+		this.name = new String(name);
+		this.isCatched = false;
 	}
 
 	@Override
@@ -25,11 +25,11 @@ public abstract class AbstractTreasure implements Treasures {
 
 	@Override
 	public String getTreasureName() {
-		return nom;
+		return name;
 	}
 	
-	public boolean isCatchOk() {
-		return catchOk;
+	public boolean isCatched() {
+		return isCatched;
 	}
 
 	@Override

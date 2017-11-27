@@ -44,7 +44,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final Integer PAWN_LAYER = new Integer(2);
 
 
-	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim) {
+	public MazeGameGUI(String name, MazeGameControlers mazeGameControler, Dimension dim) {
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
@@ -160,7 +160,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeBoard.addMouseMotionListener(this);
 
 		// histoire d'utiliser le nom
-		System.out.println(nom);
+		System.out.println(name);
 
 	}
 	

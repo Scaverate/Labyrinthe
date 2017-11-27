@@ -21,17 +21,17 @@ public class MazeImageProvider {
 	static {	
 		mapImage = new HashMap<String, String>();
 		for (int i = 0; i < MazePieceImage.values().length; i++) {
-			mapImage.put(MazePieceImage.values()[i].nom, MazePieceImage.values()[i].imageFile);
+			mapImage.put(MazePieceImage.values()[i].name, MazePieceImage.values()[i].imageFile);
 		}
 
 		mapImageCouloirs = new HashMap<String, String>();
 		for (int i = 0; i < MazeCouloirImage.values().length; i++) {
-			mapImageCouloirs.put(MazeCouloirImage.values()[i].nom, MazeCouloirImage.values()[i].imageFile);
+			mapImageCouloirs.put(MazeCouloirImage.values()[i].name, MazeCouloirImage.values()[i].imageFile);
 		}
 		
 		mapImageTreasures = new HashMap<String, String>();
 		for (int i = 0; i < MazeTreasureImage.values().length; i++) {
-			mapImageTreasures.put(MazeTreasureImage.values()[i].nom, MazeTreasureImage.values()[i].imageFile);
+			mapImageTreasures.put(MazeTreasureImage.values()[i].name, MazeTreasureImage.values()[i].imageFile);
 		}
 		
 	}

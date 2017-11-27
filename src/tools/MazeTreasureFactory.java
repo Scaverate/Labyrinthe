@@ -29,7 +29,7 @@ public class MazeTreasureFactory {
 		treasures = new LinkedList<Treasures>();
 		List<Coord> listCoord = null;
 		listCoord = new LinkedList<Coord>();
-		int nombreAleatoire = 0;
+		int randomNumber = 0;
 		
 		//Récupération dans la liste les couloirs amovibles
 		for(int j = 0; j < 48; j++){
@@ -41,19 +41,19 @@ public class MazeTreasureFactory {
 		//Si objets fixe, on recupere les coordonnees ecrites dans MazeTreasurePos
 		//Sinon, on recupere une piece amovible aleatoirement parmis la liste
 		for(int i = 0; i < MazeTreasurePos.values().length; i++){
-			if(MazeTreasurePos.values()[i].nom == "TresorFixe"){
+			if(MazeTreasurePos.values()[i].name == "TreasureFixed"){
 				Treasure theTreasure = new Treasure(MazeTreasurePos.values()[i].coord.x,
-						MazeTreasurePos.values()[i].coord.y, MazeTreasurePos.values()[i].nom, false);
+						MazeTreasurePos.values()[i].coord.y, MazeTreasurePos.values()[i].name, false);
 				System.out.println("TYPE FIXE :" + theTreasure);
 				treasures.add(theTreasure);
 			}else{
 				Random rand = new Random();
 				//Recuperation nombre aleatoire entre 0 et nombre de coordonnees valides restantes
-				nombreAleatoire = rand.nextInt(listCoord.size() - 0 ) + 0;
-				Treasure theTreasure = new Treasure(listCoord.get(nombreAleatoire).x,listCoord.get(nombreAleatoire).y,
-						 			   MazeTreasurePos.values()[i].nom, false);
+				randomNumber = rand.nextInt(listCoord.size() - 0 ) + 0;
+				Treasure theTreasure = new Treasure(listCoord.get(randomNumber).x,listCoord.get(randomNumber).y,
+						 			   MazeTreasurePos.values()[i].name, false);
 				treasures.add(theTreasure);
-				listCoord.remove(nombreAleatoire);
+				listCoord.remove(randomNumber);
 				System.out.println("TYPE AMOVIBLE : " + theTreasure);
 			}
 		}
