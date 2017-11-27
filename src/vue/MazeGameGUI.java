@@ -11,6 +11,7 @@ import tools.MazeImageProvider;
 import model.Coord;
 import model.Couleur;
 import model.PieceIHMs;
+import net.miginfocom.swing.MigLayout;
 import model.CouloirIHM;
 import model.TreasureIHM;
 import controler.MazeGameControlers;
@@ -24,9 +25,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	
 	private JLayeredPane layeredPane;
 	private JLayeredPane mazeContainer;
+	private JPanel generalBoard;
 	private JPanel mazeBoard;
 	private JLabel couloir;
 	private JLabel treasure;
+	private JLabel cardStack;
+	private JLabel tresorCard;
+	private JLabel tresorCardTwo;
+	private CouloirIHM extraCard;
+	private JLayeredPane extraCardPane;
+	private JLabel extraCardImage;
 	private JLabel pawn = null;
 	private int xAdjustment;
 	private int yAdjustment;
@@ -48,6 +56,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
+		Dimension windowSize = new Dimension(950,1000);
 		Icon imageIcon;
 		Icon disabledIcon;
 		Icon imageIconTreasure;
@@ -64,12 +73,68 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// on crée un conteneur general qui acceuillera le tableau de jeu + l'element draggé
 		mazeContainer = new JLayeredPane();
-		mazeContainer.setPreferredSize(boardSize);
-		mazeContainer.setBounds(0, 0, boardSize.width, boardSize.height);
+		mazeContainer.setPreferredSize(windowSize);
+		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
 		getContentPane().add(mazeContainer); // on l'ajoute à la fenetre principale
+		
+		//On crée une grille de 2 par 2 (4 cases)
+		//Le plateau sera dans la première case, les éléments de jeu dans les autres
+		generalBoard = new JPanel(new MigLayout());
 
 		// On crée une grille de 7 par 7 (49 cases)
 		mazeBoard = new JPanel(new GridLayout(7,7));
+		
+		//On définit la taille de la grille générale
+		generalBoard.setPreferredSize(windowSize);
+		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
+		
+		
+		//On crée une image pour la pile des cartes des trésors
+		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("DosJeu"));
+		//On crée la zone pour la pile de cartes
+		tresorCard = new JLabel(imageIcon);
+		
+		//On crée une image pour la pile des cartes des trésors
+		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("TresorTrois"));
+		//On crée la zone pour la pile de cartes
+		tresorCardTwo = new JLabel(imageIcon);
+		
+		//On crée la carte supplémentaire, récupérant la deuxième pièce de la liste
+		//On garde le côté aléatoire comme la liste est aléatoire
+		//Il faut la deuxième car la première est un angle de départ
+		extraCard = couloirIHMs.get(1);
+		// on crée un panneau contenant différents plans
+		extraCardPane = new JLayeredPane();
+		extraCardPane.setPreferredSize(new Dimension(100, 100));
+
+		// on crée une image de couloir pour la pièce supplémentaire
+		imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			"Couloir",
+			extraCard.isNorthOpened(),
+			extraCard.isSouthOpened(),
+			extraCard.isEastOpened(),
+			extraCard.isWestOpened(),
+			false
+		));
+		disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			"Couloir",
+			extraCard.isNorthOpened(),
+			extraCard.isSouthOpened(),
+			extraCard.isEastOpened(),
+			extraCard.isWestOpened(),
+			true
+		));
+		extraCardImage = new JLabel(imageIcon);
+		extraCardImage.setDisabledIcon(disabledIcon);	
+		
+		// on paramètre la taille et la position de la pièce supplémentaire
+		extraCardImage.setPreferredSize(new Dimension(100, 100));
+		extraCardImage.setBounds(0, 0, 100, 100);
+
+		// on ajoute le couloir en arrière-plan
+		extraCardPane.add(extraCardImage, COULOIR_LAYER);
+		
+		
 
 		// position et taille du plateau de jeu -> on récupère les dimensions passées en paramètres
 		mazeBoard.setPreferredSize(boardSize);
@@ -153,8 +218,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(this.treasure, TREASURE_LAYER);
 		}
 
-		mazeContainer.add(mazeBoard, new Integer(0));
-
+		//On ajoute le generalBoard dans le mazeContainer, et le mazeBoard dans le generalBoard
+//		generalBoard.add(mazeBoard, new Integer(0));
+//		generalBoard.add(extraCardPane, new Integer(0));
+//		mazeContainer.add(generalBoard, new Integer(0));
+//		mazeContainer.add(mazeBoard, new Integer(0));
+		generalBoard.add(mazeBoard, "pos 0 0");
+		generalBoard.add(tresorCard, "pos 0.9al 0.9al");
+		generalBoard.add(tresorCard, "pos 0.8al 0.9al");
+		generalBoard.add(tresorCardTwo, "pos 0.5al 0.9al");
+		generalBoard.add(extraCardPane, "pos 0.9al 0.3al"); //AbsoluteLayout : on positionne à 90% en x et 30% en y
+		mazeContainer.add(generalBoard);
 		// TODO n'écouter que les pions éventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
