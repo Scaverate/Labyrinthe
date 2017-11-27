@@ -12,6 +12,7 @@ import model.Coord;
 import model.Couleur;
 import model.PieceIHMs;
 import model.CouloirIHM;
+import model.TreasureIHM;
 import controler.MazeGameControlers;
 
 public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
@@ -25,6 +26,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane mazeContainer;
 	private JPanel mazeBoard;
 	private JLabel couloir;
+	private JLabel treasure;
 	private JLabel pawn = null;
 	private int xAdjustment;
 	private int yAdjustment;
@@ -38,15 +40,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final int VERT_POS = 49;
 
 	private final Integer COULOIR_LAYER = new Integer(0);
-	private final Integer PAWN_LAYER = new Integer(1);
+	private final Integer TREASURE_LAYER = new Integer(1);
+	private final Integer PAWN_LAYER = new Integer(2);
 
 
-	public MazeGameGUI(String nom, MazeGameControlers mazeGameControler, Dimension dim) {
+	public MazeGameGUI(String name, MazeGameControlers mazeGameControler, Dimension dim) {
 
 		// récupération des dimensions de la fenetre
 		Dimension boardSize = dim;
 		Icon imageIcon;
 		Icon disabledIcon;
+		Icon imageIconTreasure;
+		List<TreasureIHM> treasureIHMs;
 		List<CouloirIHM> couloirIHMs;
 		List<PieceIHMs> pieceIHMs;
 
@@ -54,6 +59,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		this.mazeGameControler = mazeGameControler;
 		couloirIHMs = mazeGameControler.getCouloirsIHMs();
 		pieceIHMs = mazeGameControler.getPiecesIHMs();
+		treasureIHMs = mazeGameControler.getTreasuresIHMs();
+		
 
 		// on crée un conteneur general qui acceuillera le tableau de jeu + l'element draggé
 		mazeContainer = new JLayeredPane();
@@ -67,7 +74,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		// position et taille du plateau de jeu -> on récupère les dimensions passées en paramètres
 		mazeBoard.setPreferredSize(boardSize);
 		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
+		
 
+		
 		// création des couloirs à partir du modèle
 		for(CouloirIHM couloirIHM : couloirIHMs) {
 
@@ -132,15 +141,26 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(pieceIHM.getX() + 7*pieceIHM.getY())).add(this.pawn, PAWN_LAYER);
 		}
+		
+		for(TreasureIHM treasureIHM : treasureIHMs){
+			System.out.println(treasureIHM);
+			this.treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
+
+			this.treasure.setPreferredSize(new Dimension(100, 100));
+			this.treasure.setBounds(0, 0, 100, 100);
+			this.treasure.setOpaque(false);
+			//TODO moche ajouter tests
+			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(this.treasure, TREASURE_LAYER);
+		}
 
 		mazeContainer.add(mazeBoard, new Integer(0));
-		
+
 		// TODO n'écouter que les pions éventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
 
 		// histoire d'utiliser le nom
-		System.out.println(nom);
+		System.out.println(name);
 
 	}
 	
@@ -160,7 +180,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			JLayeredPane destinationPane = (JLayeredPane) componentPressed.getParent();
 
 			// on ne prend que la couche la plus haute
-			if(destinationPane.getLayer(componentPressed) == COULOIR_LAYER) {
+			if(destinationPane.getLayer(componentPressed) == COULOIR_LAYER || destinationPane.getLayer(componentPressed) == TREASURE_LAYER) {
 				return;
 			}
 

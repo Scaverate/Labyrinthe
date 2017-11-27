@@ -3,6 +3,7 @@ package controler;
 import model.Coord;
 import model.CouloirIHM;
 import model.PieceIHMs;
+import model.TreasureIHM;
 
 import java.util.List;
 
@@ -34,7 +35,8 @@ public interface MazeGameControlers {
 	 * pour empêcher tout déplacement sur le damier
 	 */
 	public boolean isPlayerOK(Coord initCoord);
-
+	
+	public List<TreasureIHM> getTreasuresIHMs();
 	public List<CouloirIHM> getCouloirsIHMs();
 	public List<PieceIHMs> getPiecesIHMs();
 

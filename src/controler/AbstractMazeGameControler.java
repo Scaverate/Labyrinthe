@@ -6,6 +6,8 @@ import model.Coord;
 import model.Couleur;
 import model.CouloirIHM;
 import model.PieceIHMs;
+import model.TreasureIHM;
+import model.TreasureIHMs;
 import model.observable.MazeGame;
 
 
@@ -92,7 +94,8 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	protected Couleur getPieceColor(Coord initCoord){		
 		return this.mazeGame.getPieceColor(initCoord.x, initCoord.y);		
 	}
-
+	
+	public List<TreasureIHM> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.mazeGame.getPiecesIHMs(); }
 }

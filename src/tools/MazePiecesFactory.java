@@ -30,7 +30,7 @@ public class MazePiecesFactory {
 			for (int i = 0; i < MazePiecePos.values().length; i++) {
 				if (pieceCouleur.equals(MazePiecePos.values()[i].couleur)) {
 					for (int j = 0; j < (MazePiecePos.values()[i].coords).length; j++) {
-						String className = "model." + MazePiecePos.values()[i].nom;	// attention au chemin
+						String className = "model." + MazePiecePos.values()[i].name;	// attention au chemin
 						Coord pieceCoord = MazePiecePos.values()[i].coords[j];
 						pieces.add((Pieces) Introspection.newInstance (className,
 								new Object[] {pieceCouleur, pieceCoord}));

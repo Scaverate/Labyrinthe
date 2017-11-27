@@ -4,13 +4,13 @@ public abstract class AbstractPiece implements Pieces {
 	private Couleur couleur;
 	private int x;
 	private int y;
-	private String nom;
+	private String name;
 	
-	public AbstractPiece(Couleur couleur, int x, int y, String nom) {
+	public AbstractPiece(Couleur couleur, int x, int y, String name) {
 		this.couleur = couleur;
 		this.x = x;
 		this.y = y;
-		this.nom = new String(nom);
+		this.name = new String(name);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public abstract class AbstractPiece implements Pieces {
 
 	@Override
 	public String getName() {
-		return nom;
+		return name;
 	}
 
 	@Override

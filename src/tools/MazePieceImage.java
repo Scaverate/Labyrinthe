@@ -6,11 +6,11 @@ public enum MazePieceImage {
 	PIONJAUNE("PionJAUNE", "pion_jaune.png"),
 	PIONVERT("PionVERT", "pion_vert.png");
 	
-	public String nom;
+	public String name;
 	public String imageFile;   
 
-	MazePieceImage(String nom, String imageFile) { 
-		this.nom = nom;
+	MazePieceImage(String name, String imageFile) { 
+		this.name = name;
 		this.imageFile = imageFile;
 	}
 }

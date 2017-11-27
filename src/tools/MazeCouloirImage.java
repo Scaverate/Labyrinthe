@@ -13,11 +13,11 @@ public enum MazeCouloirImage {
     Couloir_9("Couloir_1_0_1_1", "piece_labyrinthe_type_9.png")
     ;
 
-    public String nom;
+    public String name;
     public String imageFile;
 
-    MazeCouloirImage (String nom, String imageFile) {
-        this.nom = nom;
+    MazeCouloirImage (String name, String imageFile) {
+        this.name = name;
         this.imageFile = imageFile;
     }
 }

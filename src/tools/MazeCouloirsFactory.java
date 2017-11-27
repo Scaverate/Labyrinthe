@@ -37,7 +37,7 @@ public class MazeCouloirsFactory {
 
         // génération des couloirs
         for (int i = 0; i < MazeCouloirsPos.values().length; i++) {
-            //className = "model." + MazeCouloirsPos.values()[i].nom;
+            //className = "model." + MazeCouloirsPos.values()[i].name;
             couloirCoord = MazeCouloirsPos.values()[i].coord;
             isNorthOpened = MazeCouloirsPos.values()[i].isNorthOpened;
             isSouthOpened = MazeCouloirsPos.values()[i].isSouthOpened;
