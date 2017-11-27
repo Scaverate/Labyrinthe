@@ -371,13 +371,71 @@ public class Plateau implements BoardGames {
 		}
 		return string;
 	}
+	
+	/**
+	 * Recherche les chemins possibles à partir d'un couloir
+	 * 
+	 * @param  Couloirs 	  c
+	 * @param  List<Couloirs> couloirs 
+	 * 
+	 * @return List<Couloirs> deplacementOK
+	 */
+	public List<Couloirs> findPath(Couloirs c, List<Couloirs> corridors, List<Couloirs> reachableCorridors) {
+		reachableCorridors.add(c);
+		
+		if (c.isNorthOpened()) {
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX() && corridor.getY() == c.getY()-1) {
+	                neighbor = corridor;
+	            }
+	        }
+	        
+	        if (neighbor != null && neighbor.isSouthOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
+	        }
+	    }
+		
+		if (c.isEastOpened()) {
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX()+1 && corridor.getY() == c.getY()) {
+	            	neighbor = corridor;
+	            }
+	        }
+	        
+	        if (neighbor != null && neighbor.isWestOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
+	        }
+	    }
+		
+		if (c.isSouthOpened()) {
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX() && corridor.getY() == c.getY()+1) {
+	            	neighbor = corridor;
+	            }
+	        }
+	        
+	        if (neighbor != null && neighbor.isNorthOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
+	        }
+	    }
+		
+		if (c.isWestOpened()) {
+	        Couloirs neighbor = null;
+	        for (Couloirs corridor : corridors) {
+	            if (corridor.getX() == c.getX()-1 && corridor.getY() == c.getY()) {
+	            	neighbor = corridor;
+	            }
+	        }
+	        
+	        if (neighbor != null && neighbor.isEastOpened() && !reachableCorridors.contains(neighbor)) {
+	        	findPath(neighbor, corridors, reachableCorridors);
+	        }
+	    }
 
-	// tests
-	public static void main(String [ ] args) {
-		Plateau plateau = new Plateau(4);
-		for(Couloirs couloir : plateau.couloirs) {
-			System.out.println(couloir);
-		}
+		return reachableCorridors;
 	}
 
 	private Jeu jeuBleu;

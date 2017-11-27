@@ -24,7 +24,7 @@ public class MazeGame extends Observable implements BoardGames{
 	public MazeGame(int nbPlayer) {
 		super();
 		this.plateau = new Plateau(nbPlayer);
-		this.notifyObservers(plateau.getPiecesIHM());
+		this.notifyObservers(this.plateau.getPiecesIHM());
 	}
 
 
