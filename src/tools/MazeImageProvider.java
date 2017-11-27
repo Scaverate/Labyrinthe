@@ -17,6 +17,7 @@ public class MazeImageProvider {
 	private static Map<String, String> mapImage;
 	private static Map<String, String> mapImageCouloirs;
 	private static Map<String, String> mapImageTreasures;
+	private static Map<String, String> mapImageTresorsCard;
 
 	static {	
 		mapImage = new HashMap<String, String>();
@@ -32,6 +33,11 @@ public class MazeImageProvider {
 		mapImageTreasures = new HashMap<String, String>();
 		for (int i = 0; i < MazeTreasureImage.values().length; i++) {
 			mapImageTreasures.put(MazeTreasureImage.values()[i].name, MazeTreasureImage.values()[i].imageFile);
+		}
+		
+		mapImageTresorsCard = new HashMap<String, String>();
+		for (int i = 0; i < MazeTresorsImage.values().length; i++) {
+			mapImageTresorsCard.put(MazeTresorsImage.values()[i].name, MazeTresorsImage.values()[i].imageFile);
 		}
 	}
 
@@ -56,20 +62,19 @@ public class MazeImageProvider {
 		return ret;		
 	}
 	
-	public static String getImageFile(String pieceType) {
+	public static String getImageCardTresorsFile(String pieceType) {
 		String ret, key, value, path; 
 		ret = null;
 		key = pieceType;
 		//System.out.println(key);
-		value = mapImageTresors.get(key);
+		value = mapImageTresorsCard.get(key);
 		//System.out.println(value);
 		File g = new File("");
 		path = "/src/images/tresors/";
 		ret = g.getAbsolutePath() + path + value;
-		//System.out.println(ret);
+		System.out.println(ret);
 		return ret;
 	}
-	
 
 	/**
 	 * @param pieceType

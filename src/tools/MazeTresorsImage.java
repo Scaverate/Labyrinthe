@@ -5,11 +5,11 @@ public enum MazeTresorsImage {
 	TRESORDEUX("DosJeu", "dos_carte_jeu.png"),
 	TRESORTROIS("TresorTrois", "tresor_trois.png");
 	
-	public String nom;
+	public String name;
 	public String imageFile;   
 
-	MazeTresorsImage(String nom, String imageFile) { 
-		this.nom = nom;
+	MazeTresorsImage(String name, String imageFile) { 
+		this.name = name;
 		this.imageFile = imageFile;
 	}
 }

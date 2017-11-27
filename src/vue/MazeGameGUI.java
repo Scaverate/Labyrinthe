@@ -90,12 +90,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		
 		//On crée une image pour la pile des cartes des trésors
-		imageIcon = new ImageIcon(MazeImageProvider.getImageFile("DosJeu"));
+		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("DosJeu"));
 		//On crée la zone pour la pile de cartes
 		tresorCard = new JLabel(imageIcon);
 		
 		//On crée une image pour la pile des cartes des trésors
-		imageIcon = new ImageIcon(MazeImageProvider.getImageFile("TresorTrois"));
+		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("TresorTrois"));
 		//On crée la zone pour la pile de cartes
 		tresorCardTwo = new JLabel(imageIcon);
 		
