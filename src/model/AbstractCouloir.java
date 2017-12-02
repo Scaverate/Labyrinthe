@@ -30,7 +30,7 @@ public class AbstractCouloir implements Couloirs{
 
     @Override
     public String toString() {
-        return "[" + this.x + "," + this.y + "]";	
+        return this.getClass() + " : " + "[" + this.x + "," + this.y + "]";
     }
 
     private boolean northOpened = true;

@@ -1,9 +1,6 @@
 package controler;
 
-import model.Coord;
-import model.CouloirIHM;
-import model.PieceIHMs;
-import model.TreasureIHM;
+import model.*;
 
 import java.util.List;
 
@@ -39,5 +36,6 @@ public interface MazeGameControlers {
 	public List<TreasureIHM> getTreasuresIHMs();
 	public List<CouloirIHM> getCouloirsIHMs();
 	public List<PieceIHMs> getPiecesIHMs();
+	public List<Coord> findPath(Coord coord);
 
 }

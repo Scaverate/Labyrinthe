@@ -208,7 +208,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		for(TreasureIHM treasureIHM : treasureIHMs){
-			System.out.println(treasureIHM);
 			this.treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
 
 			this.treasure.setPreferredSize(new Dimension(100, 100));
@@ -241,8 +240,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public void mousePressed(MouseEvent e) {
 		JLayeredPane parent;
 		Component componentPressed =  this.mazeBoard.findComponentAt(e.getX(), e.getY());
-		boolean isOkDest = false;
+		boolean isOkDest;
 		int xDest, yDest;
+		List<Coord> reacheableCoords;
 
 		this.pawn = null;
 
@@ -273,11 +273,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 				// TODO a reprendre pour génération chemin possible
 				// on grise les cases où on ne peut pas se déplacer
+				reacheableCoords = this.mazeGameControler.findPath(new Coord(xOrigine, yOrigine));
 				for (Component component : this.mazeBoard.getComponents()) {
-					xDest = component.getX() / (parent.getHeight() / 7);
-					yDest = component.getY() / (parent.getHeight() / 7);
-					isOkDest = this.mazeGameControler.isMoveOk(xOrigine, yOrigine, xDest, yDest); // moche ne doit pas être public
-					if(isOkDest) {
+					xDest = component.getX() / (this.mazeBoard.getHeight()/7);
+					yDest = component.getY() / (this.mazeBoard.getHeight()/7);
+					isOkDest = false;
+					for(Coord coord : reacheableCoords) {
+						if(coord.x == xDest && coord.y == yDest) {
+							isOkDest = true;
+						}
+					}
+					if(!isOkDest) {
 						if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
 							//TODO moche ajouter un test
 							((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
