@@ -6,10 +6,10 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import tools.MazeImageProvider;
 import model.Coord;
-import model.Couleur;
 import model.PieceIHMs;
 import net.miginfocom.swing.MigLayout;
 import model.CouloirIHM;
@@ -41,11 +41,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private int xOrigine;
 	private int yOrigine;
 	private MazeGameControlers mazeGameControler;
-	private Couleur currentColor = null;
-	private final int BLEU_POS = 1;
-	private final int JAUNE_POS = 7;
-	private final int ROUGE_POS = 43;
-	private final int VERT_POS = 49;
+	private Component previouslyHoveredComponent;
 
 	private final Integer COULOIR_LAYER = new Integer(0);
 	private final Integer TREASURE_LAYER = new Integer(1);
@@ -295,10 +291,39 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	}
 
 	 public void mouseDragged(MouseEvent me) {
+		 Component hoveredComponent;
+		 JLayeredPane layeredPane;
+		 JLabel corridorImage;
+
 		if (this.pawn == null) {
 			return;
 		}
-		 this.pawn.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+
+		this.pawn.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+
+		hoveredComponent = mazeBoard.getComponentAt(me.getX(), me.getY());
+
+		 // si on est en dehors du plateau
+		 if(hoveredComponent == null) {
+			 return;
+		 }
+
+		 // affichage d'effets au survol d'une case
+		 if(previouslyHoveredComponent == null || !previouslyHoveredComponent.equals(hoveredComponent)){
+			 if(previouslyHoveredComponent != null) {
+				 layeredPane = (JLayeredPane) previouslyHoveredComponent;
+				 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
+				 corridorImage.setBorder(null);
+			 }
+
+			 previouslyHoveredComponent = hoveredComponent;
+
+			layeredPane = (JLayeredPane) previouslyHoveredComponent;
+			 // FIXME moche
+			 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
+			 corridorImage.setBorder(BorderFactory.createLineBorder(Color.yellow));
+
+		 }
 	 }
 
 	 public void mouseReleased(MouseEvent e) {
@@ -307,9 +332,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 int destinationX = e.getX()/(mazeBoard.getHeight()/7);
 		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
 
+		 Component hoveredComponent;
+		 JLayeredPane layeredPane;
+		 JLabel corridorImage;
+
 		 if (pawn == null) {
 			 return;
 		 }
+
+		// on retire l'effet visuel du hover
+		 hoveredComponent = mazeBoard.getComponentAt(e.getX(), e.getY());
+		 layeredPane = (JLayeredPane) previouslyHoveredComponent;
+		 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
+		 corridorImage.setBorder(null);
 
 		 // on cache le composant avant la mise à jour de la vue dans "update"
 		 //pawn.setVisible(false);
