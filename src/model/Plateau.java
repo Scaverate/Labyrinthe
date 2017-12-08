@@ -85,23 +85,18 @@ public class Plateau implements BoardGames {
 	}
 
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
-		boolean canMove = true;
-		/*
-		boolean pieceHere = false;
-		if(this.jeuCourant != null){
-			pieceHere = this.jeuCourant.isPieceHere(xInit,yInit);
-			if(pieceHere){
-				if(this.jeuCourant.isMoveOk(xInit,yInit,xFinal,yFinal,true,true)){
-					if(!this.jeuCourant.isPieceHere(xFinal,yFinal)){
-						if(!this.pieceOnTraject(xInit,yInit,xFinal,yFinal)){ // pas au bon endroit
-							canMove = true;
-						}
-					}
-				}
+		boolean canMove = false;
+
+		List<Coord> moveOkCoords;
+
+		moveOkCoords = this.findPath(new Coord(xInit, yInit));
+
+		for(Coord coord : moveOkCoords) {
+			if(coord.x == xFinal && coord.y == yFinal) {
+				canMove = true;
 			}
 		}
-		*/
-		canMove = true;
+
 		return canMove;
 	}
 
@@ -371,69 +366,90 @@ public class Plateau implements BoardGames {
 		}
 		return string;
 	}
-	
+
+	public List<Coord> findPath(Coord coord){
+		Couloirs couloirFound = null;
+		List<Couloirs> couloirsFound = new LinkedList<>();
+		List<Coord> coordsFound = new LinkedList<>();
+
+
+		for(Couloirs couloir : this.couloirs){
+			if(couloir.getX() == coord.x && couloir.getY() == coord.y) {
+				couloirFound = couloir;
+			}
+		}
+
+		couloirsFound = findPath(couloirFound, this.couloirs, new LinkedList<Couloirs>());
+
+		for(Couloirs couloir : couloirsFound) {
+			coordsFound.add(new Coord(couloir.getX(), couloir.getY()));
+		}
+
+		return coordsFound;
+	}
+
 	/**
 	 * Recherche les chemins possibles à partir d'un couloir
-	 * 
-	 * @param  Couloirs 	  c
-	 * @param  List<Couloirs> couloirs 
-	 * 
-	 * @return List<Couloirs> deplacementOK
+	 *
+	 * @param  c - Couloirs
+	 * @param  corridors - List<Couloirs>
+	 *
+	 * @return List<Couloirs> reachableCorridors
 	 */
-	public List<Couloirs> findPath(Couloirs c, List<Couloirs> corridors, List<Couloirs> reachableCorridors) {
+	private List<Couloirs> findPath(Couloirs c, List<Couloirs> corridors, List<Couloirs> reachableCorridors) {
 		reachableCorridors.add(c);
-		
+
 		if (c.isNorthOpened()) {
-	        Couloirs neighbor = null;
-	        for (Couloirs corridor : corridors) {
-	            if (corridor.getX() == c.getX() && corridor.getY() == c.getY()-1) {
-	                neighbor = corridor;
-	            }
-	        }
-	        
-	        if (neighbor != null && neighbor.isSouthOpened() && !reachableCorridors.contains(neighbor)) {
-	        	findPath(neighbor, corridors, reachableCorridors);
-	        }
-	    }
-		
+			Couloirs neighbor = null;
+			for (Couloirs corridor : corridors) {
+				if (corridor.getX() == c.getX() && corridor.getY() == c.getY()-1) {
+					neighbor = corridor;
+				}
+			}
+
+			if (neighbor != null && neighbor.isSouthOpened() && !reachableCorridors.contains(neighbor)) {
+				findPath(neighbor, corridors, reachableCorridors);
+			}
+		}
+
 		if (c.isEastOpened()) {
-	        Couloirs neighbor = null;
-	        for (Couloirs corridor : corridors) {
-	            if (corridor.getX() == c.getX()+1 && corridor.getY() == c.getY()) {
-	            	neighbor = corridor;
-	            }
-	        }
-	        
-	        if (neighbor != null && neighbor.isWestOpened() && !reachableCorridors.contains(neighbor)) {
-	        	findPath(neighbor, corridors, reachableCorridors);
-	        }
-	    }
-		
+			Couloirs neighbor = null;
+			for (Couloirs corridor : corridors) {
+				if (corridor.getX() == c.getX()+1 && corridor.getY() == c.getY()) {
+					neighbor = corridor;
+				}
+			}
+
+			if (neighbor != null && neighbor.isWestOpened() && !reachableCorridors.contains(neighbor)) {
+				findPath(neighbor, corridors, reachableCorridors);
+			}
+		}
+
 		if (c.isSouthOpened()) {
-	        Couloirs neighbor = null;
-	        for (Couloirs corridor : corridors) {
-	            if (corridor.getX() == c.getX() && corridor.getY() == c.getY()+1) {
-	            	neighbor = corridor;
-	            }
-	        }
-	        
-	        if (neighbor != null && neighbor.isNorthOpened() && !reachableCorridors.contains(neighbor)) {
-	        	findPath(neighbor, corridors, reachableCorridors);
-	        }
-	    }
-		
+			Couloirs neighbor = null;
+			for (Couloirs corridor : corridors) {
+				if (corridor.getX() == c.getX() && corridor.getY() == c.getY()+1) {
+					neighbor = corridor;
+				}
+			}
+
+			if (neighbor != null && neighbor.isNorthOpened() && !reachableCorridors.contains(neighbor)) {
+				findPath(neighbor, corridors, reachableCorridors);
+			}
+		}
+
 		if (c.isWestOpened()) {
-	        Couloirs neighbor = null;
-	        for (Couloirs corridor : corridors) {
-	            if (corridor.getX() == c.getX()-1 && corridor.getY() == c.getY()) {
-	            	neighbor = corridor;
-	            }
-	        }
-	        
-	        if (neighbor != null && neighbor.isEastOpened() && !reachableCorridors.contains(neighbor)) {
-	        	findPath(neighbor, corridors, reachableCorridors);
-	        }
-	    }
+			Couloirs neighbor = null;
+			for (Couloirs corridor : corridors) {
+				if (corridor.getX() == c.getX()-1 && corridor.getY() == c.getY()) {
+					neighbor = corridor;
+				}
+			}
+
+			if (neighbor != null && neighbor.isEastOpened() && !reachableCorridors.contains(neighbor)) {
+				findPath(neighbor, corridors, reachableCorridors);
+			}
+		}
 
 		return reachableCorridors;
 	}
@@ -447,5 +463,15 @@ public class Plateau implements BoardGames {
 	private List<Couloirs> couloirs;
 	private List<Treasures> treasures;
 	//vue/mazegameGUI
-	//boucle for couloirs ihm qui permet de poser les images 
+	//boucle for couloirs ihm qui permet de poser les images
+
+	// tests
+	public static void main(String[] args){
+		System.out.println("tests plateau");
+		Plateau plateau = new Plateau(2);
+
+		List<Couloirs> couloirs;
+		couloirs = plateau.findPath(new CouloirFixe(new Coord(0, 0), false, true, true, false), plateau.couloirs, new LinkedList<Couloirs>());
+		System.out.println(couloirs);
+	}
 }

@@ -2,12 +2,7 @@ package controler;
 
 import java.util.List;
 
-import model.Coord;
-import model.Couleur;
-import model.CouloirIHM;
-import model.PieceIHMs;
-import model.TreasureIHM;
-import model.TreasureIHMs;
+import model.*;
 import model.observable.MazeGame;
 
 
@@ -89,7 +84,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	
 	protected Couleur getColorCurrentPlayer(){		
 		return this.mazeGame.getColorCurrentPlayer();		
-	}	
+	}
 
 	protected Couleur getPieceColor(Coord initCoord){		
 		return this.mazeGame.getPieceColor(initCoord.x, initCoord.y);		
@@ -98,4 +93,5 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	public List<TreasureIHM> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.mazeGame.getPiecesIHMs(); }
+	public List<Coord> findPath(Coord coord) { return this.mazeGame.findPath(coord); }
 }
