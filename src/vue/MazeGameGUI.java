@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import tools.MazeImageProvider;
 import model.Coord;
@@ -27,14 +26,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel mazeBoard;
-	private JLabel couloir;
-	private JLabel treasure;
-	private JLabel cardStack;
-	private JLabel tresorCard;
-	private JLabel tresorCardTwo;
-	private CouloirIHM extraCard;
-	private JLayeredPane extraCardPane;
-	private JLabel extraCardImage;
 	private JLabel pawn = null;
 	private int xAdjustment;
 	private int yAdjustment;
@@ -43,22 +34,26 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
 
-	private final Integer COULOIR_LAYER = new Integer(0);
-	private final Integer TREASURE_LAYER = new Integer(1);
-	private final Integer PAWN_LAYER = new Integer(2);
+	private final Integer COULOIR_LAYER = 0;
+	private final Integer TREASURE_LAYER = 1;
+	private final Integer PAWN_LAYER = 2;
 
 
 	public MazeGameGUI(String name, MazeGameControlers mazeGameControler, Dimension dim) {
 
-		// récupération des dimensions de la fenetre
-		Dimension boardSize = dim;
 		Dimension windowSize = new Dimension(950,1000);
 		Icon imageIcon;
 		Icon disabledIcon;
-		Icon imageIconTreasure;
 		List<TreasureIHM> treasureIHMs;
 		List<CouloirIHM> couloirIHMs;
 		List<PieceIHMs> pieceIHMs;
+		JLabel couloir;
+		JLabel treasure;
+		JLabel tresorCard;
+		JLabel tresorCardTwo;
+		CouloirIHM extraCard;
+		JLayeredPane extraCardPane;
+		JLabel extraCardImage;
 
 		// on initialise le controleur
 		this.mazeGameControler = mazeGameControler;
@@ -133,8 +128,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 
 		// position et taille du plateau de jeu -> on récupère les dimensions passées en paramètres
-		mazeBoard.setPreferredSize(boardSize);
-		mazeBoard.setBounds(0, 0, boardSize.width, boardSize.height);
+		mazeBoard.setPreferredSize(dim);
+		mazeBoard.setBounds(0, 0, dim.width, dim.height);
 		
 
 		
@@ -162,8 +157,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				couloirIHM.isWestOpened(),
 				true
 			));
-			this.couloir = new JLabel(imageIcon);
-			this.couloir.setDisabledIcon(disabledIcon);
+			couloir = new JLabel(imageIcon);
+			couloir.setDisabledIcon(disabledIcon);
 
 			// si on veut entourer les couloirs fixes
 			/*
@@ -173,11 +168,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			*/
 
 			// pour chaque case on ajoute paramètre dimension et position du couloir
-			this.couloir.setPreferredSize(new Dimension(100, 100));
-			this.couloir.setBounds(0, 0, 100, 100);
+			couloir.setPreferredSize(new Dimension(100, 100));
+			couloir.setBounds(0, 0, 100, 100);
 
 			// on ajoute le couloir en arrière-plan
-			this.layeredPane.add(this.couloir, COULOIR_LAYER);
+			this.layeredPane.add(couloir, COULOIR_LAYER);
 
 			// on ajoute les différents plans au plateau
 			this.mazeBoard.add(this.layeredPane);
@@ -204,20 +199,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		for(TreasureIHM treasureIHM : treasureIHMs){
-			this.treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
+			treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
 
-			this.treasure.setPreferredSize(new Dimension(100, 100));
-			this.treasure.setBounds(0, 0, 100, 100);
-			this.treasure.setOpaque(false);
+			treasure.setPreferredSize(new Dimension(100, 100));
+			treasure.setBounds(0, 0, 100, 100);
+			treasure.setOpaque(false);
 			//TODO moche ajouter tests
-			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(this.treasure, TREASURE_LAYER);
+			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(treasure, TREASURE_LAYER);
 		}
 
 		//On ajoute le generalBoard dans le mazeContainer, et le mazeBoard dans le generalBoard
-//		generalBoard.add(mazeBoard, new Integer(0));
-//		generalBoard.add(extraCardPane, new Integer(0));
-//		mazeContainer.add(generalBoard, new Integer(0));
-//		mazeContainer.add(mazeBoard, new Integer(0));
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.9al 0.9al");
 		generalBoard.add(tresorCard, "pos 0.8al 0.9al");
@@ -332,7 +323,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 int destinationX = e.getX()/(mazeBoard.getHeight()/7);
 		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
 
-		 Component hoveredComponent;
 		 JLayeredPane layeredPane;
 		 JLabel corridorImage;
 
@@ -341,18 +331,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 }
 
 		// on retire l'effet visuel du hover
-		 hoveredComponent = mazeBoard.getComponentAt(e.getX(), e.getY());
 		 layeredPane = (JLayeredPane) previouslyHoveredComponent;
 		 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
 		 corridorImage.setBorder(null);
 
-		 // on cache le composant avant la mise à jour de la vue dans "update"
-		 //pawn.setVisible(false);
 		 boolean isMoveOK = mazeGameControler.move(
 			 new Coord(xOrigine, yOrigine),
 			 new Coord(destinationX, destinationY)
 		 );
 
+		 // histoire d'utiliser isMoveOK
 		 if(isMoveOK) {
 		 	System.out.println("déplacement OK");
 		 }

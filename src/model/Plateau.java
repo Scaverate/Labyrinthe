@@ -379,7 +379,7 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		couloirsFound = findPath(couloirFound, this.couloirs, new LinkedList<>());
+		couloirsFound = findPath(couloirFound, this.couloirs, new LinkedList<Couloirs>());
 
 		for(Couloirs couloir : couloirsFound) {
 			coordsFound.add(new Coord(couloir.getX(), couloir.getY()));
@@ -388,6 +388,14 @@ public class Plateau implements BoardGames {
 		return coordsFound;
 	}
 
+	/**
+	 * Recherche les chemins possibles à partir d'un couloir
+	 *
+	 * @param  c - Couloirs
+	 * @param  corridors - List<Couloirs>
+	 *
+	 * @return List<Couloirs> reachableCorridors
+	 */
 	private List<Couloirs> findPath(Couloirs c, List<Couloirs> corridors, List<Couloirs> reachableCorridors) {
 		reachableCorridors.add(c);
 
@@ -459,11 +467,11 @@ public class Plateau implements BoardGames {
 
 	// tests
 	public static void main(String[] args){
-		System.out.println("tests palteau");
+		System.out.println("tests plateau");
 		Plateau plateau = new Plateau(2);
 
 		List<Couloirs> couloirs;
-		couloirs = plateau.findPath(new CouloirFixe(new Coord(0, 0), false, true, true, false), plateau.couloirs, new LinkedList<>());
+		couloirs = plateau.findPath(new CouloirFixe(new Coord(0, 0), false, true, true, false), plateau.couloirs, new LinkedList<Couloirs>());
 		System.out.println(couloirs);
 	}
 }
