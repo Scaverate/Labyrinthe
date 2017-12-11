@@ -2,6 +2,7 @@ package tools;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import model.Coord;
 import model.CouloirFixe;
@@ -9,9 +10,7 @@ import model.CouloirAmovible;
 import model.Couloirs;
 
 /**
- * Classe qui fabrique une liste de pieces
- * de la couleur passee en parametre
- *
+ * Classe qui fabrique une liste de pieces sur le plateau
  */
 public class MazeCouloirsFactory {
 
@@ -19,32 +18,37 @@ public class MazeCouloirsFactory {
      * private pour ne pas instancier d'objets
      */
     private MazeCouloirsFactory() {}
+    
+    private static int typeI=12;
+    private static int typeL=16;
+    private static int typeT=6;
 
     /**
      * @return liste de couloirs
      */
     public static List<Couloirs> newCouloirs() {
         List<Couloirs> couloirs = null;
-        String className;
         Coord couloirCoord;
         Couloirs couloirGenerated;
         boolean isNorthOpened;
         boolean isSouthOpened;
         boolean isEastOpened;
         boolean isWestOpened;
+        int typeIdCorridor;
+        MazeCouloirsType corridor;
 
         couloirs = new LinkedList<Couloirs>();
 
-        // génération des couloirs
+        //Génération des couloirs
         for (int i = 0; i < MazeCouloirsPos.values().length; i++) {
-            //className = "model." + MazeCouloirsPos.values()[i].name;
             couloirCoord = MazeCouloirsPos.values()[i].coord;
-            isNorthOpened = MazeCouloirsPos.values()[i].isNorthOpened;
-            isSouthOpened = MazeCouloirsPos.values()[i].isSouthOpened;
-            isEastOpened = MazeCouloirsPos.values()[i].isEastOpened;
-            isWestOpened = MazeCouloirsPos.values()[i].isWestOpened;
 
             if(MazeCouloirsPos.values()[i].isFixed) {
+            	isNorthOpened = MazeCouloirsPos.values()[i].isNorthOpened;
+                isSouthOpened = MazeCouloirsPos.values()[i].isSouthOpened;
+                isEastOpened = MazeCouloirsPos.values()[i].isEastOpened;
+                isWestOpened = MazeCouloirsPos.values()[i].isWestOpened;
+                
                 couloirGenerated = new CouloirFixe(
                     couloirCoord,
                     isNorthOpened,
@@ -54,6 +58,18 @@ public class MazeCouloirsFactory {
                 );
             }
             else {
+            	typeIdCorridor = getTypeIdCorridor();
+            	corridor = getRandomCorridorFromType(typeIdCorridor);
+            	
+            	System.out.println("I = "+typeI);
+            	System.out.println("L = "+typeL);
+            	System.out.println("T = "+typeT);
+            	
+            	isNorthOpened = corridor.isNorthOpened;
+                isSouthOpened = corridor.isSouthOpened;
+                isEastOpened = corridor.isEastOpened;
+                isWestOpened = corridor.isWestOpened;
+            	
                 couloirGenerated = new CouloirAmovible(
                     couloirCoord,
                     isNorthOpened,
@@ -67,5 +83,63 @@ public class MazeCouloirsFactory {
 
         // fusion des deux listes
         return couloirs;
+    }
+    
+    private static int getTypeIdCorridor() {
+    	List<Integer> listNbAleatoire = null;
+    	int randomNumber;
+    	
+    	listNbAleatoire = new LinkedList<Integer>();
+    	
+    	if (typeI !=0) {
+    		listNbAleatoire.add(1);
+    	}
+    	if (typeL !=0) {
+    		listNbAleatoire.add(2);
+    	}
+    	if (typeT !=0) {
+    		listNbAleatoire.add(3);
+    	}
+    	
+    	Random rand = new Random();
+    	
+    	randomNumber = rand.nextInt(listNbAleatoire.size());
+    	System.out.println(listNbAleatoire.get(randomNumber));
+    	
+    	switch (listNbAleatoire.get(randomNumber)) {
+    	case 1: 
+    		typeI--;
+    		break;
+    	case 2: 
+    		typeL--;
+    		break;
+    	case 3: 
+    		typeT--;
+    		break;
+		default:
+			System.out.println("Erreur sur le type de la piece");
+			break;
+    	}
+    	
+    	return listNbAleatoire.get(randomNumber);
+    }
+    
+    private static MazeCouloirsType getRandomCorridorFromType(int typeId) {
+    	List<MazeCouloirsType> corridors= null;
+    	corridors = new LinkedList<MazeCouloirsType>();
+    	
+    	int randomCorridor;
+    	
+    	for (int i=0; i < MazeCouloirsType.values().length; i++) {
+    		if(MazeCouloirsType.values()[i].typeId == typeId) {
+    			corridors.add(MazeCouloirsType.values()[i]);
+    		}
+    	}
+    	Random rand = new Random();
+    	
+    	randomCorridor = rand.nextInt(corridors.size());
+    	//System.out.println(randomCorridor);
+    	
+    	return corridors.get(randomCorridor);
     }
 }
