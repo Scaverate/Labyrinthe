@@ -44,7 +44,6 @@ public class MazeTreasureFactory {
 			if(MazeTreasurePos.values()[i].name == "TreasureFixed"){
 				Treasure theTreasure = new Treasure(MazeTreasurePos.values()[i].coord.x,
 						MazeTreasurePos.values()[i].coord.y, MazeTreasurePos.values()[i].name, false);
-				System.out.println("TYPE FIXE :" + theTreasure);
 				treasures.add(theTreasure);
 			}else{
 				Random rand = new Random();
@@ -54,7 +53,6 @@ public class MazeTreasureFactory {
 						 			   MazeTreasurePos.values()[i].name, false);
 				treasures.add(theTreasure);
 				listCoord.remove(randomNumber);
-				System.out.println("TYPE AMOVIBLE : " + theTreasure);
 			}
 		}
 		return treasures;

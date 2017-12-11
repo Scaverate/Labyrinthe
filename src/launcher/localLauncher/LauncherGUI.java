@@ -43,6 +43,5 @@ public class LauncherGUI {
 		frame.setResizable(true);
 		frame.pack();
 		frame.setVisible(true);
-		
 	}
 }

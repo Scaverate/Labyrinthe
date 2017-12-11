@@ -2,12 +2,13 @@ package model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import tools.MazePiecesFactory;
 import tools.MazeTreasureFactory;
 
 public class Jeu implements Game {
-	
+	private Treasure treasureToCatch;
 	public Jeu(Couleur couleur){
 		this.pieces = MazePiecesFactory.newPieces(couleur);
 	}
@@ -19,6 +20,17 @@ public class Jeu implements Game {
 			couleur = piece.getCouleur();
 		}
 		return couleur;
+	}
+	
+	public Treasure drawCard(List<Treasures> listTreasure){
+		Treasure treasureDraw;
+		int randomNumber = 0;
+		Random rand = new Random();
+		randomNumber = rand.nextInt(listTreasure.size() - 0 ) + 0;
+		treasureDraw = (Treasure) listTreasure.get(randomNumber);
+		this.setTreasureToCatch(treasureDraw);
+		listTreasure.remove(randomNumber);	
+		return treasureDraw;
 	}
 	
 	private Pieces findPiece(int x, int y){
@@ -103,6 +115,18 @@ public class Jeu implements Game {
 		return string;
 	}
 	
+	public Treasure getTreasureToCatch() {
+		return treasureToCatch;
+	}
+
+	public void setTreasureToCatch(Treasure treasureToCatch) {
+		this.treasureToCatch = treasureToCatch;
+	}
+	
+	public boolean addTreasureCatched(Treasure treasureCatched){
+		return this.treasureCatched.add(treasureCatched);
+	}
 	
 	private List<Pieces> pieces;
+	private List<Treasures> treasureCatched = new LinkedList<Treasures>();
 }

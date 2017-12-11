@@ -99,7 +99,7 @@ public class MazeGame extends Observable implements BoardGames{
 		return this.plateau.getPieceColor(x, y);
 	}
 	
-	public List<TreasureIHM> getTreasureIHMs () { return this.plateau.getTreasuresIHMs(); }
+	public List<TreasureIHMs> getTreasureIHMs () { return this.plateau.getTreasuresIHMs(); }
 	public List<CouloirIHM> getCouloirIHMs () { return this.plateau.getCouloirsIHMs(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.plateau.getPiecesIHMs(); }
 	public List<Coord> findPath(Coord coord) { return this.plateau.findPath(coord); }
@@ -120,5 +120,23 @@ public class MazeGame extends Observable implements BoardGames{
 	public void addObserver(Observer o){
 		super.addObserver(o);
 		this.notifyObservers(plateau.getPiecesIHM()); 
+	}
+	
+	public Treasure currentTreasureToCatch(){
+		Treasure treasureToCatch = null;
+		treasureToCatch = this.plateau.currentTreasureToCatch();
+		return treasureToCatch;
+	}
+	
+	public void setCurrentTreasureToCatch(Treasure treasureToCatch){
+		this.plateau.setCurrentTreasureToCatch(treasureToCatch);
+	}
+	
+	public boolean treasureCatchedPlateau(Treasure treasureCatched){
+		boolean test = this.plateau.treasureCatched(treasureCatched);
+		System.out.println("tresor a ete recupere : " + test);
+		System.out.println(treasureCatched);
+		this.notifyObservers(plateau.getPiecesIHM());
+		return test;
 	}
 }
