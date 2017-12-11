@@ -31,10 +31,11 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
 	private int xAdjustment;
-	private JButton okButton;
+	private JButton okButton, nb2Button, nb3Button, nb4Button;
 	private int yAdjustment;
 	private int xOrigine;
 	private int yOrigine;
+	private int nbPlayer;
 	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
 	List<TreasureIHMs> treasureIHMs;
@@ -58,13 +59,39 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 		menu.setPreferredSize(windowSize);
 		menu.setBackground(Color.BLACK);
 		
+		nb2Button = new JButton("2");
+		nb3Button = new JButton("3");
+		nb4Button = new JButton("4");
+		
+		nb2Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nbPlayer = 2;
+			}
+		});
+		
+		nb3Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nbPlayer = 3;
+			}
+		});
+		
+		nb4Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nbPlayer = 4;
+			}
+		});
+		
 		// Lancer le jeu
 		okButton = new JButton("Lancer");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				initMazeGame(4);	
+				initMazeGame(nbPlayer);	
 			}			
 		});
+		
+		menu.add(nb2Button, BorderLayout.CENTER);
+		menu.add(nb3Button, BorderLayout.CENTER);
+		menu.add(nb4Button, BorderLayout.CENTER);
 		menu.add(okButton, BorderLayout.CENTER);
 		getContentPane().add(menu);
 
