@@ -5,17 +5,25 @@ import java.util.List;
 
 import tools.MazeCouloirsFactory;
 import tools.MazeTreasureFactory;
+import model.Coord;
+
 
 public class Plateau implements BoardGames {
 	public Plateau(int nbPlayer) {
 		this.treasures = MazeTreasureFactory.newTreasure();
+		//Liste correspondant à la pioche du jeu
 		List<Treasures> treasureToDraw = new LinkedList<Treasures>(this.treasures);
+		//Score maximum que chaque joueur doit atteindre
+		scoreMax = 24/nbPlayer; 
 		switch (nbPlayer) {
 		case 2 :
 			jeuRouge = new Jeu(Couleur.ROUGE);
+			jeuRouge.setCoordInit(new Coord(0,0));
 			jeuRouge.drawCard(treasureToDraw);
 			jeuBleu = new Jeu(Couleur.BLEU);
 			jeuBleu.drawCard(treasureToDraw);
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
 			break;
 		case 3 :
 			jeuBleu = new Jeu(Couleur.BLEU);
@@ -24,6 +32,9 @@ public class Plateau implements BoardGames {
 			jeuRouge.drawCard(treasureToDraw);
 			jeuJaune = new Jeu(Couleur.JAUNE);
 			jeuJaune.drawCard(treasureToDraw);
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
 			break;
 		case 4 :
 			jeuBleu = new Jeu(Couleur.BLEU);
@@ -34,6 +45,10 @@ public class Plateau implements BoardGames {
 			jeuVert.drawCard(treasureToDraw);
 			jeuJaune = new Jeu(Couleur.JAUNE);
 			jeuJaune.drawCard(treasureToDraw);
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
+			jeuVert.setCoordInit(new Coord(jeuVert.getPiecesIHM().get(0).getX(),jeuVert.getPiecesIHM().get(0).getY()));
 			break;
 		default:
 				System.out.println("La creation des jeux a echoue");
@@ -92,8 +107,9 @@ public class Plateau implements BoardGames {
 				this.jeuCourant = this.jeuBleu;
 			}
 		}
-		if(jeuCourant.getTreasureToCatch() == null){
-			jeuCourant.drawCard(this.treasures);
+		if(this.jeuCourant.getTreasureToCatch() == null && this.jeuCourant.getScorePlayer() < this.scoreMax){
+			//Piocher une carte si le joueur n'a pas atteint le score final
+			this.jeuCourant.drawCard(this.treasures);
 		}
 	}
 
@@ -479,16 +495,21 @@ public class Plateau implements BoardGames {
 	
 	public boolean treasureCatched(Treasure treasureCatched){
 		if(this.jeuCourant.addTreasureCatched(treasureCatched)){
-			System.out.println(treasures);
-			boolean test = this.treasures.remove(treasureCatched);
-			System.out.println(treasures);
-			return test;
+			System.out.println("TRESOR VA ETRE SUPPRIMER");
+			this.treasures.remove(treasureCatched);
+			System.out.println(this.treasures.size());
+			return true;
 			
 		}else{
 			return false;
 		}
-	}		
-
+	}
+	
+	public int getCurrentScorePlayer(){
+		return this.jeuCourant.getScorePlayer();
+	}
+	
+	int scoreMax = 0;
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;
 	private Jeu jeuJaune;

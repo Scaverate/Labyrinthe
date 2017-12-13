@@ -285,7 +285,6 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 		if (this.pawn == null) {
 			return;
 		}
-
 		this.pawn.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
 
 		hoveredComponent = mazeBoard.getComponentAt(me.getX(), me.getY());
@@ -336,10 +335,24 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 			 new Coord(destinationX, destinationY)
 		 );
 
-		 // histoire d'utiliser isMoveOK
-		 if(isMoveOK) {
-		 	System.out.println("déplacement OK");
-		 }
+		if (isMoveOK) {
+			System.out.println("déplacement OK");
+			Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
+					e.getY());
+			parentComponentHere = (JLayeredPane) componentHere.getParent();
+			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
+				Treasure treasureToCatch = this.mazeGameControler
+						.currentTreasureToCatch();
+				System.out.println(treasureToCatch);
+				if (destinationX == treasureToCatch.getTreasureX()
+						&& destinationY == treasureToCatch.getTreasureY()) {
+					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
+					System.out.println("Le score du joueur actuel est : " + mazeGameControler.getCurrentScorePlayer());
+					this.mazeGameControler.setCurrentTreasureToCatch(null);
+
+				}
+			}
+		}
 	 }
 
 	 public void mouseClicked(MouseEvent e) {}
@@ -347,43 +360,96 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 	 public void mouseEntered(MouseEvent e) {}
 	 public void mouseExited(MouseEvent e) {}
 
-	 @Override
-	 public void update(Observable o, Object arg) {
-		List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
-		for (PieceIHMs pieceIHM : piecesIHM) {
+	@Override
+	public void update(Observable o, Object arg) {
+		if(((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
+			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
+			for (PieceIHMs pieceIHM : piecesIHM) {
+				//On récupère la piece sur le board (son layerded pane)
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* pieceIHM.getY() + pieceIHM.getX());
 
-			this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
-					* pieceIHM.getY() + pieceIHM.getX());
-
-			if (this.layeredPane.getComponentsInLayer(PAWN_LAYER).length != 0) {
-				for (int i = 0; i < this.layeredPane
-						.getComponentsInLayer(PAWN_LAYER).length; i++) {
-					this.layeredPane.remove(this.layeredPane
-							.getComponentsInLayer(PAWN_LAYER)[i]);
+				//On enlève le pion
+				if (this.layeredPane.getComponentsInLayer(PAWN_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(PAWN_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(PAWN_LAYER)[i]);
+					}
 				}
-			}
-
-			if (this.mazeContainer
-					.getComponentsInLayer(JLayeredPane.DRAG_LAYER).length != 0) {
-				for (int i = 0; i < this.mazeContainer
-						.getComponentsInLayer(JLayeredPane.DRAG_LAYER).length; i++) {
-					this.mazeContainer.remove(this.mazeContainer
-							.getComponentsInLayer(JLayeredPane.DRAG_LAYER)[i]);
+				// on enlève le pion du drag layer
+				if (this.mazeContainer
+						.getComponentsInLayer(JLayeredPane.DRAG_LAYER).length != 0) {
+					for (int i = 0; i < this.mazeContainer
+							.getComponentsInLayer(JLayeredPane.DRAG_LAYER).length; i++) {
+						this.mazeContainer.remove(this.mazeContainer
+								.getComponentsInLayer(JLayeredPane.DRAG_LAYER)[i]);
+					}
 				}
+
+				// on recrée le pion
+				this.pawn = new JLabel(new ImageIcon(
+						MazeImageProvider.getImageFile("Pion",
+								pieceIHM.getCouleur())));
+				this.pawn.setPreferredSize(new Dimension(100, 100));
+				this.pawn.setBounds(0, 0, 100, 100);
+				this.pawn.setOpaque(false);
+
+				// on rajoute le pion
+				this.layeredPane.add(this.pawn, PAWN_LAYER);
 			}
-
-			this.pawn = new JLabel(new ImageIcon(
-					MazeImageProvider.getImageFile("Pion",
-							pieceIHM.getCouleur())));
-
-			this.pawn.setPreferredSize(new Dimension(100, 100));
-			this.pawn.setBounds(0, 0, 100, 100);
-			this.pawn.setOpaque(false);
-
-			this.layeredPane.add(this.pawn, PAWN_LAYER);
 		}
 
-		// on réautorise toutes les cases
+		if(((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
+			List<TreasureIHMs> updatedList = (List<TreasureIHMs>) arg;
+
+			//Suppression des trésors
+			for (TreasureIHMs treasureIHM : this.treasureIHMs) {
+				// on récupère le trésor
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* treasureIHM.getTreasureY() + treasureIHM.getTreasureX());
+
+				//On le supprime
+				if (this.layeredPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(TREASURE_LAYER)[i]);
+					}
+				}
+			}
+
+			//Re-creaction des tresors
+			for (TreasureIHMs treasureIHM : updatedList) {
+				// on récupère le trésor
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* treasureIHM.getTreasureY() + treasureIHM.getTreasureX());
+
+				//On le supprime
+				if (this.layeredPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(TREASURE_LAYER)[i]);
+					}
+				}
+
+				//On recrée le trésor
+				this.treasure = new JLabel(new ImageIcon(
+						MazeImageProvider.getImageFile(treasureIHM
+								.getTreasureName())));
+				this.treasure.setPreferredSize(new Dimension(100, 100));
+				this.treasure.setBounds(0, 0, 100, 100);
+				this.treasure.setOpaque(false);
+				// TODO moche ajouter tests
+				((JLayeredPane) this.mazeBoard.getComponent(treasureIHM
+						.getTreasureX() + 7 * treasureIHM.getTreasureY())).add(
+						this.treasure, TREASURE_LAYER);
+			}
+
+		}
+
+		//On réautorise toutes les cases
 		for (Component component : this.mazeBoard.getComponents()) {
 			if (((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
 				((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0]

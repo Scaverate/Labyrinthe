@@ -9,6 +9,7 @@ import tools.MazeTreasureFactory;
 
 public class Jeu implements Game {
 	private Treasure treasureToCatch;
+	private Coord coordInitiale = new Coord(0,0);
 	public Jeu(Couleur couleur){
 		this.pieces = MazePiecesFactory.newPieces(couleur);
 	}
@@ -124,9 +125,25 @@ public class Jeu implements Game {
 	}
 	
 	public boolean addTreasureCatched(Treasure treasureCatched){
-		return this.treasureCatched.add(treasureCatched);
+		return this.listTreasureCatched.add(treasureCatched);
 	}
 	
+	public List<Treasures> getListTreasureCatched(){
+		return this.listTreasureCatched;
+	}
+	
+	public int getScorePlayer(){
+		return this.listTreasureCatched.size();
+	}
+	
+	public Coord getCoordInitiale() {
+		return coordInitiale;
+	}
+
+	public void setCoordInit(Coord coordInit) {
+		this.coordInitiale = coordInit;
+	}
+
 	private List<Pieces> pieces;
-	private List<Treasures> treasureCatched = new LinkedList<Treasures>();
+	private List<Treasures> listTreasureCatched = new LinkedList<Treasures>();
 }

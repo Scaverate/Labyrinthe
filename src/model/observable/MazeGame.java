@@ -24,7 +24,8 @@ public class MazeGame extends Observable implements BoardGames{
 	public MazeGame(int nbPlayer) {
 		super();
 		this.plateau = new Plateau(nbPlayer);
-		this.notifyObservers(this.plateau.getPiecesIHM());
+		this.notifyObservers(plateau.getPiecesIHM());
+		this.notifyObservers(plateau.getTreasuresIHMs());
 	}
 
 
@@ -120,6 +121,7 @@ public class MazeGame extends Observable implements BoardGames{
 	public void addObserver(Observer o){
 		super.addObserver(o);
 		this.notifyObservers(plateau.getPiecesIHM()); 
+		this.notifyObservers(plateau.getTreasuresIHMs()); 
 	}
 	
 	public Treasure currentTreasureToCatch(){
@@ -136,7 +138,11 @@ public class MazeGame extends Observable implements BoardGames{
 		boolean test = this.plateau.treasureCatched(treasureCatched);
 		System.out.println("tresor a ete recupere : " + test);
 		System.out.println(treasureCatched);
-		this.notifyObservers(plateau.getPiecesIHM());
+		this.notifyObservers(plateau.getTreasuresIHMs()); 
 		return test;
+	}
+	
+	public int getCurrentScorePlayer(){
+		return this.plateau.getCurrentScorePlayer();
 	}
 }

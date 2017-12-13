@@ -28,8 +28,7 @@ public enum MazeTreasurePos {
 	FRAMBOISE("TreasureMoveable", new Coord(0,0)),
 	CERISE("TreasureMoveable", new Coord(0,0)),
 	PAMPLEMOUSSE("TreasureMoveable", new Coord(0,0)),
-	RAISIN("TreasureMoveable", new Coord(0,0)),
-	TOMATE("TreasureMoveable", new Coord(0,0));
+	RAISIN("TreasureMoveable", new Coord(0,0));
 	
 	public String name;
 	public Coord coord;

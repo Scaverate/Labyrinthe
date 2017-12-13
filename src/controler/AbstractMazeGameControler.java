@@ -101,6 +101,10 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		this.mazeGame.setCurrentTreasureToCatch(treasureToCatch);
 	}
 	
+	public int getCurrentScorePlayer(){
+		return this.mazeGame.getCurrentScorePlayer();
+	}
+	
 	public void treasureCatchedPlateau(Treasure treasureCatched){
 		this.mazeGame.treasureCatchedPlateau(treasureCatched);
 	}
