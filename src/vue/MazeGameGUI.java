@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import tools.MazeImageProvider;
 import model.Coord;
 import model.PieceIHMs;
@@ -28,16 +29,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
+	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
+	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton okButton; 
-	private JRadioButton btnNb2, btnNb3, btnNb4;
+	private JRadioButton nb2Button, nb3Button, nb4Button;
 	private int yAdjustment;
 	private int xOrigine;
-	private ButtonGroup btnGrp;
+	private ButtonGroup grpButton;
 	private int yOrigine;
-	private int nbPlayer;
+	private int nbPlayer = 2;
 	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
 	List<TreasureIHMs> treasureIHMs;
@@ -45,6 +48,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
+	private JFrame f1;
+
 	
 	public MazeGameGUI(Dimension dim) {
 		
@@ -52,53 +57,51 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Dimension windowSize = new Dimension(950,1000);		
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
-		
 		mazeContainer = new JLayeredPane();
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
-		// on l'ajoute a la fenetre principale
-		menu = new JPanel();	
-		menu.setPreferredSize(new Dimension(600,40));
-		menu.setOpaque(false);
-		//menu.setBackground(Color.BLACK);
-		File g = new File("");
-		String path = "/src/images/";
-		String ret = g.getAbsolutePath() + path + "bg.jpg";
 		
-		//ImagePanel panel = new ImagePanel(new ImageIcon(ret).getImage());	
-	    
-		btnGrp = new ButtonGroup();
-		btnNb2 = new JRadioButton("2 joueurs");
-		btnNb3 = new JRadioButton("3 joueurs");
-		btnNb4 = new JRadioButton("4 joueurs");
+		// on cree le container du menu
+	    b1 = Box.createHorizontalBox();
+		b1.setOpaque(true); // background gris desactive
+		grpButton = new ButtonGroup();
+		nb2Button = new JRadioButton("2 joueurs");
+		nb3Button = new JRadioButton("3 joueurs");
+		nb4Button = new JRadioButton("4 joueurs");
 
-		btnNb2.setOpaque(false);
-		btnNb3.setOpaque(false);
-		btnNb4.setOpaque(false);
+		nb2Button.setOpaque(false);
+		nb3Button.setOpaque(false);
+		nb4Button.setOpaque(false);
 		
 		// ajout des boutons radio dans le groupe bg
-		btnGrp.add(btnNb2);
-		btnGrp.add(btnNb3);
-		btnGrp.add(btnNb4);
+		grpButton.add(nb2Button);
+		grpButton.add(nb3Button);
+		grpButton.add(nb4Button);
 		
-		btnNb2.addActionListener(new ActionListener() {
+		nb2Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 2;
 			}
 		});
 		
-		btnNb3.addActionListener(new ActionListener() {
+		nb3Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 3;
 			}
 		});
 		
-		btnNb4.addActionListener(new ActionListener() {
+		nb4Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 4;
 			}
 		});
+		b1.add(nb2Button);
+		b1.add(nb3Button);
+		b1.add(nb4Button);
+		nb2Button.setSelected(true);
 		
+		b2 = Box.createHorizontalBox();
+		b2.setOpaque(false); // background gris desactive
 		// Lancer le jeu
 		okButton = new JButton("Lancer");
 		okButton.addActionListener(new ActionListener() {
@@ -106,18 +109,25 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				initMazeGame(nbPlayer);	
 			}			
 		});
+		b2.add(okButton);
+			
+		b3 = Box.createVerticalBox();
+		b3.setOpaque(false); // background gris desactive
+		b3.add(b1);
+		b3.add(b2);
+				
+		b3.setBorder(new EmptyBorder(100, 0, 0, 0));
+		b2.setBorder(new EmptyBorder(10,0,0,0));
 		
-		menu.add(btnNb2, BorderLayout.CENTER);
-		menu.add(btnNb3, BorderLayout.CENTER);
-		menu.add(btnNb4, BorderLayout.CENTER);
-		menu.add(okButton, BorderLayout.CENTER);		
-
-		ImagePanel contentPane = new ImagePanel(new ImageIcon(ret).getImage());
-	    contentPane.add(menu);
+		File g = new File("");
+		String path = "/src/images/";
+		String ret = g.getAbsolutePath() + path + "bg.jpg";
+		
+		//ImagePanel panel = new ImagePanel(new ImageIcon(ret).getImage());	
+	   	contentPane = new ImagePanel(new ImageIcon(ret).getImage());
+	    contentPane.add(b3);
 		contentPane.setPreferredSize(windowSize);
-		setContentPane(contentPane);
-		getContentPane().add(mazeContainer);
-		
+		setContentPane(contentPane);	
 	}
 	
 	public void initMazeGame(int nbPlayer) {
@@ -132,11 +142,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel tresorCardTwo;
 		CouloirIHM extraCard;
 		JLayeredPane extraCardPane;
-		JLabel extraCardImage;		
+		JLabel extraCardImage;	
+		
+		repaint();
+		pack();
+		getContentPane().add(mazeContainer);
+		getContentPane().remove(b3);
 		
 		MazeGame mazeGame;	
 		MazeGameControlers mazeGameControler;
-		getContentPane().remove(menu);
+		
 		mazeGame = new MazeGame(nbPlayer);
 		mazeGameControler = new MazeGameControler(mazeGame);
 		mazeGame.addObserver((Observer) this);

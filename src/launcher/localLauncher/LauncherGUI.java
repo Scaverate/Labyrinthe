@@ -30,9 +30,12 @@ public class LauncherGUI {
 		dim = new Dimension(700, 700);
 		frame = new MazeGameGUI(dim);		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocation(600, 10);
-		frame.setResizable(true);
+		//frame.setLocation(600, 10);
+		frame.setTitle("Super Mario Maze");
+		frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+
 	}
 }
