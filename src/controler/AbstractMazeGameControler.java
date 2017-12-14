@@ -111,6 +111,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	
 	public List<TreasureIHMs> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
+	public CouloirIHM getExtraCorridorIHM() { return this.mazeGame.getExtraCorridorIHM(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.mazeGame.getPiecesIHMs(); }
 	public List<Coord> findPath(Coord coord) { return this.mazeGame.findPath(coord); }
 }

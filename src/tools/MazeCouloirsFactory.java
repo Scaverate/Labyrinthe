@@ -81,6 +81,22 @@ public class MazeCouloirsFactory {
         return couloirs;
     }
     
+    public static Couloirs getExtraCorridor(){
+        MazeCouloirsType corridor;
+    	
+        corridor = getRandomCorridorFromType(getTypeIdCorridor());
+    	
+    	Couloirs extraCorridor = new CouloirAmovible(
+    		new Coord(0,0),
+    		corridor.isNorthOpened,
+    		corridor.isSouthOpened,
+    		corridor.isEastOpened,
+    		corridor.isWestOpened
+		);
+    	
+    	return extraCorridor;
+    }
+    
     private static int getTypeIdCorridor() {
     	List<Integer> listNbAleatoire = null;
     	int randomNumber;
