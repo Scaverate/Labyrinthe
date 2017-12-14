@@ -456,6 +456,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		if(this.mazeBoard == null) {
+			return;
+		}
 		if(((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
 			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
 			for (PieceIHMs pieceIHM : piecesIHM) {
