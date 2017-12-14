@@ -234,7 +234,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				couloirIHM.isWestOpened(),
 				false
 			));
-			generalBoard.add(tresorCard, "pos 0.8al 0.9al");
 			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
 				"Couloir",
 				couloirIHM.isNorthOpened(),
@@ -254,7 +253,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			 */
 			
 			// pour chaque case on ajoute paramètre dimension et position du couloir
-			couloir.setPreferredSize(new Dimension(100, 1010000));
+			couloir.setPreferredSize(new Dimension(100, 100));
 			couloir.setBounds(0, 0, 100, 100);
 
 			// on ajoute le couloir en arriere-plan
