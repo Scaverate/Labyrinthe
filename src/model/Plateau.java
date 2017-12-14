@@ -5,32 +5,57 @@ import java.util.List;
 
 import tools.MazeCouloirsFactory;
 import tools.MazeTreasureFactory;
+import model.Coord;
+
 
 public class Plateau implements BoardGames {
 	public Plateau(int nbPlayer) {
+		this.treasures = MazeTreasureFactory.newTreasure();
+		//Liste correspondant à la pioche du jeu
+		this.treasureToDraw = new LinkedList<Treasures>(this.treasures);
+		//Score maximum que chaque joueur doit atteindre
+		scoreMax = 24/nbPlayer; 
 		switch (nbPlayer) {
-			case 2 :
-				jeuRouge = new Jeu(Couleur.ROUGE);
-				jeuBleu = new Jeu(Couleur.BLEU);
-				break;
-			case 3 :
-				jeuBleu = new Jeu(Couleur.BLEU);
-				jeuRouge = new Jeu(Couleur.ROUGE);
-				jeuJaune = new Jeu(Couleur.JAUNE);
-				break;
-			case 4 :
-				jeuBleu = new Jeu(Couleur.BLEU);
-				jeuRouge = new Jeu(Couleur.ROUGE);
-				jeuVert = new Jeu(Couleur.VERT);
-				jeuJaune = new Jeu(Couleur.JAUNE);
-				break;
-			default:
+		case 2 :
+			jeuRouge = new Jeu(Couleur.ROUGE);
+			jeuRouge.setCoordInit(new Coord(0,0));
+			jeuRouge.drawCard(this.treasureToDraw);
+			jeuBleu = new Jeu(Couleur.BLEU);
+			jeuBleu.drawCard(this.treasureToDraw);
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			break;
+		case 3 :
+			jeuBleu = new Jeu(Couleur.BLEU);
+			jeuBleu.drawCard(this.treasureToDraw);
+			jeuRouge = new Jeu(Couleur.ROUGE);
+			jeuRouge.drawCard(this.treasureToDraw);
+			jeuJaune = new Jeu(Couleur.JAUNE);
+			jeuJaune.drawCard(this.treasureToDraw);
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
+			break;
+		case 4 :
+			jeuBleu = new Jeu(Couleur.BLEU);
+			jeuBleu.drawCard(this.treasureToDraw);
+			jeuRouge = new Jeu(Couleur.ROUGE);
+			jeuRouge.drawCard(this.treasureToDraw);
+			jeuVert = new Jeu(Couleur.VERT);
+			jeuVert.drawCard(this.treasureToDraw);
+			jeuJaune = new Jeu(Couleur.JAUNE);
+			jeuJaune.drawCard(this.treasureToDraw);
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
+			jeuVert.setCoordInit(new Coord(jeuVert.getPiecesIHM().get(0).getX(),jeuVert.getPiecesIHM().get(0).getY()));
+			break;
+		default:
 				System.out.println("La creation des jeux a echoue");
 		}
 		this.jeuCourant = jeuRouge;
 		this.message = new String("");
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
-		this.treasures = MazeTreasureFactory.newTreasure();
 	}
 	
 	/*
@@ -82,6 +107,10 @@ public class Plateau implements BoardGames {
 				this.jeuCourant = this.jeuBleu;
 			}
 		}
+		if(this.jeuCourant.getTreasureToCatch() == null && this.jeuCourant.getScorePlayer() < this.scoreMax){
+			//Piocher une carte si le joueur n'a pas atteint le score final
+			this.jeuCourant.drawCard(this.treasureToDraw);
+		}
 	}
 
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
@@ -99,7 +128,7 @@ public class Plateau implements BoardGames {
 
 		return canMove;
 	}
-
+	
 	private boolean isPieceAnyColor(int coord1, int coord2){
 		boolean ret = false;
 
@@ -290,8 +319,8 @@ public class Plateau implements BoardGames {
 		return couloirIHMs;
 	}
 	
-	public List<TreasureIHM> getTreasuresIHMs() {
-		List<TreasureIHM> treasureIHMs = new LinkedList<TreasureIHM>();
+	public List<TreasureIHMs> getTreasuresIHMs() {
+		List<TreasureIHMs> treasureIHMs = new LinkedList<TreasureIHMs>();
 
 		for(Treasures treasure : this.treasures) {
 			treasureIHMs.add(new TreasureIHM(treasure));
@@ -453,7 +482,34 @@ public class Plateau implements BoardGames {
 
 		return reachableCorridors;
 	}
-
+	
+	public Treasure currentTreasureToCatch(){
+		Treasure treasureToCatch = null;
+		treasureToCatch = this.jeuCourant.getTreasureToCatch();
+		return treasureToCatch;
+	}
+	
+	public void setCurrentTreasureToCatch(Treasure treasureToCatch){
+		this.jeuCourant.setTreasureToCatch(treasureToCatch);
+	}
+	
+	public boolean treasureCatched(Treasure treasureCatched){
+		if(this.jeuCourant.addTreasureCatched(treasureCatched)){
+			System.out.println("TRESOR VA ETRE SUPPRIMER");
+			this.treasures.remove(treasureCatched);
+			System.out.println(this.treasures.size());
+			return true;
+			
+		}else{
+			return false;
+		}
+	}
+	
+	public int getCurrentScorePlayer(){
+		return this.jeuCourant.getScorePlayer();
+	}
+	
+	int scoreMax = 0;
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;
 	private Jeu jeuJaune;
@@ -462,6 +518,7 @@ public class Plateau implements BoardGames {
 	private String message;
 	private List<Couloirs> couloirs;
 	private List<Treasures> treasures;
+	List<Treasures> treasureToDraw; 
 	//vue/mazegameGUI
 	//boucle for couloirs ihm qui permet de poser les images
 

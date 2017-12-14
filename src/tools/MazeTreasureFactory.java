@@ -42,19 +42,19 @@ public class MazeTreasureFactory {
 		//Sinon, on recupere une piece amovible aleatoirement parmis la liste
 		for(int i = 0; i < MazeTreasurePos.values().length; i++){
 			if(MazeTreasurePos.values()[i].name == "TreasureFixed"){
+				//Creation d'un tresor a une position fixe
 				Treasure theTreasure = new Treasure(MazeTreasurePos.values()[i].coord.x,
 						MazeTreasurePos.values()[i].coord.y, MazeTreasurePos.values()[i].name, false);
-				System.out.println("TYPE FIXE :" + theTreasure);
 				treasures.add(theTreasure);
 			}else{
 				Random rand = new Random();
 				//Recuperation nombre aleatoire entre 0 et nombre de coordonnees valides restantes
 				randomNumber = rand.nextInt(listCoord.size() - 0 ) + 0;
+				//Creation d'un tresor a une position aleatoire
 				Treasure theTreasure = new Treasure(listCoord.get(randomNumber).x,listCoord.get(randomNumber).y,
 						 			   MazeTreasurePos.values()[i].name, false);
 				treasures.add(theTreasure);
 				listCoord.remove(randomNumber);
-				System.out.println("TYPE AMOVIBLE : " + theTreasure);
 			}
 		}
 		return treasures;

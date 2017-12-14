@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.*;
 import model.observable.MazeGame;
+import model.Treasure;
 
 
 /**
@@ -90,7 +91,25 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		return this.mazeGame.getPieceColor(initCoord.x, initCoord.y);		
 	}
 	
-	public List<TreasureIHM> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
+	public Treasure currentTreasureToCatch(){
+		Treasure treasureToCatch = null;
+		treasureToCatch = this.mazeGame.currentTreasureToCatch();
+		return treasureToCatch;
+	}
+	
+	public void setCurrentTreasureToCatch(Treasure treasureToCatch){
+		this.mazeGame.setCurrentTreasureToCatch(treasureToCatch);
+	}
+	
+	public int getCurrentScorePlayer(){
+		return this.mazeGame.getCurrentScorePlayer();
+	}
+	
+	public void treasureCatchedPlateau(Treasure treasureCatched){
+		this.mazeGame.treasureCatchedPlateau(treasureCatched);
+	}
+	
+	public List<TreasureIHMs> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.mazeGame.getPiecesIHMs(); }
 	public List<Coord> findPath(Coord coord) { return this.mazeGame.findPath(coord); }
