@@ -24,24 +24,18 @@ public class LauncherGUI {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		MazeGame mazeGame;	
-		MazeGameControlers mazeGameControler;
 		JFrame frame;	
 		Dimension dim;
-	
+		
 		dim = new Dimension(700, 700);
-		
-		mazeGame = new MazeGame(2);
-		mazeGameControler = new MazeGameControler(mazeGame);
-		
-		frame = new MazeGameGUI("Jeu", mazeGameControler,  dim);
-		mazeGame.addObserver((Observer) frame);
-		
+		frame = new MazeGameGUI(dim);		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocation(600, 10);
-		frame.setResizable(true);
+		//frame.setLocation(600, 10);
+		frame.setTitle("Super Mario Maze");
+		frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+
 	}
 }
