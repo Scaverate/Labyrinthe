@@ -5,36 +5,38 @@ import model.Coord;
 public enum MazeTreasurePos {
 	//Création 24 objets
 	//Les objets sur les couloirs fixes ont les bonnes coordonnees
-	COFFRE("TreasureFixed",new Coord(0,2)),
-	BOUTEILLERHUM("TreasureFixed", new Coord(0,4)),
-	CROCODILE("TreasureFixed", new Coord(2,0)), 
-	BATEAUX("TreasureFixed", new Coord(2,2)),
-	COURONNE("TreasureFixed", new Coord(2,4)),
-	CORNE("TreasureFixed", new Coord(2,6)),
-	MAGE("TreasureFixed", new Coord(4,0)),
-	PAPYRUS("TreasureFixed", new Coord(4,2)),
-	EPEE("TreasureFixed", new Coord(4,4)),
-	DIAMAND("TreasureFixed", new Coord(4,6)),
-	TABLEAU("TreasureFixed", new Coord(6,2)),
-	SABLIER("TreasureFixed", new Coord(6,4)),
-	POMME("TreasureMoveable", new Coord(0,0)),
-	POIRE("TreasureMoveable", new Coord(0,0)),
-	PECHE("TreasureMoveable", new Coord(0,0)),
-	ABRICOT("TreasureMoveable", new Coord(0,0)),
-	BANANE("TreasureMoveable", new Coord(0,0)),
-	CLEMENTINE("TreasureMoveable", new Coord(0,0)),
-	ORANGE("TreasureMoveable", new Coord(0,0)),
-	FRAISE("TreasureMoveable", new Coord(0,0)),
-	FRAMBOISE("TreasureMoveable", new Coord(0,0)),
-	CERISE("TreasureMoveable", new Coord(0,0)),
-	PAMPLEMOUSSE("TreasureMoveable", new Coord(0,0)),
-	RAISIN("TreasureMoveable", new Coord(0,0));
+	BULLET_BILL(1, "TreasureFixed",new Coord(0,2)),
+	BLOC_QUESTION(2, "TreasureFixed", new Coord(0,4)),
+	BOB_OMB(3, "TreasureFixed", new Coord(2,0)), 
+	CHAMPIGNON(4, "TreasureFixed", new Coord(2,2)),
+	HELICE(5, "TreasureFixed", new Coord(2,4)),
+	BANANE(6, "TreasureFixed", new Coord(2,6)),
+	BLOOBS(7, "TreasureFixed", new Coord(4,0)),
+	CARAPACE_VERTE(8, "TreasureFixed", new Coord(4,2)),
+	GOOMBA(9, "TreasureFixed", new Coord(4,4)),
+	PIECE(10, "TreasureFixed", new Coord(4,6)),
+	ECLAIR(11, "TreasureFixed", new Coord(6,2)),
+	PLANTE_PIRANHA(12, "TreasureFixed", new Coord(6,4)),
+	CHAMPIGNON_DORE(13, "TreasureMoveable", new Coord(0,0)),
+	FLEUR_FEU(14, "TreasureMoveable", new Coord(0,0)),
+	CARAPACE_EPINES(15, "TreasureMoveable", new Coord(0,0)),
+	TRIPLE_CARAPACE_ROUGE(16, "TreasureMoveable", new Coord(0,0)),
+	FLEU_BOOMERANG(17, "TreasureMoveable", new Coord(0,0)),
+	ETOILE(18, "TreasureMoveable", new Coord(0,0)),
+	FEUILLE_INVINCIBILITE(19, "TreasureMoveable", new Coord(0,0)),
+	BOO(20, "TreasureMoveable", new Coord(0,0)),
+	NUAGE_ZAP(21, "TreasureMoveable", new Coord(0,0)),
+	FLEUR_GLACE(22, "TreasureMoveable", new Coord(0,0)),
+	BLOC_POW(23, "TreasureMoveable", new Coord(0,0)),
+	DOUBLE_CERISE(24, "TreasureMoveable", new Coord(0,0));
 	
-	public String name;
+	public int id;
+	public String type;
 	public Coord coord;
 	
-	MazeTreasurePos( String name, Coord coords) {
-		this.name = name;
+	MazeTreasurePos( int id, String type, Coord coords) {
+		this.id = id;
+		this.type = type;
 		this.coord = coords;
 	}
 }

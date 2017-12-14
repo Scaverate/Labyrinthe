@@ -20,7 +20,7 @@ public  class TreasureIHM  implements TreasureIHMs {
 	 */
 	@Override
 	public String toString() {
-		return "TreasureIHM [name=" + getTreasureName() + ", x="
+		return "TreasureIHM [id=" + getTreasureId() + ", name=" + getTreasureType() + ", x="
 				+ getTreasureX() + ", y=" + getTreasureY() + "]";
 	}
 
@@ -35,7 +35,12 @@ public  class TreasureIHM  implements TreasureIHMs {
 	}
 
 	@Override
-	public String getTreasureName() {
-		return treasure.getTreasureName();
+	public String getTreasureType() {
+		return treasure.getTreasureType();
+	}
+
+	@Override
+	public int getTreasureId() {
+		return treasure.getTreasureId();
 	}
 }

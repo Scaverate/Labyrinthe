@@ -285,8 +285,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		for(TreasureIHMs treasureIHM : treasureIHMs){
-			treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
-
+			treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureId())));
 			treasure.setPreferredSize(new Dimension(100, 100));
 			treasure.setBounds(0, 0, 100, 100);
 			treasure.setOpaque(false);
@@ -527,8 +526,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 				//On recrée le trésor
 				treasure = new JLabel(new ImageIcon(
-						MazeImageProvider.getImageFile(treasureIHM
-								.getTreasureName())));
+						MazeImageProvider.getImageFile(treasureIHM.getTreasureId())));
 				treasure.setPreferredSize(new Dimension(100, 100));
 				treasure.setBounds(0, 0, 100, 100);
 				treasure.setOpaque(false);

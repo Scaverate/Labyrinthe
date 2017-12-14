@@ -20,6 +20,12 @@ public interface TreasureIHMs {
 	 * @return le nom de la pièce
 	 *
 	 */
-	public String getTreasureName();
+	public String getTreasureType();
+	
+	/**
+	 * 
+	 * @return l'ID du trésor
+	 */
+	public int getTreasureId();
 	
 }
