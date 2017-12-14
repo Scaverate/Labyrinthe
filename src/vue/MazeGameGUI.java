@@ -144,10 +144,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLayeredPane extraCardPane;
 		JLabel extraCardImage;	
 		
+		
+		setContentPane(mazeContainer);
 		repaint();
 		pack();
-		getContentPane().add(mazeContainer);
-		getContentPane().remove(b3);
 		
 		MazeGame mazeGame;	
 		MazeGameControlers mazeGameControler;
