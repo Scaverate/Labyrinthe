@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -17,8 +18,7 @@ import model.observable.MazeGame;
 import controler.MazeGameControlers;
 import controler.controlerLocal.MazeGameControler;
 
-public class MazeGameGUI extends JFrame implements MouseListener,
-		MouseMotionListener, Observer {
+public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
 
 	/**
 	 * default serial version uid
@@ -31,9 +31,11 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
 	private int xAdjustment;
-	private JButton okButton, nb2Button, nb3Button, nb4Button;
+	private JButton okButton; 
+	private JRadioButton btnNb2, btnNb3, btnNb4;
 	private int yAdjustment;
 	private int xOrigine;
+	private ButtonGroup btnGrp;
 	private int yOrigine;
 	private int nbPlayer;
 	private MazeGameControlers mazeGameControler;
@@ -54,28 +56,44 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 		mazeContainer = new JLayeredPane();
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
-		getContentPane().add(mazeContainer); // on l'ajoute a la fenetre principale
-		menu = new JPanel();
-		menu.setPreferredSize(windowSize);
-		menu.setBackground(Color.BLACK);
+		// on l'ajoute a la fenetre principale
+		menu = new JPanel();	
+		menu.setPreferredSize(new Dimension(600,40));
+		menu.setOpaque(false);
+		//menu.setBackground(Color.BLACK);
+		File g = new File("");
+		String path = "/src/images/";
+		String ret = g.getAbsolutePath() + path + "bg.jpg";
 		
-		nb2Button = new JButton("2");
-		nb3Button = new JButton("3");
-		nb4Button = new JButton("4");
+		//ImagePanel panel = new ImagePanel(new ImageIcon(ret).getImage());	
+	    
+		btnGrp = new ButtonGroup();
+		btnNb2 = new JRadioButton("2 joueurs");
+		btnNb3 = new JRadioButton("3 joueurs");
+		btnNb4 = new JRadioButton("4 joueurs");
+
+		btnNb2.setOpaque(false);
+		btnNb3.setOpaque(false);
+		btnNb4.setOpaque(false);
 		
-		nb2Button.addActionListener(new ActionListener() {
+		// ajout des boutons radio dans le groupe bg
+		btnGrp.add(btnNb2);
+		btnGrp.add(btnNb3);
+		btnGrp.add(btnNb4);
+		
+		btnNb2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 2;
 			}
 		});
 		
-		nb3Button.addActionListener(new ActionListener() {
+		btnNb3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 3;
 			}
 		});
 		
-		nb4Button.addActionListener(new ActionListener() {
+		btnNb4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 4;
 			}
@@ -89,12 +107,17 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 			}			
 		});
 		
-		menu.add(nb2Button, BorderLayout.CENTER);
-		menu.add(nb3Button, BorderLayout.CENTER);
-		menu.add(nb4Button, BorderLayout.CENTER);
-		menu.add(okButton, BorderLayout.CENTER);
-		getContentPane().add(menu);
+		menu.add(btnNb2, BorderLayout.CENTER);
+		menu.add(btnNb3, BorderLayout.CENTER);
+		menu.add(btnNb4, BorderLayout.CENTER);
+		menu.add(okButton, BorderLayout.CENTER);		
 
+		ImagePanel contentPane = new ImagePanel(new ImageIcon(ret).getImage());
+	    contentPane.add(menu);
+		contentPane.setPreferredSize(windowSize);
+		setContentPane(contentPane);
+		getContentPane().add(mazeContainer);
+		
 	}
 	
 	public void initMazeGame(int nbPlayer) {
@@ -109,7 +132,7 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 		JLabel tresorCardTwo;
 		CouloirIHM extraCard;
 		JLayeredPane extraCardPane;
-		JLabel extraCardImage;
+		JLabel extraCardImage;		
 		
 		MazeGame mazeGame;	
 		MazeGameControlers mazeGameControler;
@@ -415,7 +438,7 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 	public void mouseMoved(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		if(((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
