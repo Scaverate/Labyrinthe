@@ -36,12 +36,11 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 	private int yOrigine;
 	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
+	List<TreasureIHMs> treasureIHMs;
 
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
-
-	private List<TreasureIHMs> treasureIHMs;
 
 	public MazeGameGUI(String name, MazeGameControlers mazeGameControler,
 			Dimension dim) {
@@ -49,7 +48,6 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 		Dimension windowSize = new Dimension(950,1000);
 		Icon imageIcon;
 		Icon disabledIcon;
-		List<TreasureIHM> treasureIHMs;
 		List<CouloirIHM> couloirIHMs;
 		List<PieceIHMs> pieceIHMs;
 		JLabel couloir;
@@ -189,7 +187,7 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 					* pieceIHM.getY())).add(this.pawn, PAWN_LAYER);
 		}
 		
-		for(TreasureIHM treasureIHM : treasureIHMs){
+		for(TreasureIHMs treasureIHM : treasureIHMs){
 			treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureName())));
 
 			treasure.setPreferredSize(new Dimension(100, 100));
@@ -319,6 +317,7 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
 
 		 JLayeredPane layeredPane;
+		 JLayeredPane parentComponentHere;
 		 JLabel corridorImage;
 
 		 if (pawn == null) {
@@ -402,9 +401,10 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 
 		if(((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
 			List<TreasureIHMs> updatedList = (List<TreasureIHMs>) arg;
+			JLabel treasure;
 
 			//Suppression des trésors
-			for (TreasureIHMs treasureIHM : this.treasureIHMs) {
+			for (TreasureIHMs treasureIHM : treasureIHMs) {
 				// on récupère le trésor
 				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
 						* treasureIHM.getTreasureY() + treasureIHM.getTreasureX());
@@ -435,16 +435,16 @@ public class MazeGameGUI extends JFrame implements MouseListener,
 				}
 
 				//On recrée le trésor
-				this.treasure = new JLabel(new ImageIcon(
+				treasure = new JLabel(new ImageIcon(
 						MazeImageProvider.getImageFile(treasureIHM
 								.getTreasureName())));
-				this.treasure.setPreferredSize(new Dimension(100, 100));
-				this.treasure.setBounds(0, 0, 100, 100);
-				this.treasure.setOpaque(false);
+				treasure.setPreferredSize(new Dimension(100, 100));
+				treasure.setBounds(0, 0, 100, 100);
+				treasure.setOpaque(false);
 				// TODO moche ajouter tests
 				((JLayeredPane) this.mazeBoard.getComponent(treasureIHM
 						.getTreasureX() + 7 * treasureIHM.getTreasureY())).add(
-						this.treasure, TREASURE_LAYER);
+						treasure, TREASURE_LAYER);
 			}
 
 		}
