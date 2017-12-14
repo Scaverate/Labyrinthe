@@ -61,10 +61,6 @@ public class MazeCouloirsFactory {
             	typeIdCorridor = getTypeIdCorridor();
             	corridor = getRandomCorridorFromType(typeIdCorridor);
             	
-            	System.out.println("I = "+typeI);
-            	System.out.println("L = "+typeL);
-            	System.out.println("T = "+typeT);
-            	
             	isNorthOpened = corridor.isNorthOpened;
                 isSouthOpened = corridor.isSouthOpened;
                 isEastOpened = corridor.isEastOpened;
@@ -104,7 +100,6 @@ public class MazeCouloirsFactory {
     	Random rand = new Random();
     	
     	randomNumber = rand.nextInt(listNbAleatoire.size());
-    	System.out.println(listNbAleatoire.get(randomNumber));
     	
     	switch (listNbAleatoire.get(randomNumber)) {
     	case 1: 
@@ -125,8 +120,7 @@ public class MazeCouloirsFactory {
     }
     
     private static MazeCouloirsType getRandomCorridorFromType(int typeId) {
-    	List<MazeCouloirsType> corridors= null;
-    	corridors = new LinkedList<MazeCouloirsType>();
+    	List<MazeCouloirsType> corridors= new LinkedList<MazeCouloirsType>();
     	
     	int randomCorridor;
     	
@@ -138,7 +132,6 @@ public class MazeCouloirsFactory {
     	Random rand = new Random();
     	
     	randomCorridor = rand.nextInt(corridors.size());
-    	//System.out.println(randomCorridor);
     	
     	return corridors.get(randomCorridor);
     }
