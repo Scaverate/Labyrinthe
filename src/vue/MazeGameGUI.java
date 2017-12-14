@@ -54,7 +54,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public MazeGameGUI(Dimension dim) {
 		
 		this.dim = dim;
-		Dimension windowSize = new Dimension(950,1000);		
+		Dimension windowSize = new Dimension(950,700);		
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
 		mazeContainer = new JLayeredPane();
@@ -139,7 +139,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel couloir;
 		JLabel treasure;
 		JLabel tresorCard;
-		JLabel tresorCardTwo;
 		CouloirIHM extraCard;
 		JLayeredPane extraCardPane;
 		JLabel extraCardImage;	
@@ -156,7 +155,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeGameControler = new MazeGameControler(mazeGame);
 		mazeGame.addObserver((Observer) this);
 		this.mazeGameControler = mazeGameControler;
-
 		// on initialise le controleur
 		couloirIHMs = mazeGameControler.getCouloirsIHMs();
 		pieceIHMs = mazeGameControler.getPiecesIHMs();
@@ -179,15 +177,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On cree la zone pour la pile de cartes
 		tresorCard = new JLabel(imageIcon);
 		
-		//On cree une image pour la pile des cartes des tresors
-		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("TresorTrois"));
-		//On cree la zone pour la pile de cartes
-		tresorCardTwo = new JLabel(imageIcon);
+		
 		
 		//On cree la carte supplementaire, recuperant la deuxieme piece de la liste
 		//On garde le côte aleatoire comme la liste est aleatoire
 		//Il faut la deuxieme car la premiere est un angle de depart
-		extraCard = couloirIHMs.get(1);
+		extraCard = mazeGameControler.getExtraCorridorIHM();
 		// on cree un panneau contenant differents plans
 		extraCardPane = new JLayeredPane();
 		extraCardPane.setPreferredSize(new Dimension(100, 100));
@@ -239,6 +234,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				couloirIHM.isWestOpened(),
 				false
 			));
+			generalBoard.add(tresorCard, "pos 0.8al 0.9al");
 			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
 				"Couloir",
 				couloirIHM.isNorthOpened(),
@@ -258,7 +254,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			 */
 			
 			// pour chaque case on ajoute paramètre dimension et position du couloir
-			couloir.setPreferredSize(new Dimension(100, 100));
+			couloir.setPreferredSize(new Dimension(100, 1010000));
 			couloir.setBounds(0, 0, 100, 100);
 
 			// on ajoute le couloir en arriere-plan
@@ -300,10 +296,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		generalBoard.add(mazeBoard, "pos 0 0");
-		generalBoard.add(tresorCard, "pos 0.9al 0.9al");
-		generalBoard.add(tresorCard, "pos 0.8al 0.9al");
-		generalBoard.add(tresorCardTwo, "pos 0.5al 0.9al");
-		generalBoard.add(extraCardPane, "pos 0.9al 0.3al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
+		generalBoard.add(tresorCard, "pos 0.90al 0.5al");
+		generalBoard.add(extraCardPane, "pos 0.90al 0.1al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);

@@ -56,6 +56,8 @@ public class Plateau implements BoardGames {
 		this.jeuCourant = jeuRouge;
 		this.message = new String("");
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
+		this.extraCorridor = MazeCouloirsFactory.getExtraCorridor();
+	
 	}
 	
 	/*
@@ -319,6 +321,12 @@ public class Plateau implements BoardGames {
 		return couloirIHMs;
 	}
 	
+	public CouloirIHM getExtraCorridorIHM() {
+		CouloirIHM extraCorridorIHM = new CouloirIHM(this.extraCorridor);
+		
+		return extraCorridorIHM;
+	}
+	
 	public List<TreasureIHMs> getTreasuresIHMs() {
 		List<TreasureIHMs> treasureIHMs = new LinkedList<TreasureIHMs>();
 
@@ -517,6 +525,7 @@ public class Plateau implements BoardGames {
 	private Jeu jeuCourant;
 	private String message;
 	private List<Couloirs> couloirs;
+	private Couloirs extraCorridor;
 	private List<Treasures> treasures;
 	List<Treasures> treasureToDraw; 
 	//vue/mazegameGUI
