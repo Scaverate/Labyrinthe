@@ -41,10 +41,10 @@ public class MazeTreasureFactory {
 		//Si objets fixe, on recupere les coordonnees ecrites dans MazeTreasurePos
 		//Sinon, on recupere une piece amovible aleatoirement parmis la liste
 		for(int i = 0; i < MazeTreasurePos.values().length; i++){
-			if(MazeTreasurePos.values()[i].name == "TreasureFixed"){
+			if(MazeTreasurePos.values()[i].type == "TreasureFixed"){
 				//Creation d'un tresor a une position fixe
 				Treasure theTreasure = new Treasure(MazeTreasurePos.values()[i].coord.x,
-						MazeTreasurePos.values()[i].coord.y, MazeTreasurePos.values()[i].name, false);
+						MazeTreasurePos.values()[i].coord.y, MazeTreasurePos.values()[i].id,MazeTreasurePos.values()[i].type, false);
 				treasures.add(theTreasure);
 			}else{
 				Random rand = new Random();
@@ -52,7 +52,7 @@ public class MazeTreasureFactory {
 				randomNumber = rand.nextInt(listCoord.size() - 0 ) + 0;
 				//Creation d'un tresor a une position aleatoire
 				Treasure theTreasure = new Treasure(listCoord.get(randomNumber).x,listCoord.get(randomNumber).y,
-						 			   MazeTreasurePos.values()[i].name, false);
+						MazeTreasurePos.values()[i].id, MazeTreasurePos.values()[i].type, false);
 				treasures.add(theTreasure);
 				listCoord.remove(randomNumber);
 			}

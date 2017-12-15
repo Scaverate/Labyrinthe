@@ -3,13 +3,15 @@ package model;
 public abstract class AbstractTreasure implements Treasures {
 	private int x;
 	private int y;
-	private String name;
+	private String type;
+	private int id;
 	private boolean isCatched;
 	
-	public AbstractTreasure(int x, int y, String name, boolean isCatched) {
+	public AbstractTreasure(int x, int y, int id, String type, boolean isCatched) {
 		this.x = x;
 		this.y = y;
-		this.name = new String(name);
+		this.id = id;
+		this.type = new String(type);
 		this.isCatched = false;
 	}
 
@@ -24,8 +26,12 @@ public abstract class AbstractTreasure implements Treasures {
 	}
 
 	@Override
-	public String getTreasureName() {
-		return name;
+	public String getTreasureType() {
+		return type;
+	}
+	
+	public int getTreasureId() {
+		return id;
 	}
 	
 	public boolean isCatched() {
@@ -34,6 +40,6 @@ public abstract class AbstractTreasure implements Treasures {
 
 	@Override
 	public String toString(){
-		return "Piece de type '" + this.getTreasureName() + "' en position (" + this.getTreasureX() +";"+ this.getTreasureY()+ ")";
+		return "Piece '" + this.getTreasureId() + "' de type '" + this.getTreasureType() + "' en position (" + this.getTreasureX() +";"+ this.getTreasureY()+ ")";
 	}
 }
