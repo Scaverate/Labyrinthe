@@ -34,6 +34,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel pawn = null;
 	private ImagePanel contentPane;
 	private int xAdjustment;
+	private JButton rotateLeftButton, rotateRightButton;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
 	private int yAdjustment;
@@ -183,6 +184,21 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On garde le côte aleatoire comme la liste est aleatoire
 		//Il faut la deuxieme car la premiere est un angle de depart
 		extraCard = mazeGameControler.getExtraCorridorIHM();
+
+		//Bouton de rotation gauche
+		rotateLeftButton = new JButton("Gauche");
+		rotateLeftButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				extraCard.rotateLeft();
+			}
+		});
+		//Bouton de rotation droit
+		rotateRightButton = new JButton("Droite");
+		rotateRightButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				extraCard.rotateRight();
+			}
+		});
 		// on cree un panneau contenant differents plans
 		extraCardPane = new JLayeredPane();
 		extraCardPane.setPreferredSize(new Dimension(100, 100));
@@ -296,6 +312,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.90al 0.5al");
 		generalBoard.add(extraCardPane, "pos 0.90al 0.1al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
+		generalBoard.add(rotateLeftButton, "pos 0.90al 0.05al");
+		generalBoard.add(rotateRightButton, "pos 0.90al 0.2al");
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -549,4 +567,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		this.repaint();
 		this.revalidate();
 	}
+
+
 }

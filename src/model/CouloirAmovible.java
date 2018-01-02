@@ -11,28 +11,38 @@ public class CouloirAmovible extends AbstractCouloir {
     /**
      * Rotation d'un couloir vers la gauche
      */
-    public void tiltLeft() {
+    public void rotateLeft() {
+        boolean north = isNorthOpened();
+        boolean east = isEastOpened();
+        boolean south = isSouthOpened();
+        boolean west = isWestOpened();
+
         // le nord devient l'est
-        this.setNorthOpened(this.isEastOpened());
+        this.setNorthOpened(east);
         // le sud devient l'ouest
-        this.setSouthOpened(this.isWestOpened());
+        this.setSouthOpened(west);
         // l' est devient le sud
-        this.setEastOpened(this.isSouthOpened());
+        this.setEastOpened(south);
         // l' ouest devient le nord
-        this.setWestOpened(this.isNorthOpened());
+        this.setWestOpened(north);
     }
 
     /**
      * Rotation d'un couloir vers la droite
      */
-    public void tiltRight() {
+    public void rotateRight() {
+        boolean north = isNorthOpened();
+        boolean east = isEastOpened();
+        boolean south = isSouthOpened();
+        boolean west = isWestOpened();
+
         // le nord devient l'ouest
-        this.setNorthOpened(this.isWestOpened());
+        this.setNorthOpened(west);
         // le sud devient l'est
-        this.setSouthOpened(this.isEastOpened());
+        this.setSouthOpened(east);
         // l' est devient le nord
-        this.setEastOpened(this.isNorthOpened());
+        this.setEastOpened(north);
         // l' ouest devient le sud
-        this.setWestOpened(this.isSouthOpened());
+        this.setWestOpened(south);
     }
 }
