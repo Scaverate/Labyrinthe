@@ -21,26 +21,6 @@ public class CouloirIHM implements CouloirIHMs {
         return isFixed;
     }
 
-    public void rotateLeft() {
-        if (this.couloir instanceof CouloirAmovible) {
-            ((CouloirAmovible) this.couloir).rotateLeft();
-            System.out.println(isNorthOpened());
-            System.out.println(isEastOpened());
-            System.out.println(isSouthOpened());
-            System.out.println(isWestOpened());
-        }
-    }
-
-    public void rotateRight() {
-        if (this.couloir instanceof CouloirAmovible) {
-            ((CouloirAmovible) this.couloir).rotateRight();
-            System.out.println(isNorthOpened());
-            System.out.println(isEastOpened());
-            System.out.println(isSouthOpened());
-            System.out.println(isWestOpened());
-        }
-    }
-
     public int getX() { return this.couloir.getX(); }
     public int getY() {
         return this.couloir.getY();

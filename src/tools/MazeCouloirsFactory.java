@@ -81,13 +81,13 @@ public class MazeCouloirsFactory {
         return couloirs;
     }
     
-    public static Couloirs getExtraCorridor(){
+    public static CouloirAmovible getExtraCorridor(){
         MazeCouloirsType corridor;
     	
         corridor = getRandomCorridorFromType(getTypeIdCorridor());
     	
-    	Couloirs extraCorridor = new CouloirAmovible(
-    		new Coord(0,0),
+    	CouloirAmovible extraCorridor = new CouloirAmovible(
+    		new Coord(0, 0),
     		corridor.isNorthOpened,
     		corridor.isSouthOpened,
     		corridor.isEastOpened,

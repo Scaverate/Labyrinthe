@@ -53,4 +53,6 @@ public interface MazeGameControlers {
 	public CouloirIHM getExtraCorridorIHM();
 	public List<PieceIHMs> getPiecesIHMs();
 	public List<Coord> findPath(Coord coord);
+	public void rotateExtraCardLeft();
+	public void rotateExtraCardRight();
 }

@@ -10,16 +10,9 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import model.*;
 import tools.MazeImageProvider;
-import tools.MazeTreasureImage;
-import model.Coord;
-import model.Couleur;
-import model.PieceIHMs;
-import model.Treasure;
-import model.TreasureIHMs;
 import net.miginfocom.swing.MigLayout;
-import model.CouloirIHM;
-import model.TreasureIHM;
 import model.observable.MazeGame;
 import controler.MazeGameControlers;
 import controler.controlerLocal.MazeGameControler;
@@ -51,6 +44,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
+	JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
 	private int yAdjustment;
@@ -61,6 +55,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
 	List<TreasureIHMs> treasureIHMs;
+	List<CouloirIHM> couloirIHMs;
 	private Dimension dim;
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
@@ -188,13 +183,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Dimension windowSize = new Dimension(950,1000);		
 		Icon imageIcon;
 		Icon disabledIcon;
-		List<CouloirIHM> couloirIHMs;
+		//List<CouloirIHM> couloirIHMs;
 		List<PieceIHMs> pieceIHMs;
 		JLabel couloir;
 		JLabel treasure;
 		JLabel tresorCard;
 		CouloirIHM extraCard;
-		JLayeredPane extraCardPane;
 		JLabel extraCardImage;	
 		
 		
@@ -281,8 +275,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On cree la zone pour la pile de cartes
 		tresorCard = new JLabel(imageIcon);
 		
-		
-		
 		//On cree la carte supplementaire, recuperant la deuxieme piece de la liste
 		//On garde le côte aleatoire comme la liste est aleatoire
 		//Il faut la deuxieme car la premiere est un angle de depart
@@ -292,14 +284,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		rotateLeftButton = new JButton("Gauche");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				extraCard.rotateLeft();
+				mazeGameControler.rotateExtraCardLeft();
 			}
 		});
 		//Bouton de rotation droit
 		rotateRightButton = new JButton("Droite");
 		rotateRightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				extraCard.rotateRight();
+				mazeGameControler.rotateExtraCardRight();
 			}
 		});
 		// on cree un panneau contenant differents plans
@@ -324,7 +316,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			true
 		));
 		extraCardImage = new JLabel(imageIcon);
-		extraCardImage.setDisabledIcon(disabledIcon);	
+		extraCardImage.setDisabledIcon(disabledIcon);
 		
 		// on parametre la taille et la position de la piece supplementaire
 		extraCardImage.setPreferredSize(new Dimension(100, 100));
@@ -363,13 +355,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			));
 			couloir = new JLabel(imageIcon);
 			couloir.setDisabledIcon(disabledIcon);
-
-			// si on veut entourer les couloirs fixes
-			/*
-			 * if(couloirIHM.isFixed()) {
-			 * this.couloir.setBorder(BorderFactory.createLineBorder
-			 * (Color.blue)); }
-			 */
 			
 			// pour chaque case on ajoute paramètre dimension et position du couloir
 			couloir.setPreferredSize(new Dimension(100, 100));
@@ -652,7 +637,52 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		if(this.mazeBoard == null || arg == null) {
 			return;
 		}
-		if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
+
+		// attention l'ordre des if est important...
+		// si mise à jour de la piece supplémentaire
+		if(arg instanceof CouloirIHM) {
+			CouloirIHM extraCard = (CouloirIHM) arg;
+			JLabel extraCardImage;
+			ImageIcon imageIcon;
+			ImageIcon disabledIcon;
+
+
+			if (extraCardPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
+				for (int i = 0; i < extraCardPane
+						.getComponentsInLayer(COULOIR_LAYER).length; i++) {
+					extraCardPane.remove(extraCardPane
+							.getComponentsInLayer(COULOIR_LAYER)[i]);
+				}
+			}
+			// on cree une image de couloir pour la piece supplementaire
+			imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+					"Couloir",
+					extraCard.isNorthOpened(),
+					extraCard.isSouthOpened(),
+					extraCard.isEastOpened(),
+					extraCard.isWestOpened(),
+					false
+			));
+			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+					"Couloir",
+					extraCard.isNorthOpened(),
+					extraCard.isSouthOpened(),
+					extraCard.isEastOpened(),
+					extraCard.isWestOpened(),
+					true
+			));
+			extraCardImage = new JLabel(imageIcon);
+			extraCardImage.setDisabledIcon(disabledIcon);
+
+			// on parametre la taille et la position de la piece supplementaire
+			extraCardImage.setPreferredSize(new Dimension(100, 100));
+			extraCardImage.setBounds(0, 0, 100, 100);
+
+			// on ajoute le couloir en arriere-plan
+			extraCardPane.add(extraCardImage, COULOIR_LAYER);
+		}
+		// si mise à jour du pion
+		else if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
 			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
 			for (PieceIHMs pieceIHM : piecesIHM) {
 				//On récupère la piece sur le board (son layerded pane)
@@ -689,8 +719,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				this.layeredPane.add(this.pawn, PAWN_LAYER);
 			}
 		}
-
-		if(((LinkedList<TreasureIHMs>)arg).size() > 0 && ((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
+		// si mise à jour des tresors
+ 		else if(((LinkedList<TreasureIHMs>)arg).size() > 0 && ((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
 			List<TreasureIHMs> updatedList = (List<TreasureIHMs>) arg;
 			JLabel treasure;
 
@@ -738,8 +768,65 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 
 		}
+		// si mise à jour des couloirs
+		else if(((LinkedList<CouloirIHM>)arg).getFirst() instanceof CouloirIHM) {
+			List<CouloirIHM> updatedList = (List<CouloirIHM>) arg;
+			JLabel couloir;
+			ImageIcon imageIcon;
+			ImageIcon disabledIcon;
 
-		 // on reautorise toutes les cases
+			//Suppression des trésors
+			for (CouloirIHM couloirIHM : couloirIHMs) {
+				//On enlève le couloir
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* couloirIHM.getY() + couloirIHM.getX());
+				if (this.layeredPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(COULOIR_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(COULOIR_LAYER)[i]);
+					}
+				}
+			}
+
+			for (CouloirIHM couloirIHM : updatedList) {
+				//On enlève le couloir
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* couloirIHM.getY() + couloirIHM.getX());
+				if (this.layeredPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(COULOIR_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(COULOIR_LAYER)[i]);
+					}
+				}
+
+				// on recrée le couloir
+				imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+						"Couloir",
+						couloirIHM.isNorthOpened(),
+						couloirIHM.isSouthOpened(),
+						couloirIHM.isEastOpened(),
+						couloirIHM.isWestOpened(),
+						false
+				));
+				disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+						"Couloir",
+						couloirIHM.isNorthOpened(),
+						couloirIHM.isSouthOpened(),
+						couloirIHM.isEastOpened(),
+						couloirIHM.isWestOpened(),
+						true
+				));
+				couloir = new JLabel(imageIcon);
+				couloir.setDisabledIcon(disabledIcon);
+				couloir.setPreferredSize(new Dimension(100, 100));
+				couloir.setBounds(0, 0, 100, 100);
+				this.layeredPane.add(couloir, COULOIR_LAYER);
+			}
+		}
+
+		// on reautorise toutes les cases
 		for (Component component : this.mazeBoard.getComponents()) {
 			if (((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
 				((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0]

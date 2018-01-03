@@ -1,12 +1,12 @@
 package model;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 import tools.MazeCouloirsFactory;
 import tools.MazeTreasureFactory;
-import model.Coord;
-
 
 public class Plateau implements BoardGames {
 	public Plateau(int nbPlayer) {
@@ -14,7 +14,7 @@ public class Plateau implements BoardGames {
 		//Liste correspondant à la pioche du jeu
 		this.treasureToDraw = new LinkedList<Treasures>(this.treasures);
 		//Score maximum que chaque joueur doit atteindre
-		scoreMax = 24/nbPlayer; 
+		scoreMax = 24/nbPlayer;
 		switch (nbPlayer) {
 		case 2 :
 			jeuRouge = new Jeu(Couleur.ROUGE);
@@ -54,27 +54,27 @@ public class Plateau implements BoardGames {
 				System.out.println("La creation des jeux a echoue");
 		}
 		this.jeuCourant = jeuRouge;
-		this.message = new String("");
+		this.message = "";
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
 		this.extraCorridor = MazeCouloirsFactory.getExtraCorridor();
-	
+
 	}
-	
+
 	/*
 	 * Changement de joueur en respectant l'ordre des aiguilles d'une montre:
 	 * Rouge - Jaune - Bleu - Vert - Rouge - Jaune - ...
 	*/
 	public void switchJoueur(){
 		if(this.jeuCourant == this.jeuRouge) {
-			if(this.jeuJaune != null) { 
+			if(this.jeuJaune != null) {
 				this.jeuCourant = this.jeuJaune;
-			} 
+			}
 			else if(this.jeuBleu != null){
 				this.jeuCourant = this.jeuBleu;
 			}
 			else if(this.jeuVert != null) {
 				this.jeuCourant = this.jeuVert;
-			}			
+			}
 		}
 		else if(this.jeuCourant == this.jeuJaune) {
 			if(this.jeuBleu != null) {
@@ -85,7 +85,7 @@ public class Plateau implements BoardGames {
 			}
 			else if(this.jeuRouge != null) {
 				this.jeuCourant = this.jeuRouge;
-			}			
+			}
 		}
 		else if(this.jeuCourant == this.jeuBleu) {
 			if(this.jeuVert != null) {
@@ -113,7 +113,119 @@ public class Plateau implements BoardGames {
 			//Piocher une carte si le joueur n'a pas atteint le score final
 			this.jeuCourant.drawCard(this.treasureToDraw);
 		}
+
+
+		// avant le changement de joueur, modifier le labyrinthe
+		this.alterMaze("pushDown", 1);
 	}
+
+	/*
+	 * Modifie le labyrinthe
+	 * @param String commande - Code de la commande a effectuer
+	 * 	* "pushDown" -> pousser vers le bas
+	 * 	* "pushUp" -> pousser vers le haut
+	 * 	* "pushLeft" -> pousser vers la gauche
+	 * 	* "pushRight" -> pousser vers la droite
+	 *  * Si pas de code correct, return false TODO thrower une erreur
+	 * @param int position - indice de la colonne OU ligne a pousser
+	 * 	* si commande "pushDown" -> indique une colonne
+	 * 	* si commande "pushUp" -> indique une colonne
+	 * 	* si commande "pushLeft" -> indique une ligne
+	 * 	* si commande "pushRight" -> indique une ligne
+	 */
+	public boolean alterMaze(String command, int position) {
+		boolean commandComplete;
+
+		System.out.println("alterMaze");
+
+		if(position != 1 && position != 3 && position != 5) {
+			return false;
+		}
+
+		switch(command) {
+			case "pushDown" : {
+				this.pushDown(position);
+				commandComplete = true;
+				break;
+			}
+			case "pushUp" : {
+				this.pushUp(position);
+				commandComplete = true;
+				break;
+			}
+			case "pushLeft" : {
+				this.pushLeft(position);
+				commandComplete = true;
+				break;
+			}
+			case "pushRight" : {
+				this.pushRight(position);
+				commandComplete = true;
+				break;
+			}
+			default : {
+				commandComplete = false;
+				break;
+			}
+		}
+
+		return commandComplete;
+	}
+
+	private void pushDown(int position) {
+		int oldX;
+		int oldY;
+		boolean oldNorthOpened;
+		boolean oldSouthOpened;
+		boolean oldEastOpened;
+		boolean oldWestOpened;
+		Couloirs oldExtra = new CouloirAmovible(
+				new Coord(position, 0),
+				this.extraCorridor.isNorthOpened(),
+				this.extraCorridor.isSouthOpened(),
+				this.extraCorridor.isEastOpened(),
+				this.extraCorridor.isWestOpened()
+		);
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
+		List<Couloirs> couloirsToRemove = new LinkedList<>();
+
+		for(Couloirs couloir : this.couloirs) {
+			// on ne traite que les couloirs sur l'axe sélectionné
+			if(couloir.getX() == position) {
+				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
+				if(couloir.getY() == 6) {
+					this.extraCorridor = (CouloirAmovible) couloir;
+				}
+				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
+				else {
+					oldX = couloir.getX();
+					oldY = couloir.getY();
+					oldNorthOpened = couloir.isNorthOpened();
+					oldSouthOpened = couloir.isSouthOpened();
+					oldEastOpened = couloir.isEastOpened();
+					oldWestOpened = couloir.isWestOpened();
+
+					couloirsToAdd.add(new CouloirAmovible(new Coord(oldX, oldY + 1), oldNorthOpened, oldSouthOpened, oldEastOpened, oldWestOpened));
+				}
+				// dans tous les cas on retire l'ancien couloir
+				couloirsToRemove.add(couloir);
+			}
+		}
+
+		couloirsToAdd.add(oldExtra);
+
+		// on supprime tout la ligne
+		this.couloirs.removeAll(couloirsToRemove);
+		// pour la rajouter avec les nouvelles valeurs
+		this.couloirs.addAll(couloirsToAdd);
+	}
+
+	private void pushUp(int position) { }
+	private void pushLeft(int position) { }
+	private void pushRight(int position) { }
+
+	public void rotateExtraCardLeft() { this.extraCorridor.rotateLeft(); }
+	public void rotateExtraCardRight() { this.extraCorridor.rotateRight(); }
 
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
 		boolean canMove = false;
@@ -129,104 +241,6 @@ public class Plateau implements BoardGames {
 		}
 
 		return canMove;
-	}
-	
-	private boolean isPieceAnyColor(int coord1, int coord2){
-		boolean ret = false;
-
-		/*
-		if (jeuBlanc.isPieceHere(coord1, coord2) || jeuNoir.isPieceHere(coord1, coord2)) {
-			ret = true;
-		}
-		*/
-
-		return ret;
-	}
-
-	private boolean pieceOnTraject(int xInit, int yInit, int xFinal, int yFinal) {
-		boolean pieceOnTraject = false;
-
-		/*
-		// Mouvement rectiligne le long de l'axe Y
-		if (xInit == xFinal) {
-
-			// si vers Y croissants
-			if (yFinal > yInit) {
-				for (int i = yInit + 1; i <= yFinal; i++) {
-					pieceOnTraject = isPieceAnyColor(xInit,i);
-					if(pieceOnTraject){ break; }
-				}
-			}
-			// si vers Y decroissants
-			if (yFinal < yInit) {
-				for (int i = yInit - 1; i >= yFinal; i--) {
-					pieceOnTraject = isPieceAnyColor(xInit,i);
-					if(pieceOnTraject){ break; }
-				}
-			}
-		}
-		else {
-			// Mouvement rectiligne le long de l'axe X
-			if (yInit == yFinal) {
-				// si vers X croissants
-				if (xFinal > xInit) {
-					for (int i = xInit + 1; i <= xFinal; i++) {
-						pieceOnTraject = isPieceAnyColor(yInit,i);
-						if(pieceOnTraject){ break; }
-					}
-				}
-				// si vers X decroissants
-				if (xFinal < xInit) {
-					for (int i = xInit - 1; i >= xFinal; i--) {
-						pieceOnTraject = isPieceAnyColor(yInit,i);
-						if(pieceOnTraject){ break; }
-					}
-				}
-			}
-			else {
-				// Mouvement en diagonale
-				if (Math.abs(yInit - yFinal) == Math.abs(xInit - xFinal)) {
-					int ecart = Math.abs(yInit - yFinal);
-
-					// X croissant, Y croissant
-					if ((xFinal - xInit > 0) && (yFinal - yInit > 0)) {
-						for (int i = 1; i <= ecart; i++) {
-							pieceOnTraject = isPieceAnyColor(xInit + i,yInit + i);
-							if(pieceOnTraject){ break; }
-						}
-					}
-					// X croissant, Y decroissant
-					if ((xFinal - xInit > 0) && (yFinal - yInit < 0)) {
-						for (int i = 1; i <= ecart; i++) {
-							pieceOnTraject = isPieceAnyColor(xInit + i,yInit - i);
-							if(pieceOnTraject){ break; }
-						}
-					}
-					// X decroissant, Y decroissant
-					if ((xFinal - xInit < 0) && (yFinal - yInit < 0)) {
-						for (int i = 1; i <= ecart; i++) {
-							pieceOnTraject = isPieceAnyColor(xInit - i,yInit - i);
-							if(pieceOnTraject){ break; }
-						}
-					}
-
-					// X decroissant, Y croissant
-					if ((xFinal - xInit < 0) && (yFinal - yInit > 0)) {
-						for (int i = 1; i <= ecart; i++) {
-							pieceOnTraject = isPieceAnyColor(xInit - i,yInit + i);
-							if(pieceOnTraject){ break; }
-						}
-					}
-				}
-				else {
-					// Dans tous les autres cas de mouvement
-					// la piece au coordonnées initiale est un cavalier
-					pieceOnTraject = isPieceAnyColor(xFinal,yFinal);
-				}
-			}
-		}
-		*/
-		return pieceOnTraject;
 	}
 
 	@Override
@@ -248,10 +262,6 @@ public class Plateau implements BoardGames {
 	@Override
 	public String getMessage() {
 		return this.message;
-	}
-
-	public void setMessage(String message){
-		this.message = message;
 	}
 
 	@Override
@@ -320,13 +330,13 @@ public class Plateau implements BoardGames {
 
 		return couloirIHMs;
 	}
-	
+
 	public CouloirIHM getExtraCorridorIHM() {
 		CouloirIHM extraCorridorIHM = new CouloirIHM(this.extraCorridor);
-		
+
 		return extraCorridorIHM;
 	}
-	
+
 	public List<TreasureIHMs> getTreasuresIHMs() {
 		List<TreasureIHMs> treasureIHMs = new LinkedList<TreasureIHMs>();
 
@@ -385,7 +395,7 @@ public class Plateau implements BoardGames {
 	}
 
 	public String toString(){
-		String string = new String("");
+		String string = "";
 		if(jeuRouge != null){
 			string += "Jeu blanc : " + jeuRouge.toString();
 		}
@@ -490,29 +500,29 @@ public class Plateau implements BoardGames {
 
 		return reachableCorridors;
 	}
-	
+
 	public Treasure currentTreasureToCatch(){
 		Treasure treasureToCatch = null;
 		treasureToCatch = this.jeuCourant.getTreasureToCatch();
 		return treasureToCatch;
 	}
-	
+
 	public void setCurrentTreasureToCatch(Treasure treasureToCatch){
 		this.jeuCourant.setTreasureToCatch(treasureToCatch);
 	}
-	
+
 	public boolean treasureCatched(Treasure treasureCatched){
 		if(this.jeuCourant.addTreasureCatched(treasureCatched)){
 			System.out.println("TRESOR VA ETRE SUPPRIMER");
 			this.treasures.remove(treasureCatched);
 			System.out.println(this.treasures.size());
 			return true;
-			
+
 		}else{
 			return false;
 		}
 	}
-	
+
 	public int getCurrentScorePlayer(){
 		return this.jeuCourant.getScorePlayer();
 	}
@@ -544,7 +554,7 @@ public class Plateau implements BoardGames {
 	public int getGreenPlayerScore() {
 		return this.jeuVert.getScorePlayer();
 	}
-	
+
 	int scoreMax = 0;
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;
@@ -553,9 +563,9 @@ public class Plateau implements BoardGames {
 	private Jeu jeuCourant;
 	private String message;
 	private List<Couloirs> couloirs;
-	private Couloirs extraCorridor;
+	private CouloirAmovible extraCorridor;
 	private List<Treasures> treasures;
-	List<Treasures> treasureToDraw; 
+	List<Treasures> treasureToDraw;
 	//vue/mazegameGUI
 	//boucle for couloirs ihm qui permet de poser les images
 
@@ -563,9 +573,38 @@ public class Plateau implements BoardGames {
 	public static void main(String[] args){
 		System.out.println("tests plateau");
 		Plateau plateau = new Plateau(2);
-
 		List<Couloirs> couloirs;
-		couloirs = plateau.findPath(new CouloirFixe(new Coord(0, 0), false, true, true, false), plateau.couloirs, new LinkedList<Couloirs>());
-		System.out.println(couloirs);
+		Comparator comp = new Comparator<Couloirs>() {
+			@Override
+			public int compare(Couloirs couloir1, Couloirs couloir2) {
+				int compare;
+				if(couloir1.getX() == couloir2.getX()) {
+					if(couloir1.getY() == couloir2.getY()) {
+						compare = 0;
+					}
+					else if (couloir1.getY() > couloir2.getY()){
+						compare = 1;
+					}
+					else {
+						compare = -1;
+					}
+				}
+				else if(couloir1.getX() > couloir2.getX()){
+					compare = 1;
+				}
+				else {
+					compare = -1;
+				}
+				return compare;
+			}
+		};
+
+
+		Collections.sort(plateau.couloirs, comp);
+		System.out.println(plateau.couloirs);
+		plateau.alterMaze("pushDown", 1);
+		Collections.sort(plateau.couloirs, comp);
+		System.out.println(plateau.couloirs);
+
 	}
 }

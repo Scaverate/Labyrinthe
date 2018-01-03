@@ -69,6 +69,8 @@ public class MazeGame extends Observable implements BoardGames{
 			ret = plateau.move(xInit, yInit, xFinal, yFinal);
 		}
 		this.notifyObservers(plateau.getPiecesIHM());
+		this.notifyObservers(plateau.getCouloirsIHMs());
+		this.notifyObservers(plateau.getExtraCorridorIHM());
 		return ret;	
 	}
 	
@@ -83,11 +85,6 @@ public class MazeGame extends Observable implements BoardGames{
 	public String getMessage() {
 		return this.plateau.getMessage();
 	}
-	
-	public void setMessage(String message) {
-		this.plateau.setMessage(message);
-	}
-
 
 	public Couleur getColorCurrentPlayer(){		
 		return this.plateau.getColorCurrentPlayer();
@@ -102,6 +99,14 @@ public class MazeGame extends Observable implements BoardGames{
 	public CouloirIHM getExtraCorridorIHM() { return this.plateau.getExtraCorridorIHM(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.plateau.getPiecesIHMs(); }
 	public List<Coord> findPath(Coord coord) { return this.plateau.findPath(coord); }
+	public void rotateExtraCardLeft() {
+		this.plateau.rotateExtraCardLeft();
+		this.notifyObservers(plateau.getExtraCorridorIHM());
+	}
+	public void rotateExtraCardRight() {
+		this.plateau.rotateExtraCardRight();
+		this.notifyObservers(plateau.getExtraCorridorIHM());
+	}
 
 	/* (non-Javadoc)
 	 * @see java.util.Observable#notifyObservers(java.lang.Object)
