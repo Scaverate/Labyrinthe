@@ -23,6 +23,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	 * default serial version uid
 	 */
 	private static final long serialVersionUID = 1L;
+	private MazeGameControlers mazeGameControler;
 	private JLayeredPane layeredPane;
 	private JLabel tresorToCatch;
 	private JLabel bgGame;
@@ -52,7 +53,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private ButtonGroup grpButton;
 	private int yOrigine;
 	private int nbPlayer = 2;
-	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
 	List<TreasureIHMs> treasureIHMs;
 	List<CouloirIHM> couloirIHMs;
@@ -118,13 +118,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				nbPlayer = 2;
 			}
 		});
-		
 		nb3Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 3;
 			}
 		});
-		
 		nb4Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 4;
@@ -155,7 +153,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		okButton.setIcon(new ImageIcon(getClass().getResource("../images/icon_play.png")));
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				initMazeGame(nbPlayer);	
+				initMazeGame();
 			}			
 		});
 		b2.add(okButton);
@@ -178,8 +176,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		contentPane.setPreferredSize(windowSize);
 		setContentPane(contentPane);	
 	}
-
-	public void initMazeGame(int nbPlayer) {
+	
+	public void initMazeGame() {
 		Dimension windowSize = new Dimension(950,1000);		
 		Icon imageIcon;
 		Icon disabledIcon;
@@ -189,21 +187,20 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel treasure;
 		JLabel tresorCard;
 		CouloirIHM extraCard;
-		JLabel extraCardImage;	
+		JLabel extraCardImage;
+		final MazeGame mazeGame;
+		final MazeGameControlers mazeGameControler;
 		
 		
 	   	setContentPane(mazeContainer);
 	   	
 		repaint();
 		pack();
-		
-		MazeGame mazeGame;	
-		MazeGameControlers mazeGameControler;
-		
+
 		mazeGame = new MazeGame(nbPlayer);
 		mazeGameControler = new MazeGameControler(mazeGame);
-		mazeGame.addObserver((Observer) this);
 		this.mazeGameControler = mazeGameControler;
+		mazeGame.addObserver((Observer) this);
 		// on initialise le controleur
 		couloirIHMs = mazeGameControler.getCouloirsIHMs();
 		pieceIHMs = mazeGameControler.getPiecesIHMs();

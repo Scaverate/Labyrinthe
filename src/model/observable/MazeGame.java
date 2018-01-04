@@ -16,7 +16,6 @@ import model.*;
 public class MazeGame extends Observable implements BoardGames{
 
 	private Plateau plateau;
-	private int nbPlayer;
 	/**
 	 * Cree une instance de la classe Echiquier
 	 * et notifie ses observateurs

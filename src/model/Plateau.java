@@ -114,9 +114,8 @@ public class Plateau implements BoardGames {
 			this.jeuCourant.drawCard(this.treasureToDraw);
 		}
 
-
 		// avant le changement de joueur, modifier le labyrinthe
-		this.alterMaze("pushDown", 1);
+		this.alterMaze("pushUp", 1);
 	}
 
 	/*
@@ -135,31 +134,41 @@ public class Plateau implements BoardGames {
 	 */
 	public boolean alterMaze(String command, int position) {
 		boolean commandComplete;
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
+		List<Couloirs> couloirPushed = new LinkedList<>();
+		List<Couloirs> couloirsToRemove = new LinkedList<>();
 
-		System.out.println("alterMaze");
-
+		// si la position n'est pas bonne on arrête tout
 		if(position != 1 && position != 3 && position != 5) {
 			return false;
 		}
 
+		// on retire les anciens couloirs de la colonne ciblée
+		for(Couloirs couloir : this.couloirs) {
+			if(couloir.getX() == position) {
+				couloirsToRemove.add(couloir);
+			}
+		}
+
+		// en fonction de la commande passe on traite
 		switch(command) {
 			case "pushDown" : {
-				this.pushDown(position);
+				couloirPushed = this.pushDown(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushUp" : {
-				this.pushUp(position);
+				couloirPushed = this.pushUp(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushLeft" : {
-				this.pushLeft(position);
+				couloirPushed = this.pushLeft(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushRight" : {
-				this.pushRight(position);
+				couloirPushed = this.pushRight(position);
 				commandComplete = true;
 				break;
 			}
@@ -169,16 +178,17 @@ public class Plateau implements BoardGames {
 			}
 		}
 
+		couloirsToAdd.addAll(couloirPushed);
+		// on supprime tout la ligne
+		this.couloirs.removeAll(couloirsToRemove);
+		// pour la rajouter avec les nouvelles valeurs
+		this.couloirs.addAll(couloirsToAdd);
+
 		return commandComplete;
 	}
 
-	private void pushDown(int position) {
-		int oldX;
-		int oldY;
-		boolean oldNorthOpened;
-		boolean oldSouthOpened;
-		boolean oldEastOpened;
-		boolean oldWestOpened;
+	private List<Couloirs> pushDown(int position) {
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
 				new Coord(position, 0),
 				this.extraCorridor.isNorthOpened(),
@@ -186,9 +196,7 @@ public class Plateau implements BoardGames {
 				this.extraCorridor.isEastOpened(),
 				this.extraCorridor.isWestOpened()
 		);
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
-		List<Couloirs> couloirsToRemove = new LinkedList<>();
-
+		couloirsToAdd.add(oldExtra);
 		for(Couloirs couloir : this.couloirs) {
 			// on ne traite que les couloirs sur l'axe sélectionné
 			if(couloir.getX() == position) {
@@ -198,31 +206,93 @@ public class Plateau implements BoardGames {
 				}
 				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
 				else {
-					oldX = couloir.getX();
-					oldY = couloir.getY();
-					oldNorthOpened = couloir.isNorthOpened();
-					oldSouthOpened = couloir.isSouthOpened();
-					oldEastOpened = couloir.isEastOpened();
-					oldWestOpened = couloir.isWestOpened();
-
-					couloirsToAdd.add(new CouloirAmovible(new Coord(oldX, oldY + 1), oldNorthOpened, oldSouthOpened, oldEastOpened, oldWestOpened));
+					couloirsToAdd.add(
+						new CouloirAmovible(
+							new Coord(couloir.getX(), couloir.getY() + 1),
+							couloir.isNorthOpened(),
+							couloir.isSouthOpened(),
+							couloir.isEastOpened(),
+							couloir.isWestOpened()
+						)
+					);
 				}
-				// dans tous les cas on retire l'ancien couloir
-				couloirsToRemove.add(couloir);
 			}
 		}
-
-		couloirsToAdd.add(oldExtra);
-
-		// on supprime tout la ligne
-		this.couloirs.removeAll(couloirsToRemove);
-		// pour la rajouter avec les nouvelles valeurs
-		this.couloirs.addAll(couloirsToAdd);
+		return couloirsToAdd;
 	}
 
-	private void pushUp(int position) { }
-	private void pushLeft(int position) { }
-	private void pushRight(int position) { }
+	private List<Couloirs> pushUp(int position) {
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
+		Couloirs oldExtra = new CouloirAmovible(
+				new Coord(position, 6),
+				this.extraCorridor.isNorthOpened(),
+				this.extraCorridor.isSouthOpened(),
+				this.extraCorridor.isEastOpened(),
+				this.extraCorridor.isWestOpened()
+		);
+		couloirsToAdd.add(oldExtra);
+		for(Couloirs couloir : this.couloirs) {
+			// on ne traite que les couloirs sur l'axe sélectionné
+			if(couloir.getX() == position) {
+				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
+				if(couloir.getY() == 0) {
+					this.extraCorridor = (CouloirAmovible) couloir;
+				}
+				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
+				else {
+					couloirsToAdd.add(
+							new CouloirAmovible(
+									new Coord(couloir.getX(), couloir.getY() - 1),
+									couloir.isNorthOpened(),
+									couloir.isSouthOpened(),
+									couloir.isEastOpened(),
+									couloir.isWestOpened()
+							)
+					);
+				}
+			}
+		}
+		return couloirsToAdd;
+	}
+	private List<Couloirs> pushLeft(int position) {
+		//TODO
+		/* A TESTER*/
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
+		Couloirs oldExtra = new CouloirAmovible(
+				new Coord(0, position),
+				this.extraCorridor.isNorthOpened(),
+				this.extraCorridor.isSouthOpened(),
+				this.extraCorridor.isEastOpened(),
+				this.extraCorridor.isWestOpened()
+		);
+		couloirsToAdd.add(oldExtra);
+		for(Couloirs couloir : this.couloirs) {
+			// on ne traite que les couloirs sur l'axe sélectionné
+			if(couloir.getY() == position) {
+				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
+				if(couloir.getX() == 6) {
+					this.extraCorridor = (CouloirAmovible) couloir;
+				}
+				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
+				else {
+					couloirsToAdd.add(
+							new CouloirAmovible(
+									new Coord(couloir.getX() + 1, couloir.getY()),
+									couloir.isNorthOpened(),
+									couloir.isSouthOpened(),
+									couloir.isEastOpened(),
+									couloir.isWestOpened()
+							)
+					);
+				}
+			}
+		}
+		return couloirsToAdd;
+	}
+	private List<Couloirs> pushRight(int position) {
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
+		return couloirsToAdd;
+	}
 
 	public void rotateExtraCardLeft() { this.extraCorridor.rotateLeft(); }
 	public void rotateExtraCardRight() { this.extraCorridor.rotateRight(); }
