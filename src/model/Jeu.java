@@ -100,9 +100,7 @@ public class Jeu implements Game {
 			if(piece != null){
 				if(piece.getX() != -1) {
 					newPieceIHM = new PieceIHM(piece);
-					if(list != null) {
-						list.add(newPieceIHM);
-					}
+					list.add(newPieceIHM);
 				}
 			}
 		}

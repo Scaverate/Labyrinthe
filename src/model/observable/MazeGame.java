@@ -35,7 +35,7 @@ public class MazeGame extends Observable implements BoardGames{
 	public String toString() {
 		String st = "";
 		st += "\n" + plateau.getMessage() + "\n";
-		st = plateau.toString();	
+		st = plateau.toString();
 		return  st;
 	}
 
@@ -50,27 +50,17 @@ public class MazeGame extends Observable implements BoardGames{
 		return ret;
 	}
 
-	/**
-	 * Permet de deplacer une piece connaissant ses coordonnees initiales vers ses
-	 * coordonnees finales si le deplacement est "legal". 
-	 * Si deplacement OK, permet l'alternance des joueurs.
-	 * @param xInit
-	 * @param yInit
-	 * @param xFinal
-	 * @param yFinal
-	 * @return OK si deplacement OK
-	 * si OK, permet l'alternance des joueurs
-	 */
-	public boolean move (int xInit, int yInit, int xFinal, int yFinal){
+	public boolean move (Coord initCoord, Coord finalCoord){
 		boolean ret = false;
-		ret = plateau.isMoveOk(xInit, yInit, xFinal, yFinal);
-		if (ret){
-			ret = plateau.move(xInit, yInit, xFinal, yFinal);
+		if( initCoord != null && finalCoord != null){
+			ret = plateau.isMoveOk(initCoord.x, initCoord.y, finalCoord.x, finalCoord.y);
+			if (ret){
+				ret = plateau.move(initCoord, finalCoord);
+			}
 		}
 		this.notifyObservers(plateau.getPiecesIHM());
 		this.notifyObservers(plateau.getCouloirsIHMs());
-		this.notifyObservers(plateau.getExtraCorridorIHM());
-		return ret;	
+		return ret;
 	}
 	
 	public boolean isMoveOk (int xInit, int yInit, int xFinal, int yFinal){
@@ -159,7 +149,7 @@ public class MazeGame extends Observable implements BoardGames{
 	public String getCurrentNamePlayer(){
 		return this.plateau.getNamePlayer();
 	}
-	
+
 	public int getBluePlayerScore() {
 		return this.plateau.getBluePlayerScore();
 	}
@@ -178,5 +168,17 @@ public class MazeGame extends Observable implements BoardGames{
 	
 	public void switchJoueur() {
 		this.plateau.switchJoueur();
+	}
+
+	public boolean alterMaze(String command, int position){
+		boolean commandComplete;
+
+		commandComplete = this.plateau.alterMaze(command, position);
+		this.notifyObservers(plateau.getPiecesIHM());
+		this.notifyObservers(plateau.getCouloirsIHMs());
+		this.notifyObservers(plateau.getTreasuresIHMs());
+		this.notifyObservers(plateau.getExtraCorridorIHM());
+
+		return commandComplete;
 	}
 }

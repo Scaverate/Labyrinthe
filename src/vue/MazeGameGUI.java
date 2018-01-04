@@ -569,8 +569,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				possibleValuesNumber[0]
 		);
 
-		System.out.println(selectedValueNumber);
-
 		// on ne laisse pas l'option de bouger si on n'a pas choisi de modification pour le labyrinthe
 		if(selectedValueNumber != null && selectedValueDirection!= null) {
 			boolean isMoveOK = mazeGameControler.move(
@@ -670,6 +668,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		else {
 			//TODO traiter le non-choix (cancel)
+			mazeGameControler.move(null, null);
 		}
 	 }
 

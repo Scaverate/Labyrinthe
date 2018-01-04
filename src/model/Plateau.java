@@ -113,9 +113,6 @@ public class Plateau implements BoardGames {
 			//Piocher une carte si le joueur n'a pas atteint le score final
 			this.jeuCourant.drawCard(this.treasureToDraw);
 		}
-
-		// avant le changement de joueur, modifier le labyrinthe
-		this.alterMaze("pushRight", 1);
 	}
 
 	/*
@@ -133,6 +130,8 @@ public class Plateau implements BoardGames {
 	 * 	* si commande "pushRight" -> indique une ligne
 	 */
 	public boolean alterMaze(String command, int position) {
+		//TODO ajouter le décalage des objets et personnages
+
 		boolean commandComplete;
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		List<Couloirs> couloirPushed = new LinkedList<>();
@@ -348,10 +347,10 @@ public class Plateau implements BoardGames {
 	}
 
 	@Override
-	public boolean move(int xInit, int yInit, int xFinal, int yFinal) {
+	public boolean move(Coord initCoord, Coord finalCoord) {
 		boolean hasMoved = false;
 		if(this.jeuCourant != null){
-			hasMoved = jeuCourant.move(xInit, yInit, xFinal, yFinal);
+			hasMoved = jeuCourant.move(initCoord.x, initCoord.y, finalCoord.x, finalCoord.y);
 		}
 		return hasMoved;
 	}
@@ -518,7 +517,7 @@ public class Plateau implements BoardGames {
 
 	public List<Coord> findPath(Coord coord){
 		Couloirs couloirFound = null;
-		List<Couloirs> couloirsFound = new LinkedList<>();
+		List<Couloirs> couloirsFound;
 		List<Coord> coordsFound = new LinkedList<>();
 
 
@@ -615,9 +614,7 @@ public class Plateau implements BoardGames {
 
 	public boolean treasureCatched(Treasure treasureCatched){
 		if(this.jeuCourant.addTreasureCatched(treasureCatched)){
-			System.out.println("TRESOR VA ETRE SUPPRIMER");
 			this.treasures.remove(treasureCatched);
-			System.out.println(this.treasures.size());
 			return true;
 
 		}else{
