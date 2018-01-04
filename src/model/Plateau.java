@@ -115,7 +115,7 @@ public class Plateau implements BoardGames {
 		}
 
 		// avant le changement de joueur, modifier le labyrinthe
-		this.alterMaze("pushUp", 1);
+		this.alterMaze("pushRight", 1);
 	}
 
 	/*
@@ -145,8 +145,15 @@ public class Plateau implements BoardGames {
 
 		// on retire les anciens couloirs de la colonne ciblée
 		for(Couloirs couloir : this.couloirs) {
-			if(couloir.getX() == position) {
-				couloirsToRemove.add(couloir);
+			if(command.equals("pushDown") || command.equals("pushUp")){
+				if(couloir.getX() == position) {
+					couloirsToRemove.add(couloir);
+				}
+			}
+			else {
+				if(couloir.getY() == position) {
+					couloirsToRemove.add(couloir);
+				}
 			}
 		}
 
@@ -255,8 +262,39 @@ public class Plateau implements BoardGames {
 		return couloirsToAdd;
 	}
 	private List<Couloirs> pushLeft(int position) {
-		//TODO
-		/* A TESTER*/
+		List<Couloirs> couloirsToAdd = new LinkedList<>();
+		Couloirs oldExtra = new CouloirAmovible(
+				new Coord(6, position),
+				this.extraCorridor.isNorthOpened(),
+				this.extraCorridor.isSouthOpened(),
+				this.extraCorridor.isEastOpened(),
+				this.extraCorridor.isWestOpened()
+		);
+		couloirsToAdd.add(oldExtra);
+		for(Couloirs couloir : this.couloirs) {
+			// on ne traite que les couloirs sur l'axe sélectionné
+			if(couloir.getY() == position) {
+				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
+				if(couloir.getX() == 0) {
+					this.extraCorridor = (CouloirAmovible) couloir;
+				}
+				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
+				else {
+					couloirsToAdd.add(
+						new CouloirAmovible(
+							new Coord(couloir.getX() - 1, couloir.getY()),
+							couloir.isNorthOpened(),
+							couloir.isSouthOpened(),
+							couloir.isEastOpened(),
+							couloir.isWestOpened()
+						)
+					);
+				}
+			}
+		}
+		return couloirsToAdd;
+	}
+	private List<Couloirs> pushRight(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
 				new Coord(0, position),
@@ -276,21 +314,17 @@ public class Plateau implements BoardGames {
 				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
 				else {
 					couloirsToAdd.add(
-							new CouloirAmovible(
-									new Coord(couloir.getX() + 1, couloir.getY()),
-									couloir.isNorthOpened(),
-									couloir.isSouthOpened(),
-									couloir.isEastOpened(),
-									couloir.isWestOpened()
-							)
+						new CouloirAmovible(
+							new Coord(couloir.getX() + 1, couloir.getY()),
+							couloir.isNorthOpened(),
+							couloir.isSouthOpened(),
+							couloir.isEastOpened(),
+							couloir.isWestOpened()
+						)
 					);
 				}
 			}
 		}
-		return couloirsToAdd;
-	}
-	private List<Couloirs> pushRight(int position) {
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		return couloirsToAdd;
 	}
 
@@ -318,8 +352,6 @@ public class Plateau implements BoardGames {
 		boolean hasMoved = false;
 		if(this.jeuCourant != null){
 			hasMoved = jeuCourant.move(xInit, yInit, xFinal, yFinal);
-			if(hasMoved){
-			}
 		}
 		return hasMoved;
 	}
