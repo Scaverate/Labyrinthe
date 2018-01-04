@@ -543,29 +543,51 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
 		 corridorImage.setBorder(null);
 
-		 boolean isMoveOK = mazeGameControler.move(
-			 new Coord(xOrigine, yOrigine),
-			 new Coord(destinationX, destinationY)
-		 );
-		 
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
-	
 
-		if (isMoveOK) {
-			System.out.println("déplacement OK");
-			Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
-					e.getY());
-			parentComponentHere = (JLayeredPane) componentHere.getParent();
-			if(this.mazeGameControler.getCurrentScorePlayer() < this.mazeGameControler.getScoreMax()){
-				if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0){
-					treasureToCatch = this.mazeGameControler
-							.currentTreasureToCatch();
+		// choix modification du labyrinthe
+		String[] possibleValuesDirection = { "Haut", "Bas", "Gauche", "Droite" };
+		Object selectedValueDirection = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la direction",
+				"Direction",
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesDirection,
+				possibleValuesDirection[0]
+		);
+		boolean upDown = (possibleValuesDirection.equals("Haut") || possibleValuesDirection.equals("Bas"));
+		String[] possibleValuesNumber = { "1", "3", "5" };
+		Object selectedValueNumber = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la " +  (upDown ? "colonne" : "ligne") + " à pousser",
+				"Choix " + (upDown ? "colonne" : "ligne"),
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesNumber,
+				possibleValuesNumber[0]
+		);
+
+		System.out.println(selectedValueNumber);
+
+		// on ne laisse pas l'option de bouger si on n'a pas choisi de modification pour le labyrinthe
+		if(selectedValueNumber != null && selectedValueDirection!= null) {
+			boolean isMoveOK = mazeGameControler.move(
+					new Coord(xOrigine, yOrigine),
+					new Coord(destinationX, destinationY)
+			);
+			if (isMoveOK) {
+				System.out.println("déplacement OK");
+				String command;
+				Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
+						e.getY());
+				parentComponentHere = (JLayeredPane) componentHere.getParent();
+				if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
 					if (destinationX == treasureToCatch.getTreasureX()
 							&& destinationY == treasureToCatch.getTreasureY()) {
 						this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
 						this.mazeGameControler.setCurrentTreasureToCatch(null);
-
 						//Lors d'un changement de score, on met à jour l'affichage du tableau
 						scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
 						scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
@@ -591,6 +613,30 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						System.exit(0);
 					}
 				}
+					// modification du labyrinthe
+					switch((String) selectedValueDirection) {
+						case "Haut" : {
+							command = "pushUp";
+							break;
+						}
+						case "Bas" : {
+							command = "pushDown";
+							break;
+						}
+						case "Gauche" : {
+							command = "pushLeft";
+							break;
+						}
+						case "Droite" : {
+							command = "pushRight";
+							break;
+						}
+						default: {
+							command = "";
+							break;
+						}
+					}
+					this.mazeGameControler.alterMaze(command, Integer.parseInt((String)selectedValueNumber));
 			}
 
 			this.mazeGameControler.switchJoueur();
@@ -621,6 +667,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 			//On cree la zone pour la pile de cartes
 			tresorToCatch.setIcon(imageTreasureToCatch);
+		}
+		else {
+			//TODO traiter le non-choix (cancel)
 		}
 	 }
 
