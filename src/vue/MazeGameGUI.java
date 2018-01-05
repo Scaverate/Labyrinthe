@@ -457,8 +457,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 			}
 		}
-		System.out.println("Le score du joueur bleu est : " + mazeGameControler.getBluePlayerScore());
 		System.out.println("Le score du joueur rouge est : " + mazeGameControler.getRedPlayerScore());
+		System.out.println("Le score du joueur bleu est : " + mazeGameControler.getBluePlayerScore());
 		if(nbPlayer==3 || nbPlayer==4) {
 			System.out.println("Le score du joueur jaune est : " + mazeGameControler.getYellowPlayerScore());
 		}

@@ -22,31 +22,31 @@ public class Plateau implements BoardGames {
 			jeuRouge.drawCard(this.treasureToDraw);
 			jeuBleu = new Jeu(Couleur.BLEU);
 			jeuBleu.drawCard(this.treasureToDraw);
-			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
 			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
 			break;
 		case 3 :
-			jeuBleu = new Jeu(Couleur.BLEU);
-			jeuBleu.drawCard(this.treasureToDraw);
 			jeuRouge = new Jeu(Couleur.ROUGE);
 			jeuRouge.drawCard(this.treasureToDraw);
+			jeuBleu = new Jeu(Couleur.BLEU);
+			jeuBleu.drawCard(this.treasureToDraw);
 			jeuJaune = new Jeu(Couleur.JAUNE);
 			jeuJaune.drawCard(this.treasureToDraw);
-			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
 			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
 			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
 			break;
 		case 4 :
-			jeuBleu = new Jeu(Couleur.BLEU);
-			jeuBleu.drawCard(this.treasureToDraw);
 			jeuRouge = new Jeu(Couleur.ROUGE);
 			jeuRouge.drawCard(this.treasureToDraw);
-			jeuVert = new Jeu(Couleur.VERT);
-			jeuVert.drawCard(this.treasureToDraw);
+			jeuBleu = new Jeu(Couleur.BLEU);
+			jeuBleu.drawCard(this.treasureToDraw);
 			jeuJaune = new Jeu(Couleur.JAUNE);
 			jeuJaune.drawCard(this.treasureToDraw);
-			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
+			jeuVert = new Jeu(Couleur.VERT);
+			jeuVert.drawCard(this.treasureToDraw);
 			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
+			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
 			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
 			jeuVert.setCoordInit(new Coord(jeuVert.getPiecesIHM().get(0).getX(),jeuVert.getPiecesIHM().get(0).getY()));
 			break;
@@ -128,7 +128,8 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		return canMove;
+		//return canMove;
+		return true;
 	}
 	
 	private boolean isPieceAnyColor(int coord1, int coord2){
