@@ -38,6 +38,10 @@ public interface MazeGameControlers {
 	public void treasureCatchedPlateau(Treasure treasureCatched);
 	
 	public int getCurrentScorePlayer();
+	public int getBluePlayerScore();
+	public int getRedPlayerScore();
+	public int getYellowPlayerScore();
+	public int getGreenPlayerScore();
 	
 	public List<TreasureIHMs> getTreasuresIHMs();
 	public List<CouloirIHM> getCouloirsIHMs();

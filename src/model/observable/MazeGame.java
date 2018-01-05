@@ -146,4 +146,20 @@ public class MazeGame extends Observable implements BoardGames{
 	public int getCurrentScorePlayer(){
 		return this.plateau.getCurrentScorePlayer();
 	}
+	
+	public int getBluePlayerScore() {
+		return this.plateau.getBluePlayerScore();
+	}
+	
+	public int getRedPlayerScore() {
+		return this.plateau.getRedPlayerScore();
+	}
+	
+	public int getYellowPlayerScore() {
+		return this.plateau.getYellowPlayerScore();
+	}
+	
+	public int getGreenPlayerScore() {
+		return this.plateau.getGreenPlayerScore();
+	}
 }
