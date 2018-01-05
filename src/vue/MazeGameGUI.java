@@ -540,8 +540,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// on retire l'effet visuel du hover
 		 layeredPane = (JLayeredPane) previouslyHoveredComponent;
-		 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
-		 corridorImage.setBorder(null);
+		if(layeredPane != null) {
+			corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
+			corridorImage.setBorder(null);
+		}
 
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
@@ -667,7 +669,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			tresorToCatch.setIcon(imageTreasureToCatch);
 		}
 		else {
-			//TODO traiter le non-choix (cancel)
 			mazeGameControler.move(null, null);
 		}
 	 }
@@ -877,6 +878,29 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0]
 						.setEnabled(true);
 			}
+		}
+
+		// on régénère l'objet de la piece supp
+		TreasureIHM extraTreasureIHM = this.mazeGameControler.getExtraTreasureIHM();
+		JLabel extraTreasure;
+		if(extraTreasureIHM != null) {
+			// suppression
+			if (extraCardPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+				for (int i = 0; i < extraCardPane.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+					extraCardPane.remove(extraCardPane.getComponentsInLayer(TREASURE_LAYER)[i]);
+				}
+			}
+
+			// recréation
+			extraTreasure = new JLabel(new ImageIcon(
+					MazeImageProvider.getImageFile(extraTreasureIHM.getTreasureId())));
+			extraTreasure.setPreferredSize(new Dimension(100, 100));
+			extraTreasure.setBounds(0, 0, 100, 100);
+			extraTreasure.setOpaque(false);
+			extraCardPane.add(
+				extraTreasure, TREASURE_LAYER
+			);
+
 		}
 
 		this.repaint();

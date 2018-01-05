@@ -57,6 +57,7 @@ public class Plateau implements BoardGames {
 		this.message = "";
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
 		this.extraCorridor = MazeCouloirsFactory.getExtraCorridor();
+		this.extraTreasure = null;
 
 	}
 
@@ -133,9 +134,10 @@ public class Plateau implements BoardGames {
 		//TODO ajouter le décalage des objets et personnages
 
 		boolean commandComplete;
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		List<Couloirs> couloirPushed = new LinkedList<>();
 		List<Couloirs> couloirsToRemove = new LinkedList<>();
+		List<Treasures> treasuresPushed = new LinkedList<>();
+		List<Treasures> treasuresToRemove = new LinkedList<>();
 
 		// si la position n'est pas bonne on arrête tout
 		if(position != 1 && position != 3 && position != 5) {
@@ -156,25 +158,44 @@ public class Plateau implements BoardGames {
 			}
 		}
 
+		// on retire les anciens tresors de la colonne ciblée
+		for(Treasures treasure : this.treasures) {
+			if(command.equals("pushDown") || command.equals("pushUp")){
+				if(treasure.getTreasureX() == position) {
+					treasuresToRemove.add(treasure);
+				}
+			}
+			else {
+				if(treasure.getTreasureY() == position) {
+					treasuresToRemove.add(treasure);
+				}
+			}
+		}
+		// plus on retire l'extra tresor si besoin
+		if(this.extraTreasure != null) {
+			this.treasures.remove(this.extraTreasure);
+		}
+
 		// en fonction de la commande passe on traite
 		switch(command) {
 			case "pushDown" : {
-				couloirPushed = this.pushDown(position);
+				treasuresPushed = this.pushTreasuresDown(position);
+				couloirPushed = this.pushCouloirsDown(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushUp" : {
-				couloirPushed = this.pushUp(position);
+				couloirPushed = this.pushCouloirsUp(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushLeft" : {
-				couloirPushed = this.pushLeft(position);
+				couloirPushed = this.pushCouloirsLeft(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushRight" : {
-				couloirPushed = this.pushRight(position);
+				couloirPushed = this.pushCouloirsRight(position);
 				commandComplete = true;
 				break;
 			}
@@ -184,16 +205,58 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		couloirsToAdd.addAll(couloirPushed);
-		// on supprime tout la ligne
+		// on supprime toute la ligne
 		this.couloirs.removeAll(couloirsToRemove);
 		// pour la rajouter avec les nouvelles valeurs
-		this.couloirs.addAll(couloirsToAdd);
+		this.couloirs.addAll(couloirPushed);
+
+		System.out.println(treasuresToRemove.size());
+		System.out.println(treasuresPushed.size());
+		// on supprime les anciens trésors
+		this.treasures.removeAll(treasuresToRemove);
+		// pour la rajouter avec les nouvelles valeurs
+		this.treasures.addAll(treasuresPushed);
 
 		return commandComplete;
 	}
 
-	private List<Couloirs> pushDown(int position) {
+	private List<Treasures> pushTreasuresDown(int position) {
+		List<Treasures> treasuresToAdd = new LinkedList<>();
+
+		// si on a un tresor sur la piece supp
+		if(this.extraTreasure != null) {
+			Treasure oldExtra = new Treasure(
+					position,
+					0,
+					this.extraTreasure.getTreasureId(),
+					this.extraTreasure.getTreasureType(),
+					this.extraTreasure.isCatched()
+			);
+			treasuresToAdd.add(oldExtra);
+		}
+
+		for(Treasures treasure : this.treasures) {
+			if(treasure.getTreasureX() == position) {
+				// si ejection, on met le tresor sur le couloir qui devient piece supp
+				if(treasure.getTreasureY() == 6) {
+					this.extraTreasure = (Treasure) treasure;
+				}
+				else {
+					treasuresToAdd.add(
+						new Treasure(
+							treasure.getTreasureX(),
+							treasure.getTreasureY() + 1,
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+						)
+					);
+				}
+			}
+		}
+		return treasuresToAdd;
+	}
+	private List<Couloirs> pushCouloirsDown(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
 				new Coord(position, 0),
@@ -227,7 +290,7 @@ public class Plateau implements BoardGames {
 		return couloirsToAdd;
 	}
 
-	private List<Couloirs> pushUp(int position) {
+	private List<Couloirs> pushCouloirsUp(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
 				new Coord(position, 6),
@@ -260,7 +323,7 @@ public class Plateau implements BoardGames {
 		}
 		return couloirsToAdd;
 	}
-	private List<Couloirs> pushLeft(int position) {
+	private List<Couloirs> pushCouloirsLeft(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
 				new Coord(6, position),
@@ -293,7 +356,7 @@ public class Plateau implements BoardGames {
 		}
 		return couloirsToAdd;
 	}
-	private List<Couloirs> pushRight(int position) {
+	private List<Couloirs> pushCouloirsRight(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
 				new Coord(0, position),
@@ -434,8 +497,18 @@ public class Plateau implements BoardGames {
 
 	public CouloirIHM getExtraCorridorIHM() {
 		CouloirIHM extraCorridorIHM = new CouloirIHM(this.extraCorridor);
-
 		return extraCorridorIHM;
+	}
+
+	public TreasureIHM getExtraTreasureIHM() {
+		TreasureIHM extraTreasureIHM;
+		if(this.extraTreasure != null) {
+			extraTreasureIHM = new TreasureIHM(this.extraTreasure);
+		}
+		else {
+			extraTreasureIHM = null;
+		}
+		return extraTreasureIHM;
 	}
 
 	public List<TreasureIHMs> getTreasuresIHMs() {
@@ -663,6 +736,7 @@ public class Plateau implements BoardGames {
 	private String message;
 	private List<Couloirs> couloirs;
 	private CouloirAmovible extraCorridor;
+	private Treasure extraTreasure;
 	private List<Treasures> treasures;
 	List<Treasures> treasureToDraw;
 	//vue/mazegameGUI
