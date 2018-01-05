@@ -42,6 +42,7 @@ public interface MazeGameControlers {
 	public int getRedPlayerScore();
 	public int getYellowPlayerScore();
 	public int getGreenPlayerScore();
+	public void switchJoueur();
 	
 	public List<TreasureIHMs> getTreasuresIHMs();
 	public List<CouloirIHM> getCouloirsIHMs();

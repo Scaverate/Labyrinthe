@@ -125,6 +125,10 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		this.mazeGame.treasureCatchedPlateau(treasureCatched);
 	}
 	
+	public void switchJoueur() {
+		this.mazeGame.switchJoueur();
+	}
+	
 	public List<TreasureIHMs> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
 	public CouloirIHM getExtraCorridorIHM() { return this.mazeGame.getExtraCorridorIHM(); }

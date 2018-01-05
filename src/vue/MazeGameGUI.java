@@ -29,6 +29,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
+	private JPanel scores;
 	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
@@ -167,6 +168,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// On cree une grille de 7 par 7 (49 cases)
 		mazeBoard = new JPanel(new GridLayout(7,7));
+		
+		//On cree on grille de 2 par 2 pour les scores
+		scores = new JPanel(new GridLayout(2,2));
+		//On met une bordure pour le délimiter visuellement
+		scores.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		//On donne une taille au tableau des scores
+		scores.setPreferredSize(new Dimension(200,100));
 		
 		//On definit la taille de la grille generale
 		generalBoard.setPreferredSize(windowSize);
@@ -310,10 +318,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		generalBoard.add(mazeBoard, "pos 0 0");
-		generalBoard.add(tresorCard, "pos 0.90al 0.5al");
-		generalBoard.add(extraCardPane, "pos 0.90al 0.1al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
-		generalBoard.add(rotateLeftButton, "pos 0.90al 0.05al");
-		generalBoard.add(rotateRightButton, "pos 0.90al 0.2al");
+		generalBoard.add(tresorCard, "pos 0.90al 0.3al");
+		generalBoard.add(extraCardPane, "pos 0.90al 0.06al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
+		generalBoard.add(rotateLeftButton, "pos 0.90al 0.02al");
+		generalBoard.add(rotateRightButton, "pos 0.90al 0.17al");
+		generalBoard.add(scores, "pos 0.97al 0.5al");
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -451,19 +460,20 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				if (destinationX == treasureToCatch.getTreasureX()
 						&& destinationY == treasureToCatch.getTreasureY()) {
 					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
-					System.out.println("Le score du joueur actuel est : " + mazeGameControler.getCurrentScorePlayer());
 					this.mazeGameControler.setCurrentTreasureToCatch(null);
+					//Lors d'un changement de score, on les affiche de nouveau
+					System.out.println("Le score du joueur rouge est : " + mazeGameControler.getRedPlayerScore());
+					System.out.println("Le score du joueur bleu est : " + mazeGameControler.getBluePlayerScore());
+					if(nbPlayer==3 || nbPlayer==4) {
+						System.out.println("Le score du joueur jaune est : " + mazeGameControler.getYellowPlayerScore());
+					}
+					if(nbPlayer==4) {
+						System.out.println("Le score du joueur vert est : " + mazeGameControler.getGreenPlayerScore());
+					}
 
 				}
 			}
-		}
-		System.out.println("Le score du joueur rouge est : " + mazeGameControler.getRedPlayerScore());
-		System.out.println("Le score du joueur bleu est : " + mazeGameControler.getBluePlayerScore());
-		if(nbPlayer==3 || nbPlayer==4) {
-			System.out.println("Le score du joueur jaune est : " + mazeGameControler.getYellowPlayerScore());
-		}
-		if(nbPlayer==4) {
-			System.out.println("Le score du joueur vert est : " + mazeGameControler.getGreenPlayerScore());
+			this.mazeGameControler.switchJoueur();
 		}
 	 }
 
