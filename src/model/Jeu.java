@@ -10,8 +10,10 @@ import tools.MazeTreasureFactory;
 public class Jeu implements Game {
 	private Treasure treasureToCatch;
 	private Coord coordInitiale = new Coord(0,0);
+	private Couleur jeuCouleur;
 	public Jeu(Couleur couleur){
 		this.pieces = MazePiecesFactory.newPieces(couleur);
+		this.jeuCouleur = couleur;
 	}
 	
 	public Couleur getPieceColor(int x, int y){
@@ -137,11 +139,26 @@ public class Jeu implements Game {
 	}
 	
 	public Coord getCoordInitiale() {
-		return coordInitiale;
+		return this.coordInitiale;
 	}
 
 	public void setCoordInit(Coord coordInit) {
 		this.coordInitiale = coordInit;
+	}
+
+	public String getNamePlayer(){
+		Couleur colorPlayer = this.jeuCouleur;
+		String name = "PasdeNom";
+		if(colorPlayer == Couleur.BLEU){
+			name = "Luigi";
+		}else if(colorPlayer == Couleur.ROUGE){
+			name = "Mario";
+		}else if(colorPlayer == Couleur.JAUNE){
+			name = "Yoshi";
+		}else if(colorPlayer == Couleur.VERT){
+			name = "Toad";
+		}
+		return name;
 	}
 
 	private List<Pieces> pieces;

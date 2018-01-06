@@ -482,10 +482,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 //on divise getX() par layeredPane.getHeight()/7 pour savoir dans quelle case on a deplace la piece
 		 int destinationX = e.getX()/(mazeBoard.getHeight()/7);
 		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
+		int CoordInitialeX = this.mazeGameControler.getCurrentCoordInitiale().x;
+		int CoordInitialeY = this.mazeGameControler.getCurrentCoordInitiale().y;
+		String nameJeuCourant = this.mazeGameControler.getCurrentNamePlayer();
+		Object[] options = {/*"Rejouer",*/
+				"Quitter"};
 
 		 JLayeredPane layeredPane;
 		 JLayeredPane parentComponentHere;
 		 JLabel corridorImage;
+		JInternalFrame frame = new JInternalFrame();
 
 		 if (pawn == null) {
 			 return;
@@ -510,24 +516,48 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
 					e.getY());
 			parentComponentHere = (JLayeredPane) componentHere.getParent();
-			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {	
-				
-				if (destinationX == treasureToCatch.getTreasureX()
-						&& destinationY == treasureToCatch.getTreasureY()) {
-					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
-					this.mazeGameControler.setCurrentTreasureToCatch(null);
-					//Lors d'un changement de score, on met à jour l'affichage du tableau
-					scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
-					scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
-					if(nbPlayer==3 || nbPlayer==4) {
-						scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
-					}
-					if(nbPlayer==4) {
-						scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
-					}
+			if(this.mazeGameControler.getCurrentScorePlayer() < this.mazeGameControler.getScoreMax()){
+				if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0){
+					treasureToCatch = this.mazeGameControler
+							.currentTreasureToCatch();
+					System.out.println(treasureToCatch);
+					if (destinationX == treasureToCatch.getTreasureX()
+							&& destinationY == treasureToCatch.getTreasureY()) {
+						this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
+						this.mazeGameControler.setCurrentTreasureToCatch(null);
 
+						//Lors d'un changement de score, on met à jour l'affichage du tableau
+						scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
+						scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
+						if(nbPlayer==3 || nbPlayer==4) {
+							scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
+						}
+						if(nbPlayer==4) {
+							scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
+						}
+					}
+				}
+			}else{
+				if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
+					int n = JOptionPane.showOptionDialog(frame,
+							"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
+							"VICTOIRE",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.PLAIN_MESSAGE,
+							null,
+							options,
+							/*options[1]*/options[0]);
+					System.out.println("VALEUR DE N EST :"+n);
+					if(n==0){
+						System.exit(0);
+					}/*else{
+						initMazeGame(nbPlayer);
+					}*/
+				}else{
+					System.out.println("Vous avez atteint le score max, rendez vous à votre position initiale pour gagner");
 				}
 			}
+
 			this.mazeGameControler.switchJoueur();
 			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
 				player.setText("Tour du joueur : Mario");

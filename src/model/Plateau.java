@@ -128,7 +128,7 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		return canMove;
+		return true;
 	}
 	
 	private boolean isPieceAnyColor(int coord1, int coord2){
@@ -515,6 +515,18 @@ public class Plateau implements BoardGames {
 	
 	public int getCurrentScorePlayer(){
 		return this.jeuCourant.getScorePlayer();
+	}
+
+	public Coord getCurrentCoordInitiale() {
+		return this.jeuCourant.getCoordInitiale();
+	}
+
+	public int getScoreMax(){
+		return this.scoreMax;
+	}
+
+	public String getNamePlayer(){
+		return this.jeuCourant.getNamePlayer();
 	}
 	
 	public int getBluePlayerScore() {
