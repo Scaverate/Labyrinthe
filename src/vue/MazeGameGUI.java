@@ -222,6 +222,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.setPreferredSize(windowSize);
 		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
 		
+		//On crée le JLabel du tresor à attraper
+		tresorToCatch = new JLabel();
+		
 		
 		//On cree une image pour la pile des cartes des tresors
 		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("DosJeu"));
@@ -366,6 +369,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.94al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
+		generalBoard.add(tresorToCatch,"pos 0.909al 0.3al");
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -505,8 +509,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				//On cree la zone pour la pile de cartes
 
 
-				tresorToCatch = new JLabel(imageTreasureToCatch);
-				generalBoard.add(tresorToCatch,"pos 0.909al 0.3al");
+				tresorToCatch.setIcon(imageTreasureToCatch);
+				
 				
 
 				
