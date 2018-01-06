@@ -361,7 +361,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(treasure, TREASURE_LAYER);
 		}
-		
 		Treasure treasureToCatch = this.mazeGameControler
 				.currentTreasureToCatch();
 		imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
@@ -501,20 +500,20 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			 new Coord(xOrigine, yOrigine),
 			 new Coord(destinationX, destinationY)
 		 );
+		 
+		 Treasure treasureToCatch = this.mazeGameControler
+					.currentTreasureToCatch();
+	
+		imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+		//On cree la zone pour la pile de cartes
+		tresorToCatch.setIcon(imageTreasureToCatch);
 
 		if (isMoveOK) {
 			System.out.println("déplacement OK");
 			Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
 					e.getY());
 			parentComponentHere = (JLayeredPane) componentHere.getParent();
-			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
-				Treasure treasureToCatch = this.mazeGameControler
-						.currentTreasureToCatch();
-		
-				
-				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-				//On cree la zone pour la pile de cartes
-				tresorToCatch.setIcon(imageTreasureToCatch);
+			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {	
 				
 				if (destinationX == treasureToCatch.getTreasureX()
 						&& destinationY == treasureToCatch.getTreasureY()) {
