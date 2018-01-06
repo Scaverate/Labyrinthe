@@ -33,6 +33,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
+	private JLabel scoreMario;
+	private JLabel scoreYoshi;
+	private JLabel scoreLuigi;
+	private JLabel scoreToad;
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
@@ -175,6 +179,26 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		scores.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		//On donne une taille au tableau des scores
 		scores.setPreferredSize(new Dimension(200,100));
+		
+		//On initialise le score de chaque joueur
+		scoreMario = new JLabel();
+		scoreMario.setText("Mario : 0"); //+ mazeGameControler.getRedPlayerScore());
+		scoreYoshi = new JLabel();
+		scoreYoshi.setText("Yoshi : 0"); //+ mazeGameControler.getYellowPlayerScore());
+		scoreLuigi = new JLabel();
+		scoreLuigi.setText("Luigi : 0"); //+ mazeGameControler.getBluePlayerScore());
+		scoreToad = new JLabel();
+		scoreToad.setText("Toad : 0"); //+ mazeGameControler.getGreenPlayerScore());
+		
+		//On ajoute les scores dans le tableau
+		scores.add(scoreMario);
+		scores.add(scoreLuigi);
+		if(nbPlayer == 3 || nbPlayer == 4) {
+			scores.add(scoreYoshi);
+		}
+		if(nbPlayer == 4) {
+			scores.add(scoreToad);
+		}
 		
 		//On definit la taille de la grille generale
 		generalBoard.setPreferredSize(windowSize);
@@ -462,13 +486,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
 					this.mazeGameControler.setCurrentTreasureToCatch(null);
 					//Lors d'un changement de score, on les affiche de nouveau
+					//On met à jour les tableaux de score également
 					System.out.println("Le score du joueur rouge est : " + mazeGameControler.getRedPlayerScore());
 					System.out.println("Le score du joueur bleu est : " + mazeGameControler.getBluePlayerScore());
+					scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
+					scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
 					if(nbPlayer==3 || nbPlayer==4) {
 						System.out.println("Le score du joueur jaune est : " + mazeGameControler.getYellowPlayerScore());
+						scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
 					}
 					if(nbPlayer==4) {
 						System.out.println("Le score du joueur vert est : " + mazeGameControler.getGreenPlayerScore());
+						scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
 					}
 
 				}
