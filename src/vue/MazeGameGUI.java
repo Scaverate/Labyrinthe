@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import tools.MazeImageProvider;
+import tools.MazeTreasureImage;
 import model.Coord;
 import model.Couleur;
 import model.PieceIHMs;
@@ -32,6 +33,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel menu;
 	private JPanel scores;
 	private JPanel activePlayer;
+	private Icon imageTreasureToCatch;
 	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
@@ -496,7 +498,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
 				Treasure treasureToCatch = this.mazeGameControler
 						.currentTreasureToCatch();
-				System.out.println(treasureToCatch);
+		
+				
+				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+				//On cree la zone pour la pile de cartes
+				JLabel tresorToCatch;
+				tresorToCatch = new JLabel(imageTreasureToCatch);
+				
+				
+
+				
+				System.out.println(tresorToCatch);
+
 				if (destinationX == treasureToCatch.getTreasureX()
 						&& destinationY == treasureToCatch.getTreasureY()) {
 					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
