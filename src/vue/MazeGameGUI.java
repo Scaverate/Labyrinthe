@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import tools.MazeImageProvider;
+import tools.MazeTreasureImage;
 import model.Coord;
 import model.Couleur;
 import model.PieceIHMs;
@@ -27,11 +28,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	 */
 	private static final long serialVersionUID = 1L;
 	private JLayeredPane layeredPane;
+	private JLabel tresorToCatch;
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
 	private JPanel scores;
 	private JPanel activePlayer;
+	private Icon imageTreasureToCatch;
 	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
@@ -219,6 +222,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.setPreferredSize(windowSize);
 		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
 		
+		//On crée le JLabel du tresor à attraper
+		tresorToCatch = new JLabel();
+		
 		
 		//On cree une image pour la pile des cartes des tresors
 		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("DosJeu"));
@@ -355,7 +361,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(treasure, TREASURE_LAYER);
 		}
-		
+		Treasure treasureToCatch = this.mazeGameControler
+				.currentTreasureToCatch();
+		imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+		//On cree la zone pour la pile de cartes
+		tresorToCatch.setIcon(imageTreasureToCatch);
+
+		generalBoard.add(tresorToCatch,"pos 0.892al 0.458al");
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
@@ -363,6 +375,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.94al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
+
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -487,16 +500,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			 new Coord(xOrigine, yOrigine),
 			 new Coord(destinationX, destinationY)
 		 );
+		 
+		 Treasure treasureToCatch = this.mazeGameControler
+					.currentTreasureToCatch();
+	
 
 		if (isMoveOK) {
 			System.out.println("déplacement OK");
 			Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
 					e.getY());
 			parentComponentHere = (JLayeredPane) componentHere.getParent();
-			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
-				Treasure treasureToCatch = this.mazeGameControler
-						.currentTreasureToCatch();
-				System.out.println(treasureToCatch);
+			if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {	
+				
 				if (destinationX == treasureToCatch.getTreasureX()
 						&& destinationY == treasureToCatch.getTreasureY()) {
 					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
@@ -526,6 +541,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
 				player.setText("Tour du joueur : Toad");
 			}
+			treasureToCatch = this.mazeGameControler
+					.currentTreasureToCatch();
+	
+			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+			//On cree la zone pour la pile de cartes
+			tresorToCatch.setIcon(imageTreasureToCatch);
 		}
 	 }
 
