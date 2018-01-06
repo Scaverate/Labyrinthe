@@ -185,16 +185,19 @@ public class Plateau implements BoardGames {
 				break;
 			}
 			case "pushUp" : {
+				treasuresPushed = this.pushTreasuresUp(position);
 				couloirPushed = this.pushCouloirsUp(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushLeft" : {
+				treasuresPushed = this.pushTreasuresLeft(position);
 				couloirPushed = this.pushCouloirsLeft(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushRight" : {
+				treasuresPushed = this.pushTreasuresRight(position);
 				couloirPushed = this.pushCouloirsRight(position);
 				commandComplete = true;
 				break;
@@ -210,8 +213,8 @@ public class Plateau implements BoardGames {
 		// pour la rajouter avec les nouvelles valeurs
 		this.couloirs.addAll(couloirPushed);
 
-		System.out.println(treasuresToRemove.size());
-		System.out.println(treasuresPushed.size());
+		//System.out.println(treasuresToRemove.size());
+		//System.out.println(treasuresPushed.size());
 		// on supprime les anciens trésors
 		this.treasures.removeAll(treasuresToRemove);
 		// pour la rajouter avec les nouvelles valeurs
@@ -233,6 +236,7 @@ public class Plateau implements BoardGames {
 					this.extraTreasure.isCatched()
 			);
 			treasuresToAdd.add(oldExtra);
+			this.extraTreasure = null;
 		}
 
 		for(Treasures treasure : this.treasures) {
@@ -290,6 +294,43 @@ public class Plateau implements BoardGames {
 		return couloirsToAdd;
 	}
 
+	private List<Treasures> pushTreasuresUp(int position) {
+		List<Treasures> treasuresToAdd = new LinkedList<>();
+
+		// si on a un tresor sur la piece supp
+		if(this.extraTreasure != null) {
+			Treasure oldExtra = new Treasure(
+					position,
+					6,
+					this.extraTreasure.getTreasureId(),
+					this.extraTreasure.getTreasureType(),
+					this.extraTreasure.isCatched()
+			);
+			treasuresToAdd.add(oldExtra);
+			this.extraTreasure = null;
+		}
+
+		for(Treasures treasure : this.treasures) {
+			if(treasure.getTreasureX() == position) {
+				// si ejection, on met le tresor sur le couloir qui devient piece supp
+				if(treasure.getTreasureY() == 0) {
+					this.extraTreasure = (Treasure) treasure;
+				}
+				else {
+					treasuresToAdd.add(
+							new Treasure(
+									treasure.getTreasureX(),
+									treasure.getTreasureY() - 1,
+									treasure.getTreasureId(),
+									treasure.getTreasureType(),
+									treasure.isCatched()
+							)
+					);
+				}
+			}
+		}
+		return treasuresToAdd;
+	}
 	private List<Couloirs> pushCouloirsUp(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
@@ -323,6 +364,44 @@ public class Plateau implements BoardGames {
 		}
 		return couloirsToAdd;
 	}
+
+	private List<Treasures> pushTreasuresLeft(int position) {
+		List<Treasures> treasuresToAdd = new LinkedList<>();
+
+		// si on a un tresor sur la piece supp
+		if(this.extraTreasure != null) {
+			Treasure oldExtra = new Treasure(
+					6,
+					position,
+					this.extraTreasure.getTreasureId(),
+					this.extraTreasure.getTreasureType(),
+					this.extraTreasure.isCatched()
+			);
+			treasuresToAdd.add(oldExtra);
+			this.extraTreasure = null;
+		}
+
+		for(Treasures treasure : this.treasures) {
+			if(treasure.getTreasureY() == position) {
+				// si ejection, on met le tresor sur le couloir qui devient piece supp
+				if(treasure.getTreasureX() == 0) {
+					this.extraTreasure = (Treasure) treasure;
+				}
+				else {
+					treasuresToAdd.add(
+							new Treasure(
+									treasure.getTreasureX() - 1,
+									treasure.getTreasureY(),
+									treasure.getTreasureId(),
+									treasure.getTreasureType(),
+									treasure.isCatched()
+							)
+					);
+				}
+			}
+		}
+		return treasuresToAdd;
+	}
 	private List<Couloirs> pushCouloirsLeft(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
@@ -355,6 +434,44 @@ public class Plateau implements BoardGames {
 			}
 		}
 		return couloirsToAdd;
+	}
+
+	private List<Treasures> pushTreasuresRight(int position) {
+		List<Treasures> treasuresToAdd = new LinkedList<>();
+
+		// si on a un tresor sur la piece supp
+		if(this.extraTreasure != null) {
+			Treasure oldExtra = new Treasure(
+					0,
+					position,
+					this.extraTreasure.getTreasureId(),
+					this.extraTreasure.getTreasureType(),
+					this.extraTreasure.isCatched()
+			);
+			treasuresToAdd.add(oldExtra);
+			this.extraTreasure = null;
+		}
+
+		for(Treasures treasure : this.treasures) {
+			if(treasure.getTreasureY() == position) {
+				// si ejection, on met le tresor sur le couloir qui devient piece supp
+				if(treasure.getTreasureX() == 6) {
+					this.extraTreasure = (Treasure) treasure;
+				}
+				else {
+					treasuresToAdd.add(
+							new Treasure(
+									treasure.getTreasureX() + 1,
+									treasure.getTreasureY(),
+									treasure.getTreasureId(),
+									treasure.getTreasureType(),
+									treasure.isCatched()
+							)
+					);
+				}
+			}
+		}
+		return treasuresToAdd;
 	}
 	private List<Couloirs> pushCouloirsRight(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
@@ -727,7 +844,7 @@ public class Plateau implements BoardGames {
 		return this.jeuVert.getScorePlayer();
 	}
 
-	int scoreMax = 0;
+	private int scoreMax = 0;
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;
 	private Jeu jeuJaune;
@@ -738,7 +855,7 @@ public class Plateau implements BoardGames {
 	private CouloirAmovible extraCorridor;
 	private Treasure extraTreasure;
 	private List<Treasures> treasures;
-	List<Treasures> treasureToDraw;
+	private List<Treasures> treasureToDraw;
 	//vue/mazegameGUI
 	//boucle for couloirs ihm qui permet de poser les images
 
@@ -746,8 +863,7 @@ public class Plateau implements BoardGames {
 	public static void main(String[] args){
 		System.out.println("tests plateau");
 		Plateau plateau = new Plateau(2);
-		List<Couloirs> couloirs;
-		Comparator comp = new Comparator<Couloirs>() {
+		Comparator compareCouloirs = new Comparator<Couloirs>() {
 			@Override
 			public int compare(Couloirs couloir1, Couloirs couloir2) {
 				int compare;
@@ -771,13 +887,53 @@ public class Plateau implements BoardGames {
 				return compare;
 			}
 		};
+		Comparator compareTreasures = new Comparator<Treasures>() {
+			@Override
+			public int compare(Treasures treasure1, Treasures treasure2) {
+				int compare;
+				if(treasure1.getTreasureX() == treasure2.getTreasureX()) {
+					if(treasure1.getTreasureY() == treasure2.getTreasureY()) {
+						compare = 0;
+					}
+					else if (treasure1.getTreasureY() > treasure2.getTreasureY()){
+						compare = 1;
+					}
+					else {
+						compare = -1;
+					}
+				}
+				else if(treasure1.getTreasureX() > treasure2.getTreasureX()){
+					compare = 1;
+				}
+				else {
+					compare = -1;
+				}
+				return compare;
+			}
+		};
 
 
-		Collections.sort(plateau.couloirs, comp);
-		System.out.println(plateau.couloirs);
+		Collections.sort(plateau.treasures, compareTreasures);
+		System.out.println(plateau.treasures);
+		System.out.println(plateau.extraTreasure);
 		plateau.alterMaze("pushDown", 1);
-		Collections.sort(plateau.couloirs, comp);
-		System.out.println(plateau.couloirs);
+		Collections.sort(plateau.treasures, compareTreasures);
+		System.out.println(plateau.treasures);
+		System.out.println(plateau.extraTreasure);
+
+		System.out.println("\n" + plateau.treasures);
+		System.out.println(plateau.extraTreasure);
+		plateau.alterMaze("pushDown", 1);
+		Collections.sort(plateau.treasures, compareTreasures);
+		System.out.println(plateau.treasures);
+		System.out.println(plateau.extraTreasure);
+
+		System.out.println("\n" + plateau.treasures);
+		System.out.println(plateau.extraTreasure);
+		plateau.alterMaze("pushDown", 1);
+		Collections.sort(plateau.treasures, compareTreasures);
+		System.out.println(plateau.treasures);
+		System.out.println(plateau.extraTreasure);
 
 	}
 }

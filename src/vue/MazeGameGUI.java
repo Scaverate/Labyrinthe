@@ -812,6 +812,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						.getTreasureX() + 7 * treasureIHM.getTreasureY())).add(
 						treasure, TREASURE_LAYER);
 			}
+			this.treasureIHMs = updatedList;
 
 		}
 		// si mise à jour des couloirs
@@ -883,15 +884,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		// on régénère l'objet de la piece supp
 		TreasureIHM extraTreasureIHM = this.mazeGameControler.getExtraTreasureIHM();
 		JLabel extraTreasure;
-		if(extraTreasureIHM != null) {
-			// suppression
-			if (extraCardPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
-				for (int i = 0; i < extraCardPane.getComponentsInLayer(TREASURE_LAYER).length; i++) {
-					extraCardPane.remove(extraCardPane.getComponentsInLayer(TREASURE_LAYER)[i]);
-				}
-			}
 
-			// recréation
+		// suppression dans tous les cas
+		if (extraCardPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+			for (int i = 0; i < extraCardPane.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+				extraCardPane.remove(extraCardPane.getComponentsInLayer(TREASURE_LAYER)[i]);
+			}
+		}
+		// recréation si besoin
+		if(extraTreasureIHM != null) {
 			extraTreasure = new JLabel(new ImageIcon(
 					MazeImageProvider.getImageFile(extraTreasureIHM.getTreasureId())));
 			extraTreasure.setPreferredSize(new Dimension(100, 100));
@@ -900,7 +901,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			extraCardPane.add(
 				extraTreasure, TREASURE_LAYER
 			);
-
 		}
 
 		this.repaint();
