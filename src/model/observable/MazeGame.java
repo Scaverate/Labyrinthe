@@ -143,6 +143,18 @@ public class MazeGame extends Observable implements BoardGames{
 	public int getCurrentScorePlayer(){
 		return this.plateau.getCurrentScorePlayer();
 	}
+
+	public int getScoreMax(){
+		return this.plateau.getScoreMax();
+	}
+
+	public Coord getCurrentCoordInitiale() {
+		return this.plateau.getCurrentCoordInitiale();
+	}
+
+	public String getCurrentNamePlayer(){
+		return this.plateau.getNamePlayer();
+	}
 	
 	public int getBluePlayerScore() {
 		return this.plateau.getBluePlayerScore();

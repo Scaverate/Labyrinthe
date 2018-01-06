@@ -516,6 +516,18 @@ public class Plateau implements BoardGames {
 	public int getCurrentScorePlayer(){
 		return this.jeuCourant.getScorePlayer();
 	}
+
+	public Coord getCurrentCoordInitiale() {
+		return this.jeuCourant.getCoordInitiale();
+	}
+
+	public int getScoreMax(){
+		return this.scoreMax;
+	}
+
+	public String getNamePlayer(){
+		return this.jeuCourant.getNamePlayer();
+	}
 	
 	public int getBluePlayerScore() {
 		return this.jeuBleu.getScorePlayer();

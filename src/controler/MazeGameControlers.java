@@ -36,6 +36,7 @@ public interface MazeGameControlers {
 	public Treasure currentTreasureToCatch();
 	public void setCurrentTreasureToCatch(Treasure treasureToCatch);
 	public void treasureCatchedPlateau(Treasure treasureCatched);
+	public Coord getCurrentCoordInitiale();
 	
 	public int getCurrentScorePlayer();
 	public int getBluePlayerScore();
@@ -43,6 +44,8 @@ public interface MazeGameControlers {
 	public int getYellowPlayerScore();
 	public int getGreenPlayerScore();
 	public void switchJoueur();
+	public int getScoreMax();
+	public String getCurrentNamePlayer();
 	public Couleur getColorCurrentPlayer();
 	
 	public List<TreasureIHMs> getTreasuresIHMs();
