@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import tools.MazeImageProvider;
 import model.Coord;
+import model.Couleur;
 import model.PieceIHMs;
 import model.Treasure;
 import model.TreasureIHMs;
@@ -29,9 +30,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
+	private JPanel scores;
+	private JPanel activePlayer;
 	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
+	private JLabel scoreMario;
+	private JLabel scoreYoshi;
+	private JLabel scoreLuigi;
+	private JLabel scoreToad;
+	private JLabel player;
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
@@ -167,6 +175,45 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		// On cree une grille de 7 par 7 (49 cases)
 		mazeBoard = new JPanel(new GridLayout(7,7));
+		
+		//On cree on grille de 2 par 2 pour les scores
+		scores = new JPanel(new GridLayout(2,2));
+		//On met une bordure pour le délimiter visuellement
+		scores.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		//On donne une taille au tableau des scores
+		scores.setPreferredSize(new Dimension(200,100));
+		
+		//On initialise le score de chaque joueur
+		scoreMario = new JLabel();
+		scoreMario.setText("Mario : 0"); //+ mazeGameControler.getRedPlayerScore());
+		scoreYoshi = new JLabel();
+		scoreYoshi.setText("Yoshi : 0"); //+ mazeGameControler.getYellowPlayerScore());
+		scoreLuigi = new JLabel();
+		scoreLuigi.setText("Luigi : 0"); //+ mazeGameControler.getBluePlayerScore());
+		scoreToad = new JLabel();
+		scoreToad.setText("Toad : 0"); //+ mazeGameControler.getGreenPlayerScore());
+		
+		//On ajoute les scores dans le tableau
+		scores.add(scoreMario);
+		scores.add(scoreLuigi);
+		if(nbPlayer == 3 || nbPlayer == 4) {
+			scores.add(scoreYoshi);
+		}
+		if(nbPlayer == 4) {
+			scores.add(scoreToad);
+		}
+		
+		//On crée le panel du joueur actif
+		activePlayer = new JPanel(new BorderLayout());
+		
+		//On crée le label sur lequel le joueur actif sera récupéré
+		player = new JLabel();
+		
+		//On initialise le joueur devant jouer à "Mario"
+		player.setText("Tour du joueur : Mario");
+		
+		//On ajoute le JLabel sur le JPanel
+		activePlayer.add(player);
 		
 		//On definit la taille de la grille generale
 		generalBoard.setPreferredSize(windowSize);
@@ -310,10 +357,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		generalBoard.add(mazeBoard, "pos 0 0");
-		generalBoard.add(tresorCard, "pos 0.90al 0.5al");
-		generalBoard.add(extraCardPane, "pos 0.90al 0.1al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
-		generalBoard.add(rotateLeftButton, "pos 0.90al 0.05al");
-		generalBoard.add(rotateRightButton, "pos 0.90al 0.2al");
+		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
+		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
+		generalBoard.add(rotateLeftButton, "pos 0.915al 0al");
+		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
+		generalBoard.add(activePlayer, "pos 0.94al 0.25al");
+		generalBoard.add(scores, "pos 0.98al 0.65al");
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -451,10 +500,31 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				if (destinationX == treasureToCatch.getTreasureX()
 						&& destinationY == treasureToCatch.getTreasureY()) {
 					this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
-					System.out.println("Le score du joueur actuel est : " + mazeGameControler.getCurrentScorePlayer());
 					this.mazeGameControler.setCurrentTreasureToCatch(null);
+					//Lors d'un changement de score, on met à jour l'affichage du tableau
+					scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
+					scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
+					if(nbPlayer==3 || nbPlayer==4) {
+						scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
+					}
+					if(nbPlayer==4) {
+						scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
+					}
 
 				}
+			}
+			this.mazeGameControler.switchJoueur();
+			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
+				player.setText("Tour du joueur : Mario");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
+				player.setText("Tour du joueur : Luigi");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
+				player.setText("Tour du joueur : Yoshi");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
+				player.setText("Tour du joueur : Toad");
 			}
 		}
 	 }

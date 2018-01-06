@@ -83,7 +83,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	}
 
 	
-	protected Couleur getColorCurrentPlayer(){		
+	public Couleur getColorCurrentPlayer(){		
 		return this.mazeGame.getColorCurrentPlayer();		
 	}
 
@@ -105,8 +105,28 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		return this.mazeGame.getCurrentScorePlayer();
 	}
 	
+	public int getBluePlayerScore() {
+		return this.mazeGame.getBluePlayerScore();
+	}
+	
+	public int getRedPlayerScore() {
+		return this.mazeGame.getRedPlayerScore();
+	}
+	
+	public int getYellowPlayerScore() {
+		return this.mazeGame.getYellowPlayerScore();
+	}
+	
+	public int getGreenPlayerScore() {
+		return this.mazeGame.getGreenPlayerScore();
+	}
+	
 	public void treasureCatchedPlateau(Treasure treasureCatched){
 		this.mazeGame.treasureCatchedPlateau(treasureCatched);
+	}
+	
+	public void switchJoueur() {
+		this.mazeGame.switchJoueur();
 	}
 	
 	public List<TreasureIHMs> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }

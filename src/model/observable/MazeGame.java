@@ -67,9 +67,6 @@ public class MazeGame extends Observable implements BoardGames{
 		ret = plateau.isMoveOk(xInit, yInit, xFinal, yFinal);
 		if (ret){
 			ret = plateau.move(xInit, yInit, xFinal, yFinal);
-			if(ret) {
-				plateau.switchJoueur();
-			}
 		}
 		this.notifyObservers(plateau.getPiecesIHM());
 		return ret;	
@@ -145,5 +142,25 @@ public class MazeGame extends Observable implements BoardGames{
 	
 	public int getCurrentScorePlayer(){
 		return this.plateau.getCurrentScorePlayer();
+	}
+	
+	public int getBluePlayerScore() {
+		return this.plateau.getBluePlayerScore();
+	}
+	
+	public int getRedPlayerScore() {
+		return this.plateau.getRedPlayerScore();
+	}
+	
+	public int getYellowPlayerScore() {
+		return this.plateau.getYellowPlayerScore();
+	}
+	
+	public int getGreenPlayerScore() {
+		return this.plateau.getGreenPlayerScore();
+	}
+	
+	public void switchJoueur() {
+		this.plateau.switchJoueur();
 	}
 }
