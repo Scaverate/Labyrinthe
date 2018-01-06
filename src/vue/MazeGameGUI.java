@@ -892,9 +892,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	}
 
 	private void alterMaze() {
+		final String CMD_HAUT =  "Vers le haut";
+		final String CMD_BAS = "Vers le bas";
+		final String CMD_GAUCHE = "Vers la gauche";
+		final String CMD_DROITE = "Vers la droite";
+		final String CMD_1 = "2";
+		final String CMD_3 = "4";
+		final String CMD_5 = "6";
 		String command;
+		int selectedNumber;
 		// choix modification du labyrinthe
-		String[] possibleValuesDirection = { "Haut", "Bas", "Gauche", "Droite" };
+		String[] possibleValuesDirection = {CMD_HAUT, CMD_BAS, CMD_GAUCHE, CMD_DROITE};
 		Object selectedValueDirection = JOptionPane.showInputDialog(
 				null,
 				"Choisir une valeur pour la direction",
@@ -904,12 +912,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				possibleValuesDirection,
 				possibleValuesDirection[0]
 		);
-		boolean upDown = (possibleValuesDirection.equals("Haut") || possibleValuesDirection.equals("Bas"));
-		String[] possibleValuesNumber = { "1", "3", "5" };
+		boolean upDown = (possibleValuesDirection.equals(CMD_HAUT) || possibleValuesDirection.equals(CMD_BAS));
+		String columnOrLine = (upDown ? "colonne" : "ligne");
+		String[] possibleValuesNumber = { CMD_1, CMD_3, CMD_5 };
 		Object selectedValueNumber = JOptionPane.showInputDialog(
 				null,
-				"Choisir une valeur pour la " +  (upDown ? "colonne" : "ligne") + " à pousser",
-				"Choix " + (upDown ? "colonne" : "ligne"),
+				"Choisir une valeur pour la " +  columnOrLine + " à pousser",
+				"Choix " + columnOrLine,
 				JOptionPane.INFORMATION_MESSAGE,
 				null,
 				possibleValuesNumber,
@@ -917,22 +926,22 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		);
 
 		// modification du labyrinthe
-		selectedValueDirection = selectedValueDirection == null ? "Haut" : selectedValueDirection;
-		selectedValueNumber = selectedValueNumber == null ? "1" : selectedValueNumber;
+		selectedValueDirection = selectedValueDirection == null ? CMD_HAUT : selectedValueDirection;
+		selectedValueNumber = selectedValueNumber == null ? CMD_1 : selectedValueNumber;
 		switch((String) selectedValueDirection) {
-			case "Haut" : {
+			case CMD_HAUT : {
 				command = "pushUp";
 				break;
 			}
-			case "Bas" : {
+			case CMD_BAS : {
 				command = "pushDown";
 				break;
 			}
-			case "Gauche" : {
+			case CMD_GAUCHE : {
 				command = "pushLeft";
 				break;
 			}
-			case "Droite" : {
+			case CMD_DROITE : {
 				command = "pushRight";
 				break;
 			}
@@ -941,7 +950,25 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				break;
 			}
 		}
-		this.mazeGameControler.alterMaze(command, Integer.parseInt((String) selectedValueNumber));
+		switch((String) selectedValueNumber) {
+			case CMD_1 : {
+				selectedNumber = 1;
+				break;
+			}
+			case CMD_3 : {
+				selectedNumber = 3;
+				break;
+			}
+			case CMD_5 : {
+				selectedNumber = 5;
+				break;
+			}
+			default: {
+				selectedNumber = 1;
+				break;
+			}
+		}
+		this.mazeGameControler.alterMaze(command, selectedNumber);
 	}
 
 }
