@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import tools.MazeImageProvider;
 import model.Coord;
+import model.Couleur;
 import model.PieceIHMs;
 import model.Treasure;
 import model.TreasureIHMs;
@@ -30,6 +31,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel generalBoard;
 	private JPanel menu;
 	private JPanel scores;
+	private JPanel activePlayer;
 	private Box b1,b2,b3;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
@@ -37,6 +39,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel scoreYoshi;
 	private JLabel scoreLuigi;
 	private JLabel scoreToad;
+	private JLabel player;
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
@@ -200,6 +203,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			scores.add(scoreToad);
 		}
 		
+		//On crée le panel du joueur actif
+		activePlayer = new JPanel(new BorderLayout());
+		
+		//On crée le label sur lequel le joueur actif sera récupéré
+		player = new JLabel();
+		
+		//On initialise le joueur devant jouer à "Mario"
+		player.setText("Tour du joueur : Mario");
+		
+		//On ajoute le JLabel sur le JPanel
+		activePlayer.add(player);
+		
 		//On definit la taille de la grille generale
 		generalBoard.setPreferredSize(windowSize);
 		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
@@ -342,11 +357,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		generalBoard.add(mazeBoard, "pos 0 0");
-		generalBoard.add(tresorCard, "pos 0.90al 0.3al");
-		generalBoard.add(extraCardPane, "pos 0.90al 0.06al"); //AbsoluteLayout : on positionne a� 90% en x et 30% en y
-		generalBoard.add(rotateLeftButton, "pos 0.90al 0.02al");
-		generalBoard.add(rotateRightButton, "pos 0.90al 0.17al");
-		generalBoard.add(scores, "pos 0.97al 0.5al");
+		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
+		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
+		generalBoard.add(rotateLeftButton, "pos 0.915al 0al");
+		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
+		generalBoard.add(activePlayer, "pos 0.94al 0.25al");
+		generalBoard.add(scores, "pos 0.98al 0.65al");
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -503,6 +519,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 			}
 			this.mazeGameControler.switchJoueur();
+			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
+				player.setText("Tour du joueur : Mario");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
+				player.setText("Tour du joueur : Luigi");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
+				player.setText("Tour du joueur : Yoshi");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
+				player.setText("Tour du joueur : Toad");
+			}
 		}
 	 }
 

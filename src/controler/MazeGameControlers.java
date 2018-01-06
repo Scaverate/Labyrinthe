@@ -43,11 +43,11 @@ public interface MazeGameControlers {
 	public int getYellowPlayerScore();
 	public int getGreenPlayerScore();
 	public void switchJoueur();
+	public Couleur getColorCurrentPlayer();
 	
 	public List<TreasureIHMs> getTreasuresIHMs();
 	public List<CouloirIHM> getCouloirsIHMs();
 	public CouloirIHM getExtraCorridorIHM();
 	public List<PieceIHMs> getPiecesIHMs();
 	public List<Coord> findPath(Coord coord);
-
 }

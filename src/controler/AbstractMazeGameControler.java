@@ -83,7 +83,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	}
 
 	
-	protected Couleur getColorCurrentPlayer(){		
+	public Couleur getColorCurrentPlayer(){		
 		return this.mazeGame.getColorCurrentPlayer();		
 	}
 
