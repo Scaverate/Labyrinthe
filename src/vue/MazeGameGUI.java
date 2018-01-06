@@ -485,7 +485,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		int CoordInitialeX = this.mazeGameControler.getCurrentCoordInitiale().x;
 		int CoordInitialeY = this.mazeGameControler.getCurrentCoordInitiale().y;
 		String nameJeuCourant = this.mazeGameControler.getCurrentNamePlayer();
-		Object[] options = {/*"Rejouer",*/
+		Object[] options = {
 				"Quitter"};
 
 		 JLayeredPane layeredPane;
@@ -520,7 +520,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0){
 					treasureToCatch = this.mazeGameControler
 							.currentTreasureToCatch();
-					System.out.println(treasureToCatch);
 					if (destinationX == treasureToCatch.getTreasureX()
 							&& destinationY == treasureToCatch.getTreasureY()) {
 						this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
@@ -546,15 +545,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 							JOptionPane.PLAIN_MESSAGE,
 							null,
 							options,
-							/*options[1]*/options[0]);
-					System.out.println("VALEUR DE N EST :"+n);
+							options[0]);
 					if(n==0){
 						System.exit(0);
-					}/*else{
-						initMazeGame(nbPlayer);
-					}*/
-				}else{
-					System.out.println("Vous avez atteint le score max, rendez vous à votre position initiale pour gagner");
+					}
 				}
 			}
 
