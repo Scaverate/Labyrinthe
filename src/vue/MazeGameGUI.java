@@ -504,9 +504,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
 	
-		imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-		//On cree la zone pour la pile de cartes
-		tresorToCatch.setIcon(imageTreasureToCatch);
 
 		if (isMoveOK) {
 			System.out.println("déplacement OK");
@@ -544,6 +541,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
 				player.setText("Tour du joueur : Toad");
 			}
+			treasureToCatch = this.mazeGameControler
+					.currentTreasureToCatch();
+	
+			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+			//On cree la zone pour la pile de cartes
+			tresorToCatch.setIcon(imageTreasureToCatch);
 		}
 	 }
 
