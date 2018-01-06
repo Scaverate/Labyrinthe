@@ -503,16 +503,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					this.mazeGameControler.setCurrentTreasureToCatch(null);
 					//Lors d'un changement de score, on les affiche de nouveau
 					//On met à jour les tableaux de score également
-					System.out.println("Le score du joueur rouge est : " + mazeGameControler.getRedPlayerScore());
-					System.out.println("Le score du joueur bleu est : " + mazeGameControler.getBluePlayerScore());
+					System.out.println("Le score du joueur Mario est : " + mazeGameControler.getRedPlayerScore());
+					System.out.println("Le score du joueur Luigi est : " + mazeGameControler.getBluePlayerScore());
 					scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
 					scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
 					if(nbPlayer==3 || nbPlayer==4) {
-						System.out.println("Le score du joueur jaune est : " + mazeGameControler.getYellowPlayerScore());
+						System.out.println("Le score du joueur Yoshi est : " + mazeGameControler.getYellowPlayerScore());
 						scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
 					}
 					if(nbPlayer==4) {
-						System.out.println("Le score du joueur vert est : " + mazeGameControler.getGreenPlayerScore());
+						System.out.println("Le score du joueur Toad est : " + mazeGameControler.getGreenPlayerScore());
 						scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
 					}
 
