@@ -575,19 +575,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 				// modification du labyrinthe
 				switch((String) selectedValueDirection) {
-					case "Haut" : {
+					case "Haut": {
 						command = "pushUp";
 						break;
 					}
-					case "Bas" : {
+					case "Bas": {
 						command = "pushDown";
 						break;
 					}
-					case "Gauche" : {
+					case "Gauche": {
 						command = "pushLeft";
 						break;
 					}
-					case "Droite" : {
+					case "Droite": {
 						command = "pushRight";
 						break;
 					}
@@ -597,22 +597,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					}
 				}
 				this.mazeGameControler.switchJoueur();
-				this.alterMaze();
-			}else{
-				if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
-					int n = JOptionPane.showOptionDialog(frame,
-							"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
-							"VICTOIRE",
-							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.PLAIN_MESSAGE,
-							null,
-							options,
-							options[0]);
-					if(n==0){
-						System.exit(0);
-					}
+				if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
+					player.setText("Tour du joueur : Mario");
 				}
-				mazeGameControler.move(null, null);
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
+					player.setText("Tour du joueur : Luigi");
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
+					player.setText("Tour du joueur : Yoshi");
+				}
+				this.mazeGameControler.switchJoueur();
+				this.alterMaze();
 			}
 
 			File g = new File("");
@@ -666,6 +661,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			mazeAltered = false;
 		}
 		else {
+			if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
+				int n = JOptionPane.showOptionDialog(frame,
+						"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
+						"VICTOIRE",
+						JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE,
+						null,
+						options,
+						options[0]);
+				if(n==0){
+					System.exit(0);
+				}
+			}
 			mazeGameControler.move(null, null);
 		}
 	 }
