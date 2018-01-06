@@ -128,7 +128,7 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		return true;
+		return canMove;
 	}
 	
 	private boolean isPieceAnyColor(int coord1, int coord2){
