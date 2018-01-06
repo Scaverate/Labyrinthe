@@ -6,7 +6,10 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import tools.MazeImageProvider;
 import tools.MazeTreasureImage;
 import model.Coord;
@@ -29,6 +32,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private static final long serialVersionUID = 1L;
 	private JLayeredPane layeredPane;
 	private JLabel tresorToCatch;
+	private JLabel bgGame;
+	private Icon bg;
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
@@ -42,7 +47,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel scoreYoshi;
 	private JLabel scoreLuigi;
 	private JLabel scoreToad;
-	private JLabel player;
+	private JLabel player,playerText;
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
@@ -72,18 +77,41 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeContainer = new JLayeredPane();
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
-		
+		Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
+
+	    
 		// on cree le container du menu
 	    b1 = Box.createHorizontalBox();
 		b1.setOpaque(true); // background gris desactive
 		grpButton = new ButtonGroup();
-		nb2Button = new JRadioButton("2 joueurs");
-		nb3Button = new JRadioButton("3 joueurs");
-		nb4Button = new JRadioButton("4 joueurs");
+		nb2Button = new JRadioButton("2 JOUEURS");
+		nb3Button = new JRadioButton("3 JOUEURS");
+		nb4Button = new JRadioButton("4 JOUEURS");
+		
+		nb2Button.setFont(myFont);
+		nb3Button.setFont(myFont);
+		nb4Button.setFont(myFont);
+		
+		nb2Button.setForeground(Color.WHITE);
+		nb2Button.setBackground(Color.BLACK);
+		Border lineRadio1 = new LineBorder(Color.WHITE);
+		Border marginRadio1 = new EmptyBorder(8, 35, 8, 35);
+		Border compoundRadio1 = new CompoundBorder(lineRadio1, marginRadio1);
+		nb2Button.setBorder(compoundRadio1);
 
-		nb2Button.setOpaque(false);
-		nb3Button.setOpaque(false);
-		nb4Button.setOpaque(false);
+		nb3Button.setForeground(Color.WHITE);
+		nb3Button.setBackground(Color.BLACK);
+		Border lineRadio2 = new LineBorder(Color.WHITE);
+		Border marginRadio2 = new EmptyBorder(8, 35, 8, 35);
+		Border compoundRadio2 = new CompoundBorder(lineRadio2, marginRadio2);
+		nb3Button.setBorder(compoundRadio2);
+		
+		nb4Button.setForeground(Color.WHITE);
+		nb4Button.setBackground(Color.BLACK);
+		Border lineRadio3 = new LineBorder(Color.WHITE);
+		Border marginRadio3 = new EmptyBorder(8, 35, 8, 35);
+		Border compoundRadio3 = new CompoundBorder(lineRadio3, marginRadio3);
+		nb4Button.setBorder(compoundRadio3);
 		
 		// ajout des boutons radio dans le groupe bg
 		grpButton.add(nb2Button);
@@ -110,12 +138,26 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		b1.add(nb2Button);
 		b1.add(nb3Button);
 		b1.add(nb4Button);
+		b1.setBorder(BorderFactory.createMatteBorder(
+                1, 1, 1, 1, Color.WHITE));
 		nb2Button.setSelected(true);
 		
 		b2 = Box.createHorizontalBox();
 		b2.setOpaque(false); // background gris desactive
 		// Lancer le jeu
-		okButton = new JButton("Lancer");
+		
+		okButton = new JButton("JOUER");
+		okButton.setForeground(Color.WHITE);
+		okButton.setBackground(Color.BLACK);
+		Border line = new LineBorder(Color.WHITE);
+		Border margin = new EmptyBorder(8, 35, 8, 35);
+		Border compound = new CompoundBorder(line, margin);
+		okButton.setBorder(compound);
+		
+		
+		
+		okButton.setFont(myFont);
+		okButton.setIcon(new ImageIcon(getClass().getResource("../images/icon_play.png")));
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				initMazeGame(nbPlayer);	
@@ -141,7 +183,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		contentPane.setPreferredSize(windowSize);
 		setContentPane(contentPane);	
 	}
-	
+
 	public void initMazeGame(int nbPlayer) {
 		Dimension windowSize = new Dimension(950,1000);		
 		Icon imageIcon;
@@ -156,7 +198,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel extraCardImage;	
 		
 		
-		setContentPane(mazeContainer);
+	   	setContentPane(mazeContainer);
+	   	
 		repaint();
 		pack();
 		
@@ -207,17 +250,24 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		//On crée le panel du joueur actif
-		activePlayer = new JPanel(new BorderLayout());
+		activePlayer = new JPanel(new BorderLayout(1,2));
 		
 		//On crée le label sur lequel le joueur actif sera récupéré
 		player = new JLabel();
-		
+		playerText = new JLabel();
+		playerText.setText("JOUEUR  :" + " ");
 		//On initialise le joueur devant jouer à "Mario"
-		player.setText("Tour du joueur : Mario");
+		File g = new File("");
+		String path = "/src/images/";
+		String ret = g.getAbsolutePath() + path + "pion_rouge.png";
+		bg = new ImageIcon(ret); 
+		player.setIcon(bg);
+		
 		
 		//On ajoute le JLabel sur le JPanel
-		activePlayer.add(player);
-		
+		activePlayer.add(playerText,BorderLayout.PAGE_START);
+		activePlayer.add(player,BorderLayout.PAGE_END);
+		activePlayer.setOpaque(false);		
 		//On definit la taille de la grille generale
 		generalBoard.setPreferredSize(windowSize);
 		generalBoard.setBounds(0, 0, windowSize.width, windowSize.height);
@@ -367,15 +417,24 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On cree la zone pour la pile de cartes
 		tresorToCatch.setIcon(imageTreasureToCatch);
 
+		g = new File("");
+		path = "/src/images/";
+		 ret = g.getAbsolutePath() + path + "bgGame.jpg";
+		
+		bg = new ImageIcon(ret);
+		bgGame = new JLabel(); 
+		bgGame.setIcon(bg);
+		
 		generalBoard.add(tresorToCatch,"pos 0.892al 0.458al");
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
 		generalBoard.add(rotateLeftButton, "pos 0.915al 0al");
 		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
-		generalBoard.add(activePlayer, "pos 0.94al 0.25al");
+		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
-
+		generalBoard.add(bgGame,"pos 0 0");
+		
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
@@ -553,18 +612,23 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 
 			this.mazeGameControler.switchJoueur();
+			File g = new File("");
+			String path = "/src/images/";
+			String ret = "";
 			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-				player.setText("Tour du joueur : Mario");
+				ret = g.getAbsolutePath() + path + "pion_rouge.png";
 			}
 			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-				player.setText("Tour du joueur : Luigi");
+				ret = g.getAbsolutePath() + path + "pion_bleu.png";
 			}
 			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-				player.setText("Tour du joueur : Yoshi");
+				ret = g.getAbsolutePath() + path + "pion_jaune.png";
 			}
 			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-				player.setText("Tour du joueur : Toad");
+				ret = g.getAbsolutePath() + path + "pion_vert.png";
 			}
+			bg = new ImageIcon(ret); 
+			player.setIcon(bg);
 			treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
 	
