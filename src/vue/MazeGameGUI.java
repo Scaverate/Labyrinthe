@@ -28,6 +28,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	 */
 	private static final long serialVersionUID = 1L;
 	private JLayeredPane layeredPane;
+	private JLabel tresorToCatch;
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
@@ -502,9 +503,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				
 				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
 				//On cree la zone pour la pile de cartes
-				JLabel tresorToCatch;
+
+
 				tresorToCatch = new JLabel(imageTreasureToCatch);
-				
+				generalBoard.add(tresorToCatch,"pos 0.909al 0.3al");
 				
 
 				
