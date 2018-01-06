@@ -131,7 +131,7 @@ public class Plateau implements BoardGames {
 	 * 	* si commande "pushRight" -> indique une ligne
 	 */
 	public boolean alterMaze(String command, int position) {
-		//TODO ajouter le décalage des objets et personnages
+		//TODO ajouter le décalage des personnages
 
 		boolean commandComplete;
 		List<Couloirs> couloirPushed = new LinkedList<>();
@@ -179,24 +179,28 @@ public class Plateau implements BoardGames {
 		// en fonction de la commande passe on traite
 		switch(command) {
 			case "pushDown" : {
+				this.pushJoueursDown(position);
 				treasuresPushed = this.pushTreasuresDown(position);
 				couloirPushed = this.pushCouloirsDown(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushUp" : {
+				this.pushJoueursUp(position);
 				treasuresPushed = this.pushTreasuresUp(position);
 				couloirPushed = this.pushCouloirsUp(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushLeft" : {
+				this.pushJoueursLeft(position);
 				treasuresPushed = this.pushTreasuresLeft(position);
 				couloirPushed = this.pushCouloirsLeft(position);
 				commandComplete = true;
 				break;
 			}
 			case "pushRight" : {
+				this.pushJoueursRight(position);
 				treasuresPushed = this.pushTreasuresRight(position);
 				couloirPushed = this.pushCouloirsRight(position);
 				commandComplete = true;
@@ -259,6 +263,54 @@ public class Plateau implements BoardGames {
 			}
 		}
 		return treasuresToAdd;
+	}
+	private void pushJoueursDown(int position) {
+		List<Jeu> jeuxToMoveOut = new LinkedList<>();
+		List<Jeu> jeuxMoved = new LinkedList<>();
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getX() == position) {
+				if (couloir.getY() == 6) {
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuVert);
+					}
+				}
+			}
+		}
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getX() == position) {
+				if (couloir.getY() < 6) {
+					// on déplace le joueur d'une case
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuBleu) && !jeuxMoved.contains(jeuBleu)) {
+						this.jeuBleu.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() + 1);
+						jeuxMoved.add(jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuRouge) && !jeuxMoved.contains(jeuRouge)) {
+						this.jeuRouge.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() + 1);
+						jeuxMoved.add(jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuJaune) && !jeuxMoved.contains(jeuJaune)) {
+						this.jeuJaune.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() + 1);
+						jeuxMoved.add(jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuVert) && !jeuxMoved.contains(jeuVert)) {
+						this.jeuVert.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() + 1);
+						jeuxMoved.add(jeuVert);
+					}
+				}
+			}
+		}
+		for(Jeu jeu : jeuxToMoveOut) {
+			jeu.move(position, 6, position, 0);
+		}
 	}
 	private List<Couloirs> pushCouloirsDown(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
@@ -331,6 +383,54 @@ public class Plateau implements BoardGames {
 		}
 		return treasuresToAdd;
 	}
+	private void pushJoueursUp(int position) {
+		List<Jeu> jeuxToMoveOut = new LinkedList<>();
+		List<Jeu> jeuxMoved = new LinkedList<>();
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getX() == position) {
+				if (couloir.getY() == 0) {
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuVert);
+					}
+				}
+			}
+		}
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getX() == position) {
+				if (couloir.getY() > 0) {
+					// on déplace le joueur d'une case
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuBleu) && !jeuxMoved.contains(jeuBleu)) {
+						this.jeuBleu.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() - 1);
+						jeuxMoved.add(jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuRouge) && !jeuxMoved.contains(jeuRouge)) {
+						this.jeuRouge.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() - 1);
+						jeuxMoved.add(jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuJaune) && !jeuxMoved.contains(jeuJaune)) {
+						this.jeuJaune.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() - 1);
+						jeuxMoved.add(jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuVert) && !jeuxMoved.contains(jeuVert)) {
+						this.jeuVert.move(couloir.getX(), couloir.getY(), couloir.getX(), couloir.getY() - 1);
+						jeuxMoved.add(jeuVert);
+					}
+				}
+			}
+		}
+		for(Jeu jeu : jeuxToMoveOut) {
+			jeu.move(position, 0, position, 6);
+		}
+	}
 	private List<Couloirs> pushCouloirsUp(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
@@ -402,6 +502,54 @@ public class Plateau implements BoardGames {
 		}
 		return treasuresToAdd;
 	}
+	private void pushJoueursLeft(int position) {
+		List<Jeu> jeuxToMoveOut = new LinkedList<>();
+		List<Jeu> jeuxMoved = new LinkedList<>();
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getY() == position) {
+				if (couloir.getX() == 0) {
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuVert);
+					}
+				}
+			}
+		}
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getY() == position) {
+				if (couloir.getX() > 0) {
+					// on déplace le joueur d'une case
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuBleu) && !jeuxMoved.contains(jeuBleu)) {
+						this.jeuBleu.move(couloir.getX(), couloir.getY(), couloir.getX() - 1, couloir.getY());
+						jeuxMoved.add(jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuRouge) && !jeuxMoved.contains(jeuRouge)) {
+						this.jeuRouge.move(couloir.getX(), couloir.getY(), couloir.getX() - 1, couloir.getY());
+						jeuxMoved.add(jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuJaune) && !jeuxMoved.contains(jeuJaune)) {
+						this.jeuJaune.move(couloir.getX(), couloir.getY(), couloir.getX() - 1, couloir.getY());
+						jeuxMoved.add(jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuVert) && !jeuxMoved.contains(jeuVert)) {
+						this.jeuVert.move(couloir.getX(), couloir.getY(), couloir.getX() - 1, couloir.getY());
+						jeuxMoved.add(jeuVert);
+					}
+				}
+			}
+		}
+		for(Jeu jeu : jeuxToMoveOut) {
+			jeu.move(0, position, 6, position);
+		}
+	}
 	private List<Couloirs> pushCouloirsLeft(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
 		Couloirs oldExtra = new CouloirAmovible(
@@ -472,6 +620,54 @@ public class Plateau implements BoardGames {
 			}
 		}
 		return treasuresToAdd;
+	}
+	private void pushJoueursRight(int position) {
+		List<Jeu> jeuxToMoveOut = new LinkedList<>();
+		List<Jeu> jeuxMoved = new LinkedList<>();
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getY() == position) {
+				if (couloir.getX() == 6) {
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY())) {
+						jeuxToMoveOut.add(this.jeuVert);
+					}
+				}
+			}
+		}
+		for(Couloirs couloir : this.couloirs) {
+			if (couloir.getY() == position) {
+				if (couloir.getX() < 6) {
+					// on déplace le joueur d'une case
+					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuBleu) && !jeuxMoved.contains(jeuBleu)) {
+						this.jeuBleu.move(couloir.getX(), couloir.getY(), couloir.getX() + 1, couloir.getY());
+						jeuxMoved.add(jeuBleu);
+					}
+					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuRouge) && !jeuxMoved.contains(jeuRouge)) {
+						this.jeuRouge.move(couloir.getX(), couloir.getY(), couloir.getX() + 1, couloir.getY());
+						jeuxMoved.add(jeuRouge);
+					}
+					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuJaune) && !jeuxMoved.contains(jeuJaune)) {
+						this.jeuJaune.move(couloir.getX(), couloir.getY(), couloir.getX() + 1, couloir.getY());
+						jeuxMoved.add(jeuJaune);
+					}
+					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY()) && !jeuxToMoveOut.contains(this.jeuVert) && !jeuxMoved.contains(jeuVert)) {
+						this.jeuVert.move(couloir.getX(), couloir.getY(), couloir.getX() + 1, couloir.getY());
+						jeuxMoved.add(jeuVert);
+					}
+				}
+			}
+		}
+		for(Jeu jeu : jeuxToMoveOut) {
+			jeu.move(6, position, 0, position);
+		}
 	}
 	private List<Couloirs> pushCouloirsRight(int position) {
 		List<Couloirs> couloirsToAdd = new LinkedList<>();
@@ -912,7 +1108,8 @@ public class Plateau implements BoardGames {
 			}
 		};
 
-
+		// debug deplacement objets
+		/*
 		Collections.sort(plateau.treasures, compareTreasures);
 		System.out.println(plateau.treasures);
 		System.out.println(plateau.extraTreasure);
@@ -934,6 +1131,16 @@ public class Plateau implements BoardGames {
 		Collections.sort(plateau.treasures, compareTreasures);
 		System.out.println(plateau.treasures);
 		System.out.println(plateau.extraTreasure);
+		*/
+
+		// debug deplacement joueur
+		System.out.println(plateau.jeuCourant);
+		plateau.jeuCourant.move(0,0,1,0);
+		System.out.println(plateau.jeuCourant);
+		plateau.alterMaze("pushUp", 1);
+		System.out.println(plateau.jeuCourant);
+		plateau.alterMaze("pushUp", 1);
+		System.out.println(plateau.jeuCourant);
 
 	}
 }

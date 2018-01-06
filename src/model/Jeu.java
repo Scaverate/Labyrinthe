@@ -79,12 +79,6 @@ public class Jeu implements Game {
 		}
 		return done;
 	}
-
-	@Override
-	public boolean capture(int xCatch, int yCatch) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 	/**
 	 * @return une version réduite de la liste des pièces en cours

@@ -36,15 +36,5 @@ public interface Game  {
 	 */
 	public boolean move(int xInit, int yInit, int xFinal, int yFinal) ;
 
-	/**
-	 * @param xCatch
-	 * @param yCatch
-	 * @return true si la piece aux coordonnées finales
-	 * a été capturée
-	 */
-	public boolean capture(int xCatch, int yCatch) ;
-
-
-
 }
 

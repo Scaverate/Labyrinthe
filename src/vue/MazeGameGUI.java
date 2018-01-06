@@ -421,6 +421,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
+
+		// dès le départ on modifie une première fois le lab pour le tour du premier joueur
+		this.alterMaze();
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -436,47 +439,45 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			return;
 		}
 
-		if (componentPressed != null) {
-			JLayeredPane destinationPane = (JLayeredPane) componentPressed
-					.getParent();
+		JLayeredPane destinationPane = (JLayeredPane) componentPressed
+				.getParent();
 
-			// on ne prend que la couche la plus haute
-			if (destinationPane.getLayer(componentPressed) == COULOIR_LAYER
-					|| destinationPane.getLayer(componentPressed) == TREASURE_LAYER) {
-				return;
-			}
+		// on ne prend que la couche la plus haute
+		if (destinationPane.getLayer(componentPressed) == COULOIR_LAYER
+				|| destinationPane.getLayer(componentPressed) == TREASURE_LAYER) {
+			return;
+		}
 
-			Point parentLocation = componentPressed.getParent().getLocation();
-			xAdjustment = parentLocation.x - e.getX();
-			yAdjustment = parentLocation.y - e.getY();
-			this.pawn = (JLabel) componentPressed;
-			parent = (JLayeredPane) componentPressed.getParent();
-			xOrigine = e.getX() / (this.mazeBoard.getHeight() / 7);
-			yOrigine = e.getY() / (this.mazeBoard.getHeight() / 7);
-			this.pawn.setLocation(e.getX() + xAdjustment, e.getY()
-					+ yAdjustment);
-			this.pawn.setSize(this.pawn.getWidth(), this.pawn.getHeight());
+		Point parentLocation = componentPressed.getParent().getLocation();
+		xAdjustment = parentLocation.x - e.getX();
+		yAdjustment = parentLocation.y - e.getY();
+		this.pawn = (JLabel) componentPressed;
+		parent = (JLayeredPane) componentPressed.getParent();
+		xOrigine = e.getX() / (this.mazeBoard.getHeight() / 7);
+		yOrigine = e.getY() / (this.mazeBoard.getHeight() / 7);
+		this.pawn.setLocation(e.getX() + xAdjustment, e.getY()
+				+ yAdjustment);
+		this.pawn.setSize(this.pawn.getWidth(), this.pawn.getHeight());
 
-			if (parent != null) {
-				this.mazeContainer.add(this.pawn, JLayeredPane.DRAG_LAYER);
+		if (parent != null) {
+			this.mazeContainer.add(this.pawn, JLayeredPane.DRAG_LAYER);
 
-				// TODO a reprendre pour generation chemin possible
-				// on grise les cases ou on ne peut pas se deplacer
-				reacheableCoords = this.mazeGameControler.findPath(new Coord(xOrigine, yOrigine));
-				for (Component component : this.mazeBoard.getComponents()) {
-					xDest = component.getX() / (this.mazeBoard.getHeight()/7);
-					yDest = component.getY() / (this.mazeBoard.getHeight()/7);
-					isOkDest = false;
-					for(Coord coord : reacheableCoords) {
-						if(coord.x == xDest && coord.y == yDest) {
-							isOkDest = true;
-						}
+			// TODO a reprendre pour generation chemin possible
+			// on grise les cases ou on ne peut pas se deplacer
+			reacheableCoords = this.mazeGameControler.findPath(new Coord(xOrigine, yOrigine));
+			for (Component component : this.mazeBoard.getComponents()) {
+				xDest = component.getX() / (this.mazeBoard.getHeight()/7);
+				yDest = component.getY() / (this.mazeBoard.getHeight()/7);
+				isOkDest = false;
+				for(Coord coord : reacheableCoords) {
+					if(coord.x == xDest && coord.y == yDest) {
+						isOkDest = true;
 					}
-					if(!isOkDest) {
-						if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
-							//TODO moche ajouter un test
-							((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
-						}
+				}
+				if(!isOkDest) {
+					if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
+						//TODO moche ajouter un test
+						((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
 					}
 				}
 			}
@@ -548,31 +549,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
 
-		// choix modification du labyrinthe
-		String[] possibleValuesDirection = { "Haut", "Bas", "Gauche", "Droite" };
-		Object selectedValueDirection = JOptionPane.showInputDialog(
-				null,
-				"Choisir une valeur pour la direction",
-				"Direction",
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				possibleValuesDirection,
-				possibleValuesDirection[0]
-		);
-		boolean upDown = (possibleValuesDirection.equals("Haut") || possibleValuesDirection.equals("Bas"));
-		String[] possibleValuesNumber = { "1", "3", "5" };
-		Object selectedValueNumber = JOptionPane.showInputDialog(
-				null,
-				"Choisir une valeur pour la " +  (upDown ? "colonne" : "ligne") + " à pousser",
-				"Choix " + (upDown ? "colonne" : "ligne"),
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				possibleValuesNumber,
-				possibleValuesNumber[0]
-		);
-
-		// on ne laisse pas l'option de bouger si on n'a pas choisi de modification pour le labyrinthe
-		if(selectedValueNumber != null && selectedValueDirection!= null) {
 			boolean isMoveOK = mazeGameControler.move(
 					new Coord(xOrigine, yOrigine),
 					new Coord(destinationX, destinationY)
@@ -599,6 +575,31 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						}
 					}
 				}
+				// modification du labyrinthe
+				switch((String) selectedValueDirection) {
+					case "Haut" : {
+						command = "pushUp";
+						break;
+					}
+					case "Bas" : {
+						command = "pushDown";
+						break;
+					}
+					case "Gauche" : {
+						command = "pushLeft";
+						break;
+					}
+					case "Droite" : {
+						command = "pushRight";
+						break;
+					}
+					default: {
+						command = "";
+						break;
+					}
+				}
+				this.mazeGameControler.switchJoueur();
+				this.alterMaze();
 			}else{
 				if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
 					int n = JOptionPane.showOptionDialog(frame,
@@ -613,33 +614,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						System.exit(0);
 					}
 				}
-					// modification du labyrinthe
-					switch((String) selectedValueDirection) {
-						case "Haut" : {
-							command = "pushUp";
-							break;
-						}
-						case "Bas" : {
-							command = "pushDown";
-							break;
-						}
-						case "Gauche" : {
-							command = "pushLeft";
-							break;
-						}
-						case "Droite" : {
-							command = "pushRight";
-							break;
-						}
-						default: {
-							command = "";
-							break;
-						}
-					}
-					this.mazeGameControler.alterMaze(command, Integer.parseInt((String)selectedValueNumber));
+				mazeGameControler.move(null, null);
 			}
 
-			this.mazeGameControler.switchJoueur();
 			File g = new File("");
 			String path = "/src/images/";
 			String ret = "";
@@ -667,10 +644,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 			//On cree la zone pour la pile de cartes
 			tresorToCatch.setIcon(imageTreasureToCatch);
-		}
-		else {
-			mazeGameControler.move(null, null);
-		}
 	 }
 
 	public void mouseClicked(MouseEvent e) {}
@@ -730,6 +703,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		// si mise à jour du pion
 		else if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
 			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
+			// on enlève tous les pions
+			for(CouloirIHMs couloirIHM : this.couloirIHMs){
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7 * couloirIHM.getY() + couloirIHM.getX());
+				//On enlève le pion
+				if (this.layeredPane.getComponentsInLayer(PAWN_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(PAWN_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(PAWN_LAYER)[i]);
+					}
+				}
+			}
+			// on les recrée
 			for (PieceIHMs pieceIHM : piecesIHM) {
 				//On récupère la piece sur le board (son layerded pane)
 				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
@@ -752,7 +738,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 								.getComponentsInLayer(JLayeredPane.DRAG_LAYER)[i]);
 					}
 				}
-
 				// on recrée le pion
 				this.pawn = new JLabel(new ImageIcon(
 						MazeImageProvider.getImageFile("Pion",
@@ -760,7 +745,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				this.pawn.setPreferredSize(new Dimension(100, 100));
 				this.pawn.setBounds(0, 0, 100, 100);
 				this.pawn.setOpaque(false);
-
 				// on rajoute le pion
 				this.layeredPane.add(this.pawn, PAWN_LAYER);
 			}
@@ -907,5 +891,57 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		this.revalidate();
 	}
 
+	private void alterMaze() {
+		String command;
+		// choix modification du labyrinthe
+		String[] possibleValuesDirection = { "Haut", "Bas", "Gauche", "Droite" };
+		Object selectedValueDirection = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la direction",
+				"Direction",
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesDirection,
+				possibleValuesDirection[0]
+		);
+		boolean upDown = (possibleValuesDirection.equals("Haut") || possibleValuesDirection.equals("Bas"));
+		String[] possibleValuesNumber = { "1", "3", "5" };
+		Object selectedValueNumber = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la " +  (upDown ? "colonne" : "ligne") + " à pousser",
+				"Choix " + (upDown ? "colonne" : "ligne"),
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesNumber,
+				possibleValuesNumber[0]
+		);
+
+		// modification du labyrinthe
+		selectedValueDirection = selectedValueDirection == null ? "Haut" : selectedValueDirection;
+		selectedValueNumber = selectedValueNumber == null ? "1" : selectedValueNumber;
+		switch((String) selectedValueDirection) {
+			case "Haut" : {
+				command = "pushUp";
+				break;
+			}
+			case "Bas" : {
+				command = "pushDown";
+				break;
+			}
+			case "Gauche" : {
+				command = "pushLeft";
+				break;
+			}
+			case "Droite" : {
+				command = "pushRight";
+				break;
+			}
+			default: {
+				command = "pushUp";
+				break;
+			}
+		}
+		this.mazeGameControler.alterMaze(command, Integer.parseInt((String) selectedValueNumber));
+	}
 
 }
