@@ -61,6 +61,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
 	private JFrame f1;
+	private boolean mazeAltered = false;
 
 	
 	public MazeGameGUI(Dimension dim) {
@@ -277,14 +278,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("Gauche");
+		rotateLeftButton = new JButton("Modifier le labyrinthe");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mazeGameControler.rotateExtraCardLeft();
+				alterMaze();
+				mazeAltered = true;
 			}
 		});
 		//Bouton de rotation droit
-		rotateRightButton = new JButton("Droite");
+		rotateRightButton = new JButton("Rotation du couloir");
 		rotateRightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeGameControler.rotateExtraCardRight();
@@ -415,14 +417,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
 		generalBoard.add(bgGame,"pos 0 0");
-		
+
 		mazeContainer.add(generalBoard);
 		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
-
-		// dès le départ on modifie une première fois le lab pour le tour du premier joueur
-		this.alterMaze();
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -547,14 +546,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
-
+		if(mazeAltered) {
+			// deplacement du pion
 			boolean isMoveOK = mazeGameControler.move(
 					new Coord(xOrigine, yOrigine),
 					new Coord(destinationX, destinationY)
 			);
+
 			if (isMoveOK) {
 				System.out.println("déplacement OK");
-				String command;
 				Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
 						e.getY());
 				parentComponentHere = (JLayeredPane) componentHere.getParent();
@@ -643,6 +643,32 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 			//On cree la zone pour la pile de cartes
 			tresorToCatch.setIcon(imageTreasureToCatch);
+
+			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
+				player.setText("Tour du joueur : Mario");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
+				player.setText("Tour du joueur : Luigi");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
+				player.setText("Tour du joueur : Yoshi");
+			}
+			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
+				player.setText("Tour du joueur : Toad");
+			}
+			treasureToCatch = this.mazeGameControler
+					.currentTreasureToCatch();
+
+			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+			//On cree la zone pour la pile de cartes
+			tresorToCatch.setIcon(imageTreasureToCatch);
+
+			this.mazeGameControler.switchJoueur();
+			mazeAltered = false;
+		}
+		else {
+			mazeGameControler.move(null, null);
+		}
 	 }
 
 	public void mouseClicked(MouseEvent e) {}
