@@ -936,6 +936,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				possibleValuesDirection,
 				possibleValuesDirection[0]
 		);
+		if(selectedValueDirection == null) {
+			return false;
+		}
 		// TODO vérifier
 		boolean upDown = (possibleValuesDirection.equals(CMD_HAUT) || possibleValuesDirection.equals(CMD_BAS));
 		String columnOrLine = (upDown ? "colonne" : "ligne");
