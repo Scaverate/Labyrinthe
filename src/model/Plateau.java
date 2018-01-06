@@ -217,8 +217,6 @@ public class Plateau implements BoardGames {
 		// pour la rajouter avec les nouvelles valeurs
 		this.couloirs.addAll(couloirPushed);
 
-		//System.out.println(treasuresToRemove.size());
-		//System.out.println(treasuresPushed.size());
 		// on supprime les anciens trésors
 		this.treasures.removeAll(treasuresToRemove);
 		// pour la rajouter avec les nouvelles valeurs

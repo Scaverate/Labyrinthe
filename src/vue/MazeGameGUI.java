@@ -181,7 +181,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Dimension windowSize = new Dimension(950,1000);		
 		Icon imageIcon;
 		Icon disabledIcon;
-		//List<CouloirIHM> couloirIHMs;
 		List<PieceIHMs> pieceIHMs;
 		JLabel couloir;
 		JLabel treasure;
