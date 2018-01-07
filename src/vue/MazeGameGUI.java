@@ -690,7 +690,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			ImageIcon imageIcon;
 			ImageIcon disabledIcon;
 
-
 			if (extraCardPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
 				for (int i = 0; i < extraCardPane
 						.getComponentsInLayer(COULOIR_LAYER).length; i++) {

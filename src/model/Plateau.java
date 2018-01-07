@@ -227,6 +227,26 @@ public class Plateau implements BoardGames {
 
 	private List<Treasures> pushTreasuresDown(int position) {
 		List<Treasures> treasuresToAdd = new LinkedList<>();
+		List<Treasures> drawableTreasureToAdd = new LinkedList<>();
+		List<Treasures> drawableTreasureToRemove = new LinkedList<>();
+		Treasure movedTreasure;
+		Treasure jeuRougeTreasureToCatch = null;
+		Treasure jeuBleuTreasureToCatch = null;
+		Treasure jeuVertTreasureToCatch = null;
+		Treasure jeuJauneTreasureToCatch = null;
+
+		if(this.jeuRouge != null) {
+			jeuRougeTreasureToCatch = this.jeuRouge.getTreasureToCatch();
+		}
+		if(this.jeuBleu != null){
+			jeuBleuTreasureToCatch = this.jeuBleu.getTreasureToCatch();
+		}
+		if(this.jeuVert != null) {
+			jeuVertTreasureToCatch = this.jeuVert.getTreasureToCatch();
+		}
+		if(this.jeuJaune != null) {
+			jeuJauneTreasureToCatch = this.jeuJaune.getTreasureToCatch();
+		}
 
 		// si on a un tresor sur la piece supp
 		if(this.extraTreasure != null) {
@@ -238,6 +258,34 @@ public class Plateau implements BoardGames {
 					this.extraTreasure.isCatched()
 			);
 			treasuresToAdd.add(oldExtra);
+			//gestion des draw
+			for(Treasures treasure : this.treasureToDraw) {
+				if(treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
+					drawableTreasureToRemove.add(treasure);
+				}
+			}
+			drawableTreasureToAdd.add(oldExtra);
+			// changement de tresor a attrapper
+			if(jeuRougeTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
+					this.jeuRouge.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuBleuTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
+					this.jeuBleu.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuVertTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+					this.jeuVert.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuJauneTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+					this.jeuJaune.setTreasureToCatch(oldExtra);
+				}
+			}
 			this.extraTreasure = null;
 		}
 
@@ -248,18 +296,63 @@ public class Plateau implements BoardGames {
 					this.extraTreasure = (Treasure) treasure;
 				}
 				else {
-					treasuresToAdd.add(
-						new Treasure(
+					movedTreasure = new Treasure(
 							treasure.getTreasureX(),
 							treasure.getTreasureY() + 1,
 							treasure.getTreasureId(),
 							treasure.getTreasureType(),
 							treasure.isCatched()
-						)
 					);
+					if(jeuRougeTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
+							this.jeuRouge.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuBleuTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
+							this.jeuBleu.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuVertTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+							this.jeuVert.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuJauneTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+							this.jeuJaune.setTreasureToCatch(movedTreasure);
+						}
+					}
+					treasuresToAdd.add(movedTreasure);
 				}
 			}
 		}
+		for(Treasures treasure : this.treasureToDraw) {
+			if(treasure.getTreasureX() == position) {
+				if(treasure.getTreasureY() == 6) {
+					movedTreasure = new Treasure(
+							-1,
+							-1,
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+				}
+				else{
+					movedTreasure = new Treasure(
+							treasure.getTreasureX(),
+							treasure.getTreasureY() + 1,
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+				}
+				drawableTreasureToAdd.add(movedTreasure);
+				drawableTreasureToRemove.add(treasure);
+			}
+		}
+		this.treasureToDraw.removeAll(drawableTreasureToRemove);
+		this.treasureToDraw.addAll(drawableTreasureToAdd);
 		return treasuresToAdd;
 	}
 	private void pushJoueursDown(int position) {
@@ -349,9 +442,23 @@ public class Plateau implements BoardGames {
 		List<Treasures> drawableTreasureToAdd = new LinkedList<>();
 		List<Treasures> drawableTreasureToRemove = new LinkedList<>();
 		Treasure movedTreasure;
-		// TODO gérer tous les joueurs
-		Treasure jeuRougeTreasureToCatch = this.jeuRouge.getTreasureToCatch();
-		Treasure jeuBleuTreasureToCatch = this.jeuBleu.getTreasureToCatch();
+		Treasure jeuRougeTreasureToCatch = null;
+		Treasure jeuBleuTreasureToCatch = null;
+		Treasure jeuVertTreasureToCatch = null;
+		Treasure jeuJauneTreasureToCatch = null;
+
+		if(this.jeuRouge != null) {
+			jeuRougeTreasureToCatch = this.jeuRouge.getTreasureToCatch();
+		}
+		if(this.jeuBleu != null){
+			jeuBleuTreasureToCatch = this.jeuBleu.getTreasureToCatch();
+		}
+		if(this.jeuVert != null) {
+			jeuVertTreasureToCatch = this.jeuVert.getTreasureToCatch();
+		}
+		if(this.jeuJaune != null) {
+			jeuJauneTreasureToCatch = this.jeuJaune.getTreasureToCatch();
+		}
 
 		// si on a un tresor sur la piece supp
 		if(this.extraTreasure != null) {
@@ -374,13 +481,21 @@ public class Plateau implements BoardGames {
 			if(jeuRougeTreasureToCatch != null) {
 				if(this.extraTreasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
 					this.jeuRouge.setTreasureToCatch(oldExtra);
-					System.out.println("oldextra : " + oldExtra);
 				}
 			}
 			if(jeuBleuTreasureToCatch != null) {
 				if(this.extraTreasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
 					this.jeuBleu.setTreasureToCatch(oldExtra);
-					System.out.println("oldextra : " + oldExtra);
+				}
+			}
+			if(jeuVertTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+					this.jeuVert.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuJauneTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+					this.jeuJaune.setTreasureToCatch(oldExtra);
 				}
 			}
 			this.extraTreasure = null;
@@ -410,6 +525,16 @@ public class Plateau implements BoardGames {
 							this.jeuBleu.setTreasureToCatch(movedTreasure);
 						}
 					}
+					if(jeuVertTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+							this.jeuVert.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuJauneTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+							this.jeuJaune.setTreasureToCatch(movedTreasure);
+						}
+					}
 					treasuresToAdd.add(movedTreasure);
 				}
 			}
@@ -417,7 +542,6 @@ public class Plateau implements BoardGames {
 		for(Treasures treasure : this.treasureToDraw) {
 			if(treasure.getTreasureX() == position) {
 				if(treasure.getTreasureY() == 0) {
-					// TODO traiter extratresure
 					movedTreasure = new Treasure(
 							-1,
 							-1,
@@ -527,6 +651,26 @@ public class Plateau implements BoardGames {
 
 	private List<Treasures> pushTreasuresLeft(int position) {
 		List<Treasures> treasuresToAdd = new LinkedList<>();
+		List<Treasures> drawableTreasureToAdd = new LinkedList<>();
+		List<Treasures> drawableTreasureToRemove = new LinkedList<>();
+		Treasure movedTreasure;
+		Treasure jeuRougeTreasureToCatch = null;
+		Treasure jeuBleuTreasureToCatch = null;
+		Treasure jeuVertTreasureToCatch = null;
+		Treasure jeuJauneTreasureToCatch = null;
+
+		if(this.jeuRouge != null) {
+			jeuRougeTreasureToCatch = this.jeuRouge.getTreasureToCatch();
+		}
+		if(this.jeuBleu != null){
+			jeuBleuTreasureToCatch = this.jeuBleu.getTreasureToCatch();
+		}
+		if(this.jeuVert != null) {
+			jeuVertTreasureToCatch = this.jeuVert.getTreasureToCatch();
+		}
+		if(this.jeuJaune != null) {
+			jeuJauneTreasureToCatch = this.jeuJaune.getTreasureToCatch();
+		}
 
 		// si on a un tresor sur la piece supp
 		if(this.extraTreasure != null) {
@@ -538,6 +682,34 @@ public class Plateau implements BoardGames {
 					this.extraTreasure.isCatched()
 			);
 			treasuresToAdd.add(oldExtra);
+			//gestion des draw
+			for(Treasures treasure : this.treasureToDraw) {
+				if(treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
+					drawableTreasureToRemove.add(treasure);
+				}
+			}
+			drawableTreasureToAdd.add(oldExtra);
+			// changement de tresor a attrapper
+			if(jeuRougeTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
+					this.jeuRouge.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuBleuTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
+					this.jeuBleu.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuVertTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+					this.jeuVert.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuJauneTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+					this.jeuJaune.setTreasureToCatch(oldExtra);
+				}
+			}
 			this.extraTreasure = null;
 		}
 
@@ -548,18 +720,63 @@ public class Plateau implements BoardGames {
 					this.extraTreasure = (Treasure) treasure;
 				}
 				else {
-					treasuresToAdd.add(
-							new Treasure(
-									treasure.getTreasureX() - 1,
-									treasure.getTreasureY(),
-									treasure.getTreasureId(),
-									treasure.getTreasureType(),
-									treasure.isCatched()
-							)
+					movedTreasure = new Treasure(
+							treasure.getTreasureX() - 1,
+							treasure.getTreasureY(),
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
 					);
+					if(jeuRougeTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
+							this.jeuRouge.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuBleuTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
+							this.jeuBleu.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuVertTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+							this.jeuVert.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuJauneTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+							this.jeuJaune.setTreasureToCatch(movedTreasure);
+						}
+					}
+					treasuresToAdd.add(movedTreasure);
 				}
 			}
 		}
+		for(Treasures treasure : this.treasureToDraw) {
+			if(treasure.getTreasureY() == position) {
+				if(treasure.getTreasureX() == 0) {
+					movedTreasure = new Treasure(
+							-1,
+							-1,
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+				}
+				else{
+					movedTreasure = new Treasure(
+							treasure.getTreasureX() - 1,
+							treasure.getTreasureY(),
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+				}
+				drawableTreasureToAdd.add(movedTreasure);
+				drawableTreasureToRemove.add(treasure);
+			}
+		}
+		this.treasureToDraw.removeAll(drawableTreasureToRemove);
+		this.treasureToDraw.addAll(drawableTreasureToAdd);
 		return treasuresToAdd;
 	}
 	private void pushJoueursLeft(int position) {
@@ -646,6 +863,26 @@ public class Plateau implements BoardGames {
 
 	private List<Treasures> pushTreasuresRight(int position) {
 		List<Treasures> treasuresToAdd = new LinkedList<>();
+		List<Treasures> drawableTreasureToAdd = new LinkedList<>();
+		List<Treasures> drawableTreasureToRemove = new LinkedList<>();
+		Treasure movedTreasure;
+		Treasure jeuRougeTreasureToCatch = null;
+		Treasure jeuBleuTreasureToCatch = null;
+		Treasure jeuVertTreasureToCatch = null;
+		Treasure jeuJauneTreasureToCatch = null;
+
+		if(this.jeuRouge != null) {
+			jeuRougeTreasureToCatch = this.jeuRouge.getTreasureToCatch();
+		}
+		if(this.jeuBleu != null){
+			jeuBleuTreasureToCatch = this.jeuBleu.getTreasureToCatch();
+		}
+		if(this.jeuVert != null) {
+			jeuVertTreasureToCatch = this.jeuVert.getTreasureToCatch();
+		}
+		if(this.jeuJaune != null) {
+			jeuJauneTreasureToCatch = this.jeuJaune.getTreasureToCatch();
+		}
 
 		// si on a un tresor sur la piece supp
 		if(this.extraTreasure != null) {
@@ -657,6 +894,34 @@ public class Plateau implements BoardGames {
 					this.extraTreasure.isCatched()
 			);
 			treasuresToAdd.add(oldExtra);
+			//gestion des draw
+			for(Treasures treasure : this.treasureToDraw) {
+				if(treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
+					drawableTreasureToRemove.add(treasure);
+				}
+			}
+			drawableTreasureToAdd.add(oldExtra);
+			// changement de tresor a attrapper
+			if(jeuRougeTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
+					this.jeuRouge.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuBleuTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
+					this.jeuBleu.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuVertTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+					this.jeuVert.setTreasureToCatch(oldExtra);
+				}
+			}
+			if(jeuJauneTreasureToCatch != null) {
+				if(this.extraTreasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && this.extraTreasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+					this.jeuJaune.setTreasureToCatch(oldExtra);
+				}
+			}
 			this.extraTreasure = null;
 		}
 
@@ -667,18 +932,63 @@ public class Plateau implements BoardGames {
 					this.extraTreasure = (Treasure) treasure;
 				}
 				else {
-					treasuresToAdd.add(
-							new Treasure(
-									treasure.getTreasureX() + 1,
-									treasure.getTreasureY(),
-									treasure.getTreasureId(),
-									treasure.getTreasureType(),
-									treasure.isCatched()
-							)
+					movedTreasure = new Treasure(
+							treasure.getTreasureX() + 1,
+							treasure.getTreasureY(),
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
 					);
+					if(jeuRougeTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuRougeTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuRougeTreasureToCatch.getTreasureY()) {
+							this.jeuRouge.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuBleuTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuBleuTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuBleuTreasureToCatch.getTreasureY()) {
+							this.jeuBleu.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuVertTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuVertTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuVertTreasureToCatch.getTreasureY()) {
+							this.jeuVert.setTreasureToCatch(movedTreasure);
+						}
+					}
+					if(jeuJauneTreasureToCatch != null) {
+						if(treasure.getTreasureX() == jeuJauneTreasureToCatch.getTreasureX() && treasure.getTreasureY() == jeuJauneTreasureToCatch.getTreasureY()) {
+							this.jeuJaune.setTreasureToCatch(movedTreasure);
+						}
+					}
+					treasuresToAdd.add(movedTreasure);
 				}
 			}
 		}
+		for(Treasures treasure : this.treasureToDraw) {
+			if(treasure.getTreasureY() == position) {
+				if(treasure.getTreasureX() == 6) {
+					movedTreasure = new Treasure(
+							-1,
+							-1,
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+				}
+				else{
+					movedTreasure = new Treasure(
+							treasure.getTreasureX() + 1,
+							treasure.getTreasureY(),
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+				}
+				drawableTreasureToAdd.add(movedTreasure);
+				drawableTreasureToRemove.add(treasure);
+			}
+		}
+		this.treasureToDraw.removeAll(drawableTreasureToRemove);
+		this.treasureToDraw.addAll(drawableTreasureToAdd);
 		return treasuresToAdd;
 	}
 	private void pushJoueursRight(int position) {
@@ -844,16 +1154,16 @@ public class Plateau implements BoardGames {
 		if(this.jeuVert != null){
 			list4 = this.jeuVert.getPiecesIHM();
 		}
-		if(list1 != null && listFinale != null){
+		if(list1 != null){
 			listFinale.addAll(list1);
 		}
-		if(list2 != null && listFinale != null){
+		if(list2 != null){
 			listFinale.addAll(list2);
 		}
-		if(list3 != null && listFinale != null){
+		if(list3 != null){
 			listFinale.addAll(list3);
 		}
-		if(list4 != null && listFinale != null){
+		if(list4 != null){
 			listFinale.addAll(list4);
 		}
 		return listFinale;
@@ -1112,8 +1422,6 @@ public class Plateau implements BoardGames {
 	private Treasure extraTreasure;
 	private List<Treasures> treasures;
 	private List<Treasures> treasureToDraw;
-	//vue/mazegameGUI
-	//boucle for couloirs ihm qui permet de poser les images
 
 	// tests
 	public static void main(String[] args){
@@ -1195,18 +1503,10 @@ public class Plateau implements BoardGames {
 
 		// debug deplacement joueur
 		System.out.println(plateau.treasureToDraw);
-		//System.out.println(plateau.jeuRouge.getTreasureToCatch());
-		//System.out.println(plateau.jeuBleu.getTreasureToCatch());
 		System.out.println(plateau.treasureToDraw);
-		//System.out.println(plateau.jeuRouge.getTreasureToCatch());
-		//System.out.println(plateau.jeuBleu.getTreasureToCatch());
 		plateau.alterMaze("pushUp", 1);
 		System.out.println(plateau.treasureToDraw);
-		//System.out.println(plateau.jeuRouge.getTreasureToCatch());
-		//System.out.println(plateau.jeuBleu.getTreasureToCatch());
 		plateau.alterMaze("pushUp", 1);
 		System.out.println(plateau.treasureToDraw);
-		//System.out.println(plateau.jeuRouge.getTreasureToCatch());
-		//System.out.println(plateau.jeuBleu.getTreasureToCatch());
 	}
 }
