@@ -583,18 +583,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					}
 				}
 				this.mazeGameControler.switchJoueur();
-				if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-					player.setText("Tour du joueur : Mario");
-				}
-				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-					player.setText("Tour du joueur : Luigi");
-				}
-				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-					player.setText("Tour du joueur : Yoshi");
-				}
-				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-					player.setText("Tour du joueur : Toad");
-				}
 
 				File g = new File("");
 				String path = "/src/images/";
@@ -621,12 +609,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}else{
 					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
 				}
-				//On cree la zone pour la pile de cartes
-				tresorToCatch.setIcon(imageTreasureToCatch);
-				treasureToCatch = this.mazeGameControler
-						.currentTreasureToCatch();
-
-				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
 				//On cree la zone pour la pile de cartes
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;
