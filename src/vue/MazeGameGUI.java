@@ -631,8 +631,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			player.setIcon(bg);
 			treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
-	
-			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+			
+			if(treasureToCatch != null){
+				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+			}else{
+				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
+			}
 			//On cree la zone pour la pile de cartes
 			tresorToCatch.setIcon(imageTreasureToCatch);
 		}
