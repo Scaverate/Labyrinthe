@@ -512,22 +512,22 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public void mouseReleased(MouseEvent e) {
 		 //mazeBoard.getHeight() donne la hauteur en pixels de la fenetre
 		 //on divise getX() par layeredPane.getHeight()/7 pour savoir dans quelle case on a deplace la piece
-		 int destinationX = e.getX()/(mazeBoard.getHeight()/7);
-		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
+		int destinationX = e.getX()/(mazeBoard.getHeight()/7);
+		int destinationY = e.getY()/(mazeBoard.getHeight()/7);
 		int CoordInitialeX = this.mazeGameControler.getCurrentCoordInitiale().x;
 		int CoordInitialeY = this.mazeGameControler.getCurrentCoordInitiale().y;
 		String nameJeuCourant = this.mazeGameControler.getCurrentNamePlayer();
 		Object[] options = {
 				"Quitter"};
 
-		 JLayeredPane layeredPane;
-		 JLayeredPane parentComponentHere;
-		 JLabel corridorImage;
+		JLayeredPane layeredPane;
+		JLayeredPane parentComponentHere;
+		JLabel corridorImage;
 		JInternalFrame frame = new JInternalFrame();
 
-		 if (pawn == null) {
-			 return;
-		 }
+		if (pawn == null) {
+			return;
+		}
 
 		// on retire l'effet visuel du hover
 		 layeredPane = (JLayeredPane) previouslyHoveredComponent;
@@ -538,7 +538,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
-		System.out.println(treasureToCatch);
 		if(mazeAltered) {
 			// deplacement du pion
 			boolean isMoveOK = mazeGameControler.move(
@@ -550,43 +549,37 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
 						e.getY());
 				parentComponentHere = (JLayeredPane) componentHere.getParent();
-				if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
-					if (destinationX == treasureToCatch.getTreasureX()
-							&& destinationY == treasureToCatch.getTreasureY()) {
-						this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
-						this.mazeGameControler.setCurrentTreasureToCatch(null);
-						//Lors d'un changement de score, on met à jour l'affichage du tableau
-						scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
-						scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
-						if(nbPlayer == 3 || nbPlayer == 4) {
-							scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
-						}
-						if(nbPlayer == 4) {
-							scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
+				if(this.mazeGameControler.getCurrentScorePlayer() < this.mazeGameControler.getScoreMax()) {
+					if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
+						if (destinationX == treasureToCatch.getTreasureX()
+								&& destinationY == treasureToCatch.getTreasureY()) {
+							this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
+							this.mazeGameControler.setCurrentTreasureToCatch(null);
+							//Lors d'un changement de score, on met à jour l'affichage du tableau
+							scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
+							scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
+							if (nbPlayer == 3 || nbPlayer == 4) {
+								scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
+							}
+							if (nbPlayer == 4) {
+								scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
+							}
 						}
 					}
 				}
-				// modification du labyrinthe
-				switch((String) selectedValueDirection) {
-					case "Haut": {
-						command = "pushUp";
-						break;
-					}
-					case "Bas": {
-						command = "pushDown";
-						break;
-					}
-					case "Gauche": {
-						command = "pushLeft";
-						break;
-					}
-					case "Droite": {
-						command = "pushRight";
-						break;
-					}
-					default: {
-						command = "";
-						break;
+				else {
+					if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
+						int n = JOptionPane.showOptionDialog(frame,
+								"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
+								"VICTOIRE",
+								JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.PLAIN_MESSAGE,
+								null,
+								options,
+								options[0]);
+						if(n==0){
+							System.exit(0);
+						}
 					}
 				}
 				this.mazeGameControler.switchJoueur();
@@ -599,74 +592,47 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
 					player.setText("Tour du joueur : Yoshi");
 				}
-				this.mazeGameControler.switchJoueur();
-				this.alterMaze();
-			}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
+					player.setText("Tour du joueur : Toad");
+				}
 
-			File g = new File("");
-			String path = "/src/images/";
-			String ret = "";
-			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-				ret = g.getAbsolutePath() + path + "pion_rouge.png";
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-				ret = g.getAbsolutePath() + path + "pion_bleu.png";
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-				ret = g.getAbsolutePath() + path + "pion_jaune.png";
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-				ret = g.getAbsolutePath() + path + "pion_vert.png";
-			}
-			bg = new ImageIcon(ret); 
-			player.setIcon(bg);
-			treasureToCatch = this.mazeGameControler
-					.currentTreasureToCatch();
-			
-			if(treasureToCatch != null){
+				File g = new File("");
+				String path = "/src/images/";
+				String ret = "";
+				if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
+					ret = g.getAbsolutePath() + path + "pion_rouge.png";
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
+					ret = g.getAbsolutePath() + path + "pion_bleu.png";
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
+					ret = g.getAbsolutePath() + path + "pion_jaune.png";
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
+					ret = g.getAbsolutePath() + path + "pion_vert.png";
+				}
+				bg = new ImageIcon(ret);
+				player.setIcon(bg);
+				treasureToCatch = this.mazeGameControler
+						.currentTreasureToCatch();
+
+				if(treasureToCatch != null){
+					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+				}else{
+					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
+				}
+				//On cree la zone pour la pile de cartes
+				tresorToCatch.setIcon(imageTreasureToCatch);
+				treasureToCatch = this.mazeGameControler
+						.currentTreasureToCatch();
+
 				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-			}else{
-				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
+				//On cree la zone pour la pile de cartes
+				tresorToCatch.setIcon(imageTreasureToCatch);
+				mazeAltered = false;
 			}
-			//On cree la zone pour la pile de cartes
-			tresorToCatch.setIcon(imageTreasureToCatch);
-
-			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-				player.setText("Tour du joueur : Mario");
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-				player.setText("Tour du joueur : Luigi");
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-				player.setText("Tour du joueur : Yoshi");
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-				player.setText("Tour du joueur : Toad");
-			}
-			treasureToCatch = this.mazeGameControler
-					.currentTreasureToCatch();
-
-			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-			//On cree la zone pour la pile de cartes
-			tresorToCatch.setIcon(imageTreasureToCatch);
-
-			this.mazeGameControler.switchJoueur();
-			mazeAltered = false;
 		}
 		else {
-			if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
-				int n = JOptionPane.showOptionDialog(frame,
-						"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
-						"VICTOIRE",
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE,
-						null,
-						options,
-						options[0]);
-				if(n==0){
-					System.exit(0);
-				}
-			}
 			mazeGameControler.move(null, null);
 		}
 	 }
@@ -833,7 +799,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		}
 		// si mise à jour des couloirs
-		else if(((LinkedList<CouloirIHM>)arg).getFirst() instanceof CouloirIHM) {
+		else if(((LinkedList<CouloirIHM>)arg).size() > 0 && ((LinkedList<CouloirIHM>)arg).getFirst() instanceof CouloirIHM) {
 			List<CouloirIHM> updatedList = (List<CouloirIHM>) arg;
 			JLabel couloir;
 			ImageIcon imageIcon;
