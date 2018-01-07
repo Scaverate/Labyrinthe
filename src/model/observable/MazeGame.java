@@ -16,11 +16,7 @@ import model.*;
 public class MazeGame extends Observable implements BoardGames{
 
 	private Plateau plateau;
-	private int nbPlayer;
-	/**
-	 * Cree une instance de la classe Echiquier
-	 * et notifie ses observateurs
-	 */
+
 	public MazeGame(int nbPlayer) {
 		super();
 		this.plateau = new Plateau(nbPlayer);
@@ -28,15 +24,11 @@ public class MazeGame extends Observable implements BoardGames{
 		this.notifyObservers(plateau.getTreasuresIHMs());
 	}
 
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		String st = "";
 		st += "\n" + plateau.getMessage() + "\n";
-		st = plateau.toString();	
+		st = plateau.toString();
 		return  st;
 	}
 
@@ -51,25 +43,17 @@ public class MazeGame extends Observable implements BoardGames{
 		return ret;
 	}
 
-	/**
-	 * Permet de deplacer une piece connaissant ses coordonnees initiales vers ses
-	 * coordonnees finales si le deplacement est "legal". 
-	 * Si deplacement OK, permet l'alternance des joueurs.
-	 * @param xInit
-	 * @param yInit
-	 * @param xFinal
-	 * @param yFinal
-	 * @return OK si deplacement OK
-	 * si OK, permet l'alternance des joueurs
-	 */
-	public boolean move (int xInit, int yInit, int xFinal, int yFinal){
+	public boolean move (Coord initCoord, Coord finalCoord){
 		boolean ret = false;
-		ret = plateau.isMoveOk(xInit, yInit, xFinal, yFinal);
-		if (ret){
-			ret = plateau.move(xInit, yInit, xFinal, yFinal);
+		if( initCoord != null && finalCoord != null){
+			ret = plateau.isMoveOk(initCoord.x, initCoord.y, finalCoord.x, finalCoord.y);
+			if (ret){
+				ret = plateau.move(initCoord, finalCoord);
+			}
 		}
 		this.notifyObservers(plateau.getPiecesIHM());
-		return ret;	
+		this.notifyObservers(plateau.getCouloirsIHMs());
+		return ret;
 	}
 	
 	public boolean isMoveOk (int xInit, int yInit, int xFinal, int yFinal){
@@ -83,11 +67,6 @@ public class MazeGame extends Observable implements BoardGames{
 	public String getMessage() {
 		return this.plateau.getMessage();
 	}
-	
-	public void setMessage(String message) {
-		this.plateau.setMessage(message);
-	}
-
 
 	public Couleur getColorCurrentPlayer(){		
 		return this.plateau.getColorCurrentPlayer();
@@ -100,21 +79,24 @@ public class MazeGame extends Observable implements BoardGames{
 	public List<TreasureIHMs> getTreasureIHMs () { return this.plateau.getTreasuresIHMs(); }
 	public List<CouloirIHM> getCouloirIHMs () { return this.plateau.getCouloirsIHMs(); }
 	public CouloirIHM getExtraCorridorIHM() { return this.plateau.getExtraCorridorIHM(); }
+	public TreasureIHM getExtraTreasureIHM() { return this.plateau.getExtraTreasureIHM(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.plateau.getPiecesIHMs(); }
 	public List<Coord> findPath(Coord coord) { return this.plateau.findPath(coord); }
+	public void rotateExtraCardLeft() {
+		this.plateau.rotateExtraCardLeft();
+		this.notifyObservers(plateau.getExtraCorridorIHM());
+	}
+	public void rotateExtraCardRight() {
+		this.plateau.rotateExtraCardRight();
+		this.notifyObservers(plateau.getExtraCorridorIHM());
+	}
 
-	/* (non-Javadoc)
-	 * @see java.util.Observable#notifyObservers(java.lang.Object)
-	 */
 	@Override
 	public void	notifyObservers(Object arg) {
 		super.setChanged();
 		super.notifyObservers(arg); 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.util.Observable#addObserver(java.util.Observer)
-	 */
 	@Override
 	public void addObserver(Observer o){
 		super.addObserver(o);
@@ -133,11 +115,11 @@ public class MazeGame extends Observable implements BoardGames{
 	}
 	
 	public boolean treasureCatchedPlateau(Treasure treasureCatched){
-		boolean test = this.plateau.treasureCatched(treasureCatched);
-		System.out.println("tresor a ete recupere : " + test);
+		boolean treasureHasBeenCatched = this.plateau.treasureCatched(treasureCatched);
+		System.out.println("tresor a ete recupere : " + treasureHasBeenCatched);
 		System.out.println(treasureCatched);
 		this.notifyObservers(plateau.getTreasuresIHMs()); 
-		return test;
+		return treasureHasBeenCatched;
 	}
 	
 	public int getCurrentScorePlayer(){
@@ -155,7 +137,7 @@ public class MazeGame extends Observable implements BoardGames{
 	public String getCurrentNamePlayer(){
 		return this.plateau.getNamePlayer();
 	}
-	
+
 	public int getBluePlayerScore() {
 		return this.plateau.getBluePlayerScore();
 	}
@@ -174,5 +156,15 @@ public class MazeGame extends Observable implements BoardGames{
 	
 	public void switchJoueur() {
 		this.plateau.switchJoueur();
+	}
+
+	public boolean alterMaze(String command, int position){
+		boolean commandComplete;
+		commandComplete = this.plateau.alterMaze(command, position);
+		this.notifyObservers(plateau.getCouloirsIHMs());
+		this.notifyObservers(plateau.getPiecesIHM());
+		this.notifyObservers(plateau.getTreasuresIHMs());
+		this.notifyObservers(plateau.getExtraCorridorIHM());
+		return commandComplete;
 	}
 }

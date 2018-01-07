@@ -50,18 +50,11 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see controler.AbstractMazeGameControler#isPlayerOK(model.Coord)
-	 * 
-	 * cette méthode vérifie que la couleur de la pièce que l'utilisateur
-	 * tente de déplacer est bien celle du jeu courant
-	 * la vue se servira de cette information pour empêcher tout déplacement sur le damier
-	 */
 	public abstract boolean isPlayerOK(Coord initCoord);
 
 	// Déplacement métier
 	protected boolean moveModel(Coord initCoord, Coord finalCoord) {
-		return mazeGame.move(initCoord.x, initCoord.y, finalCoord.x, finalCoord.y);	
+		return mazeGame.move(initCoord, finalCoord);
 	}
 
 	protected abstract void endMove(Coord initCoord, Coord finalCoord, String promotionType);
@@ -81,8 +74,6 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	public String toString() {
 		return this.mazeGame.toString();
 	}
-
-	
 	public Couleur getColorCurrentPlayer(){		
 		return this.mazeGame.getColorCurrentPlayer();		
 	}
@@ -144,6 +135,10 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	public List<TreasureIHMs> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
 	public CouloirIHM getExtraCorridorIHM() { return this.mazeGame.getExtraCorridorIHM(); }
+	public TreasureIHM getExtraTreasureIHM() { return this.mazeGame.getExtraTreasureIHM(); }
 	public List<PieceIHMs> getPiecesIHMs() { return this.mazeGame.getPiecesIHMs(); }
 	public List<Coord> findPath(Coord coord) { return this.mazeGame.findPath(coord); }
+	public void rotateExtraCardLeft() { this.mazeGame.rotateExtraCardLeft(); }
+	public void rotateExtraCardRight() { this.mazeGame.rotateExtraCardRight(); }
+	public boolean alterMaze(String command, int position){ return this.mazeGame.alterMaze(command, position); }
 }

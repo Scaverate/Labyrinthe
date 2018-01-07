@@ -10,26 +10,17 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import model.*;
 import tools.MazeImageProvider;
-import tools.MazeTreasureImage;
-import model.Coord;
-import model.Couleur;
-import model.PieceIHMs;
-import model.Treasure;
-import model.TreasureIHMs;
 import net.miginfocom.swing.MigLayout;
-import model.CouloirIHM;
-import model.TreasureIHM;
 import model.observable.MazeGame;
 import controler.MazeGameControlers;
 import controler.controlerLocal.MazeGameControler;
 
 public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
 
-	/**
-	 * default serial version uid
-	 */
 	private static final long serialVersionUID = 1L;
+	private MazeGameControlers mazeGameControler;
 	private JLayeredPane layeredPane;
 	private JLabel tresorToCatch;
 	private JLabel bgGame;
@@ -51,6 +42,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
+	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
 	private int yAdjustment;
@@ -58,28 +50,27 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private ButtonGroup grpButton;
 	private int yOrigine;
 	private int nbPlayer = 2;
-	private MazeGameControlers mazeGameControler;
 	private Component previouslyHoveredComponent;
-	List<TreasureIHMs> treasureIHMs;
+	private List<TreasureIHMs> treasureIHMs;
+	private List<CouloirIHM> couloirIHMs;
 	private Dimension dim;
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
 	private JFrame f1;
+	private boolean mazeAltered = false;
 
 	
 	public MazeGameGUI(Dimension dim) {
 		
 		this.dim = dim;
-		Dimension windowSize = new Dimension(950,700);		
+		Dimension windowSize = new Dimension(950,700);
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
 		mazeContainer = new JLayeredPane();
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
 		Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
-
-	    
 		// on cree le container du menu
 	    b1 = Box.createHorizontalBox();
 		b1.setOpaque(true); // background gris desactive
@@ -123,13 +114,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				nbPlayer = 2;
 			}
 		});
-		
 		nb3Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 3;
 			}
 		});
-		
 		nb4Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nbPlayer = 4;
@@ -160,7 +149,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		okButton.setIcon(new ImageIcon(getClass().getResource("../images/icon_play.png")));
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				initMazeGame(nbPlayer);	
+				initMazeGame();
 			}			
 		});
 		b2.add(okButton);
@@ -183,33 +172,30 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		contentPane.setPreferredSize(windowSize);
 		setContentPane(contentPane);	
 	}
-
-	public void initMazeGame(int nbPlayer) {
+	
+	public void initMazeGame() {
 		Dimension windowSize = new Dimension(950,1000);		
 		Icon imageIcon;
 		Icon disabledIcon;
-		List<CouloirIHM> couloirIHMs;
 		List<PieceIHMs> pieceIHMs;
 		JLabel couloir;
 		JLabel treasure;
 		JLabel tresorCard;
 		CouloirIHM extraCard;
-		JLayeredPane extraCardPane;
-		JLabel extraCardImage;	
+		JLabel extraCardImage;
+		final MazeGame mazeGame;
+		final MazeGameControlers mazeGameControler;
 		
 		
 	   	setContentPane(mazeContainer);
 	   	
 		repaint();
 		pack();
-		
-		MazeGame mazeGame;	
-		MazeGameControlers mazeGameControler;
-		
+
 		mazeGame = new MazeGame(nbPlayer);
 		mazeGameControler = new MazeGameControler(mazeGame);
-		mazeGame.addObserver((Observer) this);
 		this.mazeGameControler = mazeGameControler;
+		mazeGame.addObserver((Observer) this);
 		// on initialise le controleur
 		couloirIHMs = mazeGameControler.getCouloirsIHMs();
 		pieceIHMs = mazeGameControler.getPiecesIHMs();
@@ -281,25 +267,31 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On cree la zone pour la pile de cartes
 		tresorCard = new JLabel(imageIcon);
 		
-		
-		
 		//On cree la carte supplementaire, recuperant la deuxieme piece de la liste
 		//On garde le côte aleatoire comme la liste est aleatoire
 		//Il faut la deuxieme car la premiere est un angle de depart
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("Gauche");
+		rotateLeftButton = new JButton("Insérer la pièce");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				extraCard.rotateLeft();
+				mazeAltered = alterMaze();
+				if(mazeAltered) {
+					rotateLeftButton.setEnabled(false);
+					rotateRightButton.setEnabled(false);
+				}
+				else {
+					rotateLeftButton.setEnabled(true);
+					rotateRightButton.setEnabled(true);
+				}
 			}
 		});
 		//Bouton de rotation droit
-		rotateRightButton = new JButton("Droite");
+		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				extraCard.rotateRight();
+				mazeGameControler.rotateExtraCardRight();
 			}
 		});
 		// on cree un panneau contenant differents plans
@@ -324,7 +316,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			true
 		));
 		extraCardImage = new JLabel(imageIcon);
-		extraCardImage.setDisabledIcon(disabledIcon);	
+		extraCardImage.setDisabledIcon(disabledIcon);
 		
 		// on parametre la taille et la position de la piece supplementaire
 		extraCardImage.setPreferredSize(new Dimension(100, 100));
@@ -363,13 +355,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			));
 			couloir = new JLabel(imageIcon);
 			couloir.setDisabledIcon(disabledIcon);
-
-			// si on veut entourer les couloirs fixes
-			/*
-			 * if(couloirIHM.isFixed()) {
-			 * this.couloir.setBorder(BorderFactory.createLineBorder
-			 * (Color.blue)); }
-			 */
 			
 			// pour chaque case on ajoute paramètre dimension et position du couloir
 			couloir.setPreferredSize(new Dimension(100, 100));
@@ -398,7 +383,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			this.pawn.setBounds(0, 0, 100, 100);
 			this.pawn.setOpaque(false);
 
-			// TODO moche ajouter tests
 			((JLayeredPane) this.mazeBoard.getComponent(pieceIHM.getX() + 7
 					* pieceIHM.getY())).add(this.pawn, PAWN_LAYER);
 		}
@@ -408,7 +392,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			treasure.setPreferredSize(new Dimension(100, 100));
 			treasure.setBounds(0, 0, 100, 100);
 			treasure.setOpaque(false);
-			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(treasure, TREASURE_LAYER);
 		}
 		Treasure treasureToCatch = this.mazeGameControler
@@ -429,14 +412,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
-		generalBoard.add(rotateLeftButton, "pos 0.915al 0al");
-		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
+		generalBoard.add(rotateLeftButton, "pos 0.932al 0al");
+		generalBoard.add(rotateRightButton, "pos 0.90al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
 		generalBoard.add(bgGame,"pos 0 0");
-		
+
 		mazeContainer.add(generalBoard);
-		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
 	}
@@ -454,47 +436,41 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			return;
 		}
 
-		if (componentPressed != null) {
-			JLayeredPane destinationPane = (JLayeredPane) componentPressed
-					.getParent();
+		JLayeredPane destinationPane = (JLayeredPane) componentPressed
+				.getParent();
 
-			// on ne prend que la couche la plus haute
-			if (destinationPane.getLayer(componentPressed) == COULOIR_LAYER
-					|| destinationPane.getLayer(componentPressed) == TREASURE_LAYER) {
-				return;
-			}
+		// on ne prend que la couche la plus haute
+		if (destinationPane.getLayer(componentPressed) == COULOIR_LAYER
+				|| destinationPane.getLayer(componentPressed) == TREASURE_LAYER) {
+			return;
+		}
 
-			Point parentLocation = componentPressed.getParent().getLocation();
-			xAdjustment = parentLocation.x - e.getX();
-			yAdjustment = parentLocation.y - e.getY();
-			this.pawn = (JLabel) componentPressed;
-			parent = (JLayeredPane) componentPressed.getParent();
-			xOrigine = e.getX() / (this.mazeBoard.getHeight() / 7);
-			yOrigine = e.getY() / (this.mazeBoard.getHeight() / 7);
-			this.pawn.setLocation(e.getX() + xAdjustment, e.getY()
-					+ yAdjustment);
-			this.pawn.setSize(this.pawn.getWidth(), this.pawn.getHeight());
+		Point parentLocation = componentPressed.getParent().getLocation();
+		xAdjustment = parentLocation.x - e.getX();
+		yAdjustment = parentLocation.y - e.getY();
+		this.pawn = (JLabel) componentPressed;
+		parent = (JLayeredPane) componentPressed.getParent();
+		xOrigine = e.getX() / (this.mazeBoard.getHeight() / 7);
+		yOrigine = e.getY() / (this.mazeBoard.getHeight() / 7);
+		this.pawn.setLocation(e.getX() + xAdjustment, e.getY()
+				+ yAdjustment);
+		this.pawn.setSize(this.pawn.getWidth(), this.pawn.getHeight());
 
-			if (parent != null) {
-				this.mazeContainer.add(this.pawn, JLayeredPane.DRAG_LAYER);
-
-				// TODO a reprendre pour generation chemin possible
-				// on grise les cases ou on ne peut pas se deplacer
-				reacheableCoords = this.mazeGameControler.findPath(new Coord(xOrigine, yOrigine));
-				for (Component component : this.mazeBoard.getComponents()) {
-					xDest = component.getX() / (this.mazeBoard.getHeight()/7);
-					yDest = component.getY() / (this.mazeBoard.getHeight()/7);
-					isOkDest = false;
-					for(Coord coord : reacheableCoords) {
-						if(coord.x == xDest && coord.y == yDest) {
-							isOkDest = true;
-						}
+		if (parent != null) {
+			this.mazeContainer.add(this.pawn, JLayeredPane.DRAG_LAYER);
+			reacheableCoords = this.mazeGameControler.findPath(new Coord(xOrigine, yOrigine));
+			for (Component component : this.mazeBoard.getComponents()) {
+				xDest = component.getX() / (this.mazeBoard.getHeight()/7);
+				yDest = component.getY() / (this.mazeBoard.getHeight()/7);
+				isOkDest = false;
+				for(Coord coord : reacheableCoords) {
+					if(coord.x == xDest && coord.y == yDest) {
+						isOkDest = true;
 					}
-					if(!isOkDest) {
-						if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
-							//TODO moche ajouter un test
-							((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
-						}
+				}
+				if(!isOkDest) {
+					if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
+						((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
 					}
 				}
 			}
@@ -539,106 +515,113 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public void mouseReleased(MouseEvent e) {
 		 //mazeBoard.getHeight() donne la hauteur en pixels de la fenetre
 		 //on divise getX() par layeredPane.getHeight()/7 pour savoir dans quelle case on a deplace la piece
-		 int destinationX = e.getX()/(mazeBoard.getHeight()/7);
-		 int destinationY = e.getY()/(mazeBoard.getHeight()/7);
+		int destinationX = e.getX()/(mazeBoard.getHeight()/7);
+		int destinationY = e.getY()/(mazeBoard.getHeight()/7);
 		int CoordInitialeX = this.mazeGameControler.getCurrentCoordInitiale().x;
 		int CoordInitialeY = this.mazeGameControler.getCurrentCoordInitiale().y;
 		String nameJeuCourant = this.mazeGameControler.getCurrentNamePlayer();
 		Object[] options = {
 				"Quitter"};
 
-		 JLayeredPane layeredPane;
-		 JLayeredPane parentComponentHere;
-		 JLabel corridorImage;
+		JLayeredPane layeredPane;
+		JLayeredPane parentComponentHere;
+		JLabel corridorImage;
 		JInternalFrame frame = new JInternalFrame();
 
-		 if (pawn == null) {
-			 return;
-		 }
+		if (pawn == null) {
+			return;
+		}
 
 		// on retire l'effet visuel du hover
 		 layeredPane = (JLayeredPane) previouslyHoveredComponent;
-		 corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
-		 corridorImage.setBorder(null);
+		if(layeredPane != null) {
+			corridorImage = (JLabel) layeredPane.getComponentsInLayer(COULOIR_LAYER)[0];
+			corridorImage.setBorder(null);
+		}
 
-		 boolean isMoveOK = mazeGameControler.move(
-			 new Coord(xOrigine, yOrigine),
-			 new Coord(destinationX, destinationY)
-		 );
-		 
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
-	
+		if(mazeAltered) {
+			// deplacement du pion
+			boolean isMoveOK = mazeGameControler.move(
+					new Coord(xOrigine, yOrigine),
+					new Coord(destinationX, destinationY)
+			);
 
-		if (isMoveOK) {
-			System.out.println("déplacement OK");
-			Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
-					e.getY());
-			parentComponentHere = (JLayeredPane) componentHere.getParent();
-			if(this.mazeGameControler.getCurrentScorePlayer() < this.mazeGameControler.getScoreMax()){
-				if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0){
-					treasureToCatch = this.mazeGameControler
-							.currentTreasureToCatch();
-					if (destinationX == treasureToCatch.getTreasureX()
-							&& destinationY == treasureToCatch.getTreasureY()) {
-						this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
-						this.mazeGameControler.setCurrentTreasureToCatch(null);
-
-						//Lors d'un changement de score, on met à jour l'affichage du tableau
-						scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
-						scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
-						if(nbPlayer==3 || nbPlayer==4) {
-							scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
-						}
-						if(nbPlayer==4) {
-							scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
+			if (isMoveOK) {
+				Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
+						e.getY());
+				parentComponentHere = (JLayeredPane) componentHere.getParent();
+				if(this.mazeGameControler.getCurrentScorePlayer() < this.mazeGameControler.getScoreMax()) {
+					if (parentComponentHere.getComponentsInLayer(TREASURE_LAYER).length > 0) {
+						if (destinationX == treasureToCatch.getTreasureX()
+								&& destinationY == treasureToCatch.getTreasureY()) {
+							this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
+							this.mazeGameControler.setCurrentTreasureToCatch(null);
+							//Lors d'un changement de score, on met à jour l'affichage du tableau
+							scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
+							scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
+							if (nbPlayer == 3 || nbPlayer == 4) {
+								scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
+							}
+							if (nbPlayer == 4) {
+								scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
+							}
 						}
 					}
 				}
-			}else{
-				if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
-					int n = JOptionPane.showOptionDialog(frame,
-							"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
-							"VICTOIRE",
-							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.PLAIN_MESSAGE,
-							null,
-							options,
-							options[0]);
-					if(n==0){
-						System.exit(0);
+				else {
+					if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
+						int n = JOptionPane.showOptionDialog(frame,
+								"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
+								"VICTOIRE",
+								JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.PLAIN_MESSAGE,
+								null,
+								options,
+								options[0]);
+						if(n==0){
+							System.exit(0);
+						}
 					}
 				}
-			}
+				this.mazeGameControler.switchJoueur();
 
-			this.mazeGameControler.switchJoueur();
-			File g = new File("");
-			String path = "/src/images/";
-			String ret = "";
-			if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-				ret = g.getAbsolutePath() + path + "pion_rouge.png";
+				File g = new File("");
+				String path = "/src/images/";
+				String ret = "";
+				if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
+					ret = g.getAbsolutePath() + path + "pion_rouge.png";
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
+					ret = g.getAbsolutePath() + path + "pion_bleu.png";
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
+					ret = g.getAbsolutePath() + path + "pion_jaune.png";
+				}
+				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
+					ret = g.getAbsolutePath() + path + "pion_vert.png";
+				}
+				bg = new ImageIcon(ret);
+				player.setIcon(bg);
+				treasureToCatch = this.mazeGameControler
+						.currentTreasureToCatch();
+
+				if(treasureToCatch != null){
+					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+				}else{
+					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
+				}
+				//On cree la zone pour la pile de cartes
+				tresorToCatch.setIcon(imageTreasureToCatch);
+				mazeAltered = false;
+				// réautoriser les boutons pour le prochain joueur
+				rotateLeftButton.setEnabled(true);
+				rotateRightButton.setEnabled(true);
 			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-				ret = g.getAbsolutePath() + path + "pion_bleu.png";
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-				ret = g.getAbsolutePath() + path + "pion_jaune.png";
-			}
-			else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-				ret = g.getAbsolutePath() + path + "pion_vert.png";
-			}
-			bg = new ImageIcon(ret); 
-			player.setIcon(bg);
-			treasureToCatch = this.mazeGameControler
-					.currentTreasureToCatch();
-			
-			if(treasureToCatch != null){
-				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-			}else{
-				imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
-			}
-			//On cree la zone pour la pile de cartes
-			tresorToCatch.setIcon(imageTreasureToCatch);
+		}
+		else {
+			mazeGameControler.move(null, null);
 		}
 	 }
 
@@ -652,8 +635,65 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		if(this.mazeBoard == null || arg == null) {
 			return;
 		}
-		if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
+
+		// attention l'ordre des if est important...
+		// si mise à jour de la piece supplémentaire
+		if(arg instanceof CouloirIHM) {
+			CouloirIHM extraCard = (CouloirIHM) arg;
+			JLabel extraCardImage;
+			ImageIcon imageIcon;
+			ImageIcon disabledIcon;
+
+			if (extraCardPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
+				for (int i = 0; i < extraCardPane
+						.getComponentsInLayer(COULOIR_LAYER).length; i++) {
+					extraCardPane.remove(extraCardPane
+							.getComponentsInLayer(COULOIR_LAYER)[i]);
+				}
+			}
+			// on cree une image de couloir pour la piece supplementaire
+			imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+					"Couloir",
+					extraCard.isNorthOpened(),
+					extraCard.isSouthOpened(),
+					extraCard.isEastOpened(),
+					extraCard.isWestOpened(),
+					false
+			));
+			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+					"Couloir",
+					extraCard.isNorthOpened(),
+					extraCard.isSouthOpened(),
+					extraCard.isEastOpened(),
+					extraCard.isWestOpened(),
+					true
+			));
+			extraCardImage = new JLabel(imageIcon);
+			extraCardImage.setDisabledIcon(disabledIcon);
+
+			// on parametre la taille et la position de la piece supplementaire
+			extraCardImage.setPreferredSize(new Dimension(100, 100));
+			extraCardImage.setBounds(0, 0, 100, 100);
+
+			// on ajoute le couloir en arriere-plan
+			extraCardPane.add(extraCardImage, COULOIR_LAYER);
+		}
+		// si mise à jour du pion
+		else if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
 			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
+			// on enlève tous les pions (sur chaque couloir)
+			for(CouloirIHMs couloirIHM : this.couloirIHMs){
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7 * couloirIHM.getY() + couloirIHM.getX());
+				//On enlève le pion
+				if (this.layeredPane.getComponentsInLayer(PAWN_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(PAWN_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(PAWN_LAYER)[i]);
+					}
+				}
+			}
+			// on les recrée
 			for (PieceIHMs pieceIHM : piecesIHM) {
 				//On récupère la piece sur le board (son layerded pane)
 				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
@@ -676,7 +716,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 								.getComponentsInLayer(JLayeredPane.DRAG_LAYER)[i]);
 					}
 				}
-
 				// on recrée le pion
 				this.pawn = new JLabel(new ImageIcon(
 						MazeImageProvider.getImageFile("Pion",
@@ -684,17 +723,25 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				this.pawn.setPreferredSize(new Dimension(100, 100));
 				this.pawn.setBounds(0, 0, 100, 100);
 				this.pawn.setOpaque(false);
-
 				// on rajoute le pion
 				this.layeredPane.add(this.pawn, PAWN_LAYER);
 			}
 		}
-
-		if(((LinkedList<TreasureIHMs>)arg).size() > 0 && ((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
+		// si mise à jour des tresors
+ 		else if(((LinkedList<TreasureIHMs>)arg).size() > 0 && ((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
 			List<TreasureIHMs> updatedList = (List<TreasureIHMs>) arg;
 			JLabel treasure;
-
-			//Suppression des trésors
+			// on enlève tous les trésors (sur chaque couloir)
+			for(CouloirIHMs couloirIHM : this.couloirIHMs){
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7 * couloirIHM.getY() + couloirIHM.getX());
+				if (this.layeredPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(TREASURE_LAYER)[i]);
+					}
+				}
+			}
 			for (TreasureIHMs treasureIHM : treasureIHMs) {
 				// on récupère le trésor
 				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
@@ -736,10 +783,67 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						.getTreasureX() + 7 * treasureIHM.getTreasureY())).add(
 						treasure, TREASURE_LAYER);
 			}
+			this.treasureIHMs = updatedList;
+		}
+		// si mise à jour des couloirs
+		else if(((LinkedList<CouloirIHM>)arg).size() > 0 && ((LinkedList<CouloirIHM>)arg).getFirst() instanceof CouloirIHM) {
+			List<CouloirIHM> updatedList = (List<CouloirIHM>) arg;
+			JLabel couloir;
+			ImageIcon imageIcon;
+			ImageIcon disabledIcon;
 
+			//Suppression des trésors
+			for (CouloirIHM couloirIHM : couloirIHMs) {
+				//On enlève le couloir
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* couloirIHM.getY() + couloirIHM.getX());
+				if (this.layeredPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(COULOIR_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(COULOIR_LAYER)[i]);
+					}
+				}
+			}
+
+			for (CouloirIHM couloirIHM : updatedList) {
+				//On enlève le couloir
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+						* couloirIHM.getY() + couloirIHM.getX());
+				if (this.layeredPane.getComponentsInLayer(COULOIR_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(COULOIR_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(COULOIR_LAYER)[i]);
+					}
+				}
+
+				// on recrée le couloir
+				imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+						"Couloir",
+						couloirIHM.isNorthOpened(),
+						couloirIHM.isSouthOpened(),
+						couloirIHM.isEastOpened(),
+						couloirIHM.isWestOpened(),
+						false
+				));
+				disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+						"Couloir",
+						couloirIHM.isNorthOpened(),
+						couloirIHM.isSouthOpened(),
+						couloirIHM.isEastOpened(),
+						couloirIHM.isWestOpened(),
+						true
+				));
+				couloir = new JLabel(imageIcon);
+				couloir.setDisabledIcon(disabledIcon);
+				couloir.setPreferredSize(new Dimension(100, 100));
+				couloir.setBounds(0, 0, 100, 100);
+				this.layeredPane.add(couloir, COULOIR_LAYER);
+			}
 		}
 
-		 // on reautorise toutes les cases
+		// on reautorise toutes les cases
 		for (Component component : this.mazeBoard.getComponents()) {
 			if (((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
 				((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0]
@@ -747,9 +851,119 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 		}
 
+		// on régénère l'objet de la piece supp
+		TreasureIHM extraTreasureIHM = this.mazeGameControler.getExtraTreasureIHM();
+		JLabel extraTreasure;
+
+		// suppression dans tous les cas
+		if (extraCardPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+			for (int i = 0; i < extraCardPane.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+				extraCardPane.remove(extraCardPane.getComponentsInLayer(TREASURE_LAYER)[i]);
+			}
+		}
+		// recréation si besoin
+		if(extraTreasureIHM != null) {
+			extraTreasure = new JLabel(new ImageIcon(
+					MazeImageProvider.getImageFile(extraTreasureIHM.getTreasureId())));
+			extraTreasure.setPreferredSize(new Dimension(100, 100));
+			extraTreasure.setBounds(0, 0, 100, 100);
+			extraTreasure.setOpaque(false);
+			extraCardPane.add(
+				extraTreasure, TREASURE_LAYER
+			);
+		}
+
 		this.repaint();
 		this.revalidate();
 	}
 
+	private boolean alterMaze() {
+		final String CMD_HAUT =  "\u2191";
+		final String CMD_BAS = "\u2193";
+		final String CMD_GAUCHE = "\u2190";
+		final String CMD_DROITE = "\u2192";
+		final String CMD_1 = "2";
+		final String CMD_3 = "4";
+		final String CMD_5 = "6";
+		String command;
+		int selectedNumber;
+		// choix modification du labyrinthe
+		String[] possibleValuesDirection = {CMD_HAUT, CMD_BAS, CMD_GAUCHE, CMD_DROITE};
+		Object selectedValueDirection = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la direction",
+				"Direction",
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesDirection,
+				possibleValuesDirection[0]
+		);
+		if(selectedValueDirection == null) {
+			return false;
+		}
+		boolean upDown = (possibleValuesDirection.equals(CMD_HAUT) || possibleValuesDirection.equals(CMD_BAS));
+		String columnOrLine = (upDown ? "colonne" : "ligne");
+		String[] possibleValuesNumber = { CMD_1, CMD_3, CMD_5 };
+		Object selectedValueNumber = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la " +  columnOrLine + " à pousser",
+				"Choix " + columnOrLine,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesNumber,
+				possibleValuesNumber[0]
+		);
+
+		// si annulation d'un des deux prompt
+		if(selectedValueDirection == null || selectedValueNumber == null) {
+			return false;
+		}
+
+		// modification du labyrinthe
+		selectedValueDirection = selectedValueDirection == null ? CMD_HAUT : selectedValueDirection;
+		selectedValueNumber = selectedValueNumber == null ? CMD_1 : selectedValueNumber;
+		switch((String) selectedValueDirection) {
+			case CMD_HAUT : {
+				command = "pushUp";
+				break;
+			}
+			case CMD_BAS : {
+				command = "pushDown";
+				break;
+			}
+			case CMD_GAUCHE : {
+				command = "pushLeft";
+				break;
+			}
+			case CMD_DROITE : {
+				command = "pushRight";
+				break;
+			}
+			default: {
+				command = "pushUp";
+				break;
+			}
+		}
+		switch((String) selectedValueNumber) {
+			case CMD_1 : {
+				selectedNumber = 1;
+				break;
+			}
+			case CMD_3 : {
+				selectedNumber = 3;
+				break;
+			}
+			case CMD_5 : {
+				selectedNumber = 5;
+				break;
+			}
+			default: {
+				selectedNumber = 1;
+				break;
+			}
+		}
+		this.mazeGameControler.alterMaze(command, selectedNumber);
+		return true;
+	}
 
 }

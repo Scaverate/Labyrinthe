@@ -40,6 +40,8 @@ public abstract class AbstractTreasure implements Treasures {
 
 	@Override
 	public String toString(){
-		return "Piece '" + this.getTreasureId() + "' de type '" + this.getTreasureType() + "' en position (" + this.getTreasureX() +";"+ this.getTreasureY()+ ")";
+		String description;
+		description = "Piece '" + this.getTreasureId() + "' de type '" + this.getTreasureType() + "' en position (" + this.getTreasureX() +";"+ this.getTreasureY()+ ")";
+		return description;
 	}
 }

@@ -9,16 +9,7 @@ package model;
  */
 public interface BoardGames {	
 
-	/**
-	 * Permet de deplacer une piece connaissant ses coordonnees initiales 
-	 * vers ses coordonnees finales 	 *  
-	 * @param xInit
-	 * @param yInit
-	 * @param xFinal
-	 * @param yFinal
-	 * @return OK si deplacement OK	 
-	 */
-	public boolean move (int xInit, int yInit, int xFinal, int yFinal); 
+	public boolean move (Coord initCoord, Coord finalCoord);
 
 	/**
 	 * @return true si c'est la fin du jeu

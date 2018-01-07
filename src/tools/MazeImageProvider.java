@@ -103,41 +103,4 @@ public class MazeImageProvider {
 		ret = g.getAbsolutePath()+path+value;
 		return ret;
 	}
-
-	/**
-	 * @return nom fichier contenant image de la piece
-	 */
-	/*
-	public static String getRandomImageFile(String pieceType){
-		String ret, key, value, path;
-		File g = new File("");
-		Random randomGenerator = new Random();
-		int randomInt, keySetSize, mapSize;
-		Set<String> keySet;
-
-		mapSize = mapImageCouloirs.size();
-		String[] keySetArray = new String[mapSize];
-
-		ret = null;
-		keySet = mapImageCouloirs.keySet();
-		keySet.toArray(keySetArray);
-		keySetSize = keySetArray.length;
-
-		if(pieceType.equals("Couloir")) {
-			randomInt = randomGenerator.nextInt(keySetSize);
-			key = keySetArray[randomInt];
-			value = mapImageCouloirs.get(key);
-			path = "/src/images/couloirs/";
-		}
-		else {
-			//TODO reproduire la logique pour les piece de type pion
-			path = "";
-			value = "";
-		}
-
-
-		ret = g.getAbsolutePath()+ path + value;
-		return ret;
-	}
-	*/
 }
