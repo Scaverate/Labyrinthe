@@ -649,10 +649,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		if(this.mazeBoard == null) {
+		if(this.mazeBoard == null || arg == null) {
 			return;
 		}
-		if(((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
+		if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
 			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
 			for (PieceIHMs pieceIHM : piecesIHM) {
 				//On récupère la piece sur le board (son layerded pane)
@@ -690,7 +690,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 		}
 
-		if(((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
+		if(((LinkedList<TreasureIHMs>)arg).size() > 0 && ((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
 			List<TreasureIHMs> updatedList = (List<TreasureIHMs>) arg;
 			JLabel treasure;
 
