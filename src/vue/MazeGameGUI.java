@@ -19,9 +19,6 @@ import controler.controlerLocal.MazeGameControler;
 
 public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
 
-	/**
-	 * default serial version uid
-	 */
 	private static final long serialVersionUID = 1L;
 	private MazeGameControlers mazeGameControler;
 	private JLayeredPane layeredPane;
@@ -67,7 +64,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public MazeGameGUI(Dimension dim) {
 		
 		this.dim = dim;
-		Dimension windowSize = new Dimension(950,700);		
+		Dimension windowSize = new Dimension(950,700);
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
 		mazeContainer = new JLayeredPane();
@@ -904,7 +901,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		if(selectedValueDirection == null) {
 			return false;
 		}
-		// TODO vérifier
 		boolean upDown = (possibleValuesDirection.equals(CMD_HAUT) || possibleValuesDirection.equals(CMD_BAS));
 		String columnOrLine = (upDown ? "colonne" : "ligne");
 		String[] possibleValuesNumber = { CMD_1, CMD_3, CMD_5 };

@@ -16,10 +16,7 @@ import model.*;
 public class MazeGame extends Observable implements BoardGames{
 
 	private Plateau plateau;
-	/**
-	 * Cree une instance de la classe Echiquier
-	 * et notifie ses observateurs
-	 */
+
 	public MazeGame(int nbPlayer) {
 		super();
 		this.plateau = new Plateau(nbPlayer);
@@ -27,10 +24,6 @@ public class MazeGame extends Observable implements BoardGames{
 		this.notifyObservers(plateau.getTreasuresIHMs());
 	}
 
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		String st = "";
@@ -98,18 +91,12 @@ public class MazeGame extends Observable implements BoardGames{
 		this.notifyObservers(plateau.getExtraCorridorIHM());
 	}
 
-	/* (non-Javadoc)
-	 * @see java.util.Observable#notifyObservers(java.lang.Object)
-	 */
 	@Override
 	public void	notifyObservers(Object arg) {
 		super.setChanged();
 		super.notifyObservers(arg); 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.util.Observable#addObserver(java.util.Observer)
-	 */
 	@Override
 	public void addObserver(Observer o){
 		super.addObserver(o);
