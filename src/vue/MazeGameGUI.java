@@ -276,7 +276,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("Modifier le labyrinthe");
+		rotateLeftButton = new JButton("Insérer la pièce");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeAltered = alterMaze();
@@ -291,7 +291,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 		});
 		//Bouton de rotation droit
-		rotateRightButton = new JButton("Rotation du couloir");
+		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeGameControler.rotateExtraCardRight();
@@ -415,8 +415,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
-		generalBoard.add(rotateLeftButton, "pos 0.945al 0al");
-		generalBoard.add(rotateRightButton, "pos 0.94al 0.135al");
+		generalBoard.add(rotateLeftButton, "pos 0.932al 0al");
+		generalBoard.add(rotateRightButton, "pos 0.90al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
 		generalBoard.add(bgGame,"pos 0 0");
