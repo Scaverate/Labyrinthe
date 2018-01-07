@@ -280,7 +280,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeAltered = alterMaze();
-				rotateLeftButton.setEnabled(false);
+				if(mazeAltered) {
+					rotateLeftButton.setEnabled(false);
+					rotateRightButton.setEnabled(false);
+				}
+				else {
+					rotateLeftButton.setEnabled(true);
+					rotateRightButton.setEnabled(true);
+				}
 			}
 		});
 		//Bouton de rotation droit
@@ -611,7 +618,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				//On cree la zone pour la pile de cartes
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;
+				// réautoriser les boutons pour le prochain joueur
 				rotateLeftButton.setEnabled(true);
+				rotateRightButton.setEnabled(true);
 			}
 		}
 		else {
@@ -909,6 +918,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				possibleValuesNumber[0]
 		);
 
+		// si annulation d'un des deux prompt
 		if(selectedValueDirection == null || selectedValueNumber == null) {
 			return false;
 		}
