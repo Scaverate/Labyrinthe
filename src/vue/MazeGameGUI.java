@@ -380,7 +380,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			this.pawn.setBounds(0, 0, 100, 100);
 			this.pawn.setOpaque(false);
 
-			// TODO moche ajouter tests
 			((JLayeredPane) this.mazeBoard.getComponent(pieceIHM.getX() + 7
 					* pieceIHM.getY())).add(this.pawn, PAWN_LAYER);
 		}
@@ -390,7 +389,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			treasure.setPreferredSize(new Dimension(100, 100));
 			treasure.setBounds(0, 0, 100, 100);
 			treasure.setOpaque(false);
-			//TODO moche ajouter tests
 			((JLayeredPane)this.mazeBoard.getComponent(treasureIHM.getTreasureX() + 7*treasureIHM.getTreasureY())).add(treasure, TREASURE_LAYER);
 		}
 		Treasure treasureToCatch = this.mazeGameControler
@@ -418,7 +416,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(bgGame,"pos 0 0");
 
 		mazeContainer.add(generalBoard);
-		// TODO n'ecouter que les pions eventuellement
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
 	}
@@ -458,9 +455,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		if (parent != null) {
 			this.mazeContainer.add(this.pawn, JLayeredPane.DRAG_LAYER);
-
-			// TODO a reprendre pour generation chemin possible
-			// on grise les cases ou on ne peut pas se deplacer
 			reacheableCoords = this.mazeGameControler.findPath(new Coord(xOrigine, yOrigine));
 			for (Component component : this.mazeBoard.getComponents()) {
 				xDest = component.getX() / (this.mazeBoard.getHeight()/7);
@@ -473,7 +467,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 				if(!isOkDest) {
 					if(((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER).length > 0) {
-						//TODO moche ajouter un test
 						((JLayeredPane) component).getComponentsInLayer(COULOIR_LAYER)[0].setEnabled(false);
 					}
 				}
@@ -545,6 +538,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		 Treasure treasureToCatch = this.mazeGameControler
 					.currentTreasureToCatch();
+		System.out.println(treasureToCatch);
 		if(mazeAltered) {
 			// deplacement du pion
 			boolean isMoveOK = mazeGameControler.move(
@@ -553,7 +547,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			);
 
 			if (isMoveOK) {
-				System.out.println("déplacement OK");
 				Component componentHere = this.mazeBoard.findComponentAt(e.getX(),
 						e.getY());
 				parentComponentHere = (JLayeredPane) componentHere.getParent();
@@ -565,10 +558,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						//Lors d'un changement de score, on met à jour l'affichage du tableau
 						scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
 						scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
-						if(nbPlayer==3 || nbPlayer==4) {
+						if(nbPlayer == 3 || nbPlayer == 4) {
 							scoreYoshi.setText("Yoshi : " + mazeGameControler.getYellowPlayerScore());
 						}
-						if(nbPlayer==4) {
+						if(nbPlayer == 4) {
 							scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
 						}
 					}
@@ -735,7 +728,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		// si mise à jour du pion
 		else if(((LinkedList<PieceIHMs>)arg).size() > 0 && ((LinkedList<PieceIHMs>)arg).getFirst() instanceof PieceIHMs) {
 			List<PieceIHMs> piecesIHM = (List<PieceIHMs>) arg;
-			// on enlève tous les pions
+			// on enlève tous les pions (sur chaque couloir)
 			for(CouloirIHMs couloirIHM : this.couloirIHMs){
 				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7 * couloirIHM.getY() + couloirIHM.getX());
 				//On enlève le pion
@@ -785,8 +778,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
  		else if(((LinkedList<TreasureIHMs>)arg).size() > 0 && ((LinkedList<TreasureIHMs>)arg).getFirst() instanceof TreasureIHMs) {
 			List<TreasureIHMs> updatedList = (List<TreasureIHMs>) arg;
 			JLabel treasure;
-
-			//Suppression des trésors
+			// on enlève tous les trésors (sur chaque couloir)
+			for(CouloirIHMs couloirIHM : this.couloirIHMs){
+				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7 * couloirIHM.getY() + couloirIHM.getX());
+				if (this.layeredPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+					for (int i = 0; i < this.layeredPane
+							.getComponentsInLayer(TREASURE_LAYER).length; i++) {
+						this.layeredPane.remove(this.layeredPane
+								.getComponentsInLayer(TREASURE_LAYER)[i]);
+					}
+				}
+			}
 			for (TreasureIHMs treasureIHM : treasureIHMs) {
 				// on récupère le trésor
 				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7

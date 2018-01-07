@@ -26,13 +26,24 @@ public class Jeu implements Game {
 	}
 	
 	public Treasure drawCard(List<Treasures> listTreasure){
+		List<Treasure> curatedList = new LinkedList<>();
 		Treasure treasureDraw;
-		int randomNumber = 0;
+		int randomNumber;
 		Random rand = new Random();
-		randomNumber = rand.nextInt(listTreasure.size() - 0 ) + 0;
-		treasureDraw = (Treasure) listTreasure.get(randomNumber);
+
+		for(Treasures treasure : listTreasure) {
+			if(treasure.getTreasureX() != -1 && treasure.getTreasureY() != -1) {
+				curatedList.add((Treasure) treasure);
+			}
+		}
+		if(curatedList.size() == 0) {
+			listTreasure.clear();
+			return null;
+		}
+		randomNumber = rand.nextInt(curatedList.size());
+		treasureDraw = curatedList.get(randomNumber);
 		this.setTreasureToCatch(treasureDraw);
-		listTreasure.remove(randomNumber);	
+		listTreasure.remove(treasureDraw);
 		return treasureDraw;
 	}
 	
@@ -79,14 +90,9 @@ public class Jeu implements Game {
 		}
 		return done;
 	}
-	
-	/**
-	 * @return une version réduite de la liste des pièces en cours
-	 * ne donnant que des accès en lecture sur des PieceIHMs
-	 * (type piece + couleur + cooredonnées)
-	 */
+
 	public List<PieceIHMs> getPiecesIHM(){
-		PieceIHMs newPieceIHM = null;
+		PieceIHMs newPieceIHM;
 		List<PieceIHMs> list = new LinkedList<>();
 		
 		for(Pieces piece : this.pieces){
@@ -154,5 +160,5 @@ public class Jeu implements Game {
 	}
 
 	private List<Pieces> pieces;
-	private List<Treasures> listTreasureCatched = new LinkedList<Treasures>();
+	private List<Treasures> listTreasureCatched = new LinkedList<>();
 }
