@@ -45,7 +45,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private ImagePanel contentPane;
 	private int xAdjustment;
 	private JButton rotateLeftButton, rotateRightButton;
-	JLayeredPane extraCardPane;
+	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
 	private int yAdjustment;
@@ -54,8 +54,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private int yOrigine;
 	private int nbPlayer = 2;
 	private Component previouslyHoveredComponent;
-	List<TreasureIHMs> treasureIHMs;
-	List<CouloirIHM> couloirIHMs;
+	private List<TreasureIHMs> treasureIHMs;
+	private List<CouloirIHM> couloirIHMs;
 	private Dimension dim;
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
@@ -74,8 +74,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
 		Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
-
-	    
 		// on cree le container du menu
 	    b1 = Box.createHorizontalBox();
 		b1.setOpaque(true); // background gris desactive
@@ -409,8 +407,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
-		generalBoard.add(rotateLeftButton, "pos 0.915al 0al");
-		generalBoard.add(rotateRightButton, "pos 0.91al 0.135al");
+		generalBoard.add(rotateLeftButton, "pos 0.945al 0al");
+		generalBoard.add(rotateRightButton, "pos 0.94al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
 		generalBoard.add(bgGame,"pos 0 0");
