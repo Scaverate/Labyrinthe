@@ -881,10 +881,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	}
 
 	private boolean alterMaze() {
-		final String CMD_HAUT =  "Vers le haut";
-		final String CMD_BAS = "Vers le bas";
-		final String CMD_GAUCHE = "Vers la gauche";
-		final String CMD_DROITE = "Vers la droite";
+		final String CMD_HAUT =  "\u2191";
+		final String CMD_BAS = "\u2193";
+		final String CMD_GAUCHE = "\u2190";
+		final String CMD_DROITE = "\u2192";
 		final String CMD_1 = "2";
 		final String CMD_3 = "4";
 		final String CMD_5 = "6";
