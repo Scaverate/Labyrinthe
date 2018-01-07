@@ -193,7 +193,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel couloir;
 		JLabel treasure;
 		JLabel tresorCard;
-		final CouloirIHM extraCard;
+		CouloirIHM extraCard;
 		JLayeredPane extraCardPane;
 		JLabel extraCardImage;	
 		
