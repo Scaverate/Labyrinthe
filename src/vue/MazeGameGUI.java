@@ -280,6 +280,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeAltered = alterMaze();
+				rotateLeftButton.setEnabled(false);
 			}
 		});
 		//Bouton de rotation droit
@@ -610,6 +611,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				//On cree la zone pour la pile de cartes
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;
+				rotateLeftButton.setEnabled(true);
 			}
 		}
 		else {
@@ -776,7 +778,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						treasure, TREASURE_LAYER);
 			}
 			this.treasureIHMs = updatedList;
-
 		}
 		// si mise à jour des couloirs
 		else if(((LinkedList<CouloirIHM>)arg).size() > 0 && ((LinkedList<CouloirIHM>)arg).getFirst() instanceof CouloirIHM) {
