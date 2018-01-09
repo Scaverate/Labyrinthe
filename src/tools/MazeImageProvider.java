@@ -70,7 +70,7 @@ public class MazeImageProvider {
 		value = mapImageTresorsCard.get(key);
 		//System.out.println(value);
 		File g = new File("");
-		path = "/src/images/tresors/";
+		path = "/src/images/carte/";
 		ret = g.getAbsolutePath() + path + value;
 		System.out.println(ret);
 		return ret;
