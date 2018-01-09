@@ -637,7 +637,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						if (destinationX == treasureToCatch.getTreasureX()
 								&& destinationY == treasureToCatch.getTreasureY()) {
 							this.mazeGameControler.treasureCatchedPlateau(treasureToCatch);
-							this.mazeGameControler.setCurrentTreasureToCatch(null);
 							//Lors d'un changement de score, on met à jour l'affichage du tableau
 							scoreMario.setText("Mario : " + mazeGameControler.getRedPlayerScore());
 							scoreLuigi.setText("Luigi : " + mazeGameControler.getBluePlayerScore());
@@ -688,10 +687,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						.currentTreasureToCatch();
 
 				if(treasureToCatch != null){
+					if(treasureToCatch.getTreasureId() == 25){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(25));
+					}else if(treasureToCatch.getTreasureId() == 25){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(26));
+					}else if(treasureToCatch.getTreasureId() == 25){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(27));
+					}else if(treasureToCatch.getTreasureId() == 25){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(28));
+					}
 					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-				}else{
+				}/*else{
 					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
-				}
+				}*/
 				//On cree la zone pour la pile de cartes
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;

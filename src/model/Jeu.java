@@ -117,7 +117,7 @@ public class Jeu implements Game {
 	}
 	
 	public Treasure getTreasureToCatch() {
-		return treasureToCatch;
+		return this.treasureToCatch;
 	}
 
 	public void setTreasureToCatch(Treasure treasureToCatch) {
@@ -158,7 +158,28 @@ public class Jeu implements Game {
 		}
 		return name;
 	}
-
+	
+	public boolean setPrincessToCatch(){
+		String name = getNamePlayer();
+		int coordPrincessX = this.coordInitiale.x;
+		int coordPrincessY = this.coordInitiale.y;
+		int id = 0;
+		if(name == "Mario"){
+			id = 25;
+		}else if(name == "Luigi"){
+			id = 26;
+		}else if(name == "Yoshi"){
+			id = 27;
+		}else if(name == "Toad"){
+			id = 28;
+		}else{
+			return false;
+		}
+		Treasure princess = new Treasure(coordPrincessX, coordPrincessY, id, "TreasureFixed", false); 
+		setTreasureToCatch(princess);
+		return true;
+	}
+	
 	private List<Pieces> pieces;
 	private List<Treasures> listTreasureCatched = new LinkedList<>();
 }

@@ -14,7 +14,8 @@ public class Plateau implements BoardGames {
 		//Liste correspondant à la pioche du jeu
 		this.treasureToDraw = new LinkedList<>(this.treasures);
 		//Score maximum que chaque joueur doit atteindre
-		scoreMax = 24/nbPlayer;
+		//scoreMax = 24/nbPlayer;
+		scoreMax = 1;
 		switch (nbPlayer) {
 		case 2 :
 			jeuRouge = new Jeu(Couleur.ROUGE);
@@ -1088,8 +1089,9 @@ public class Plateau implements BoardGames {
 				canMove = true;
 			}
 		}
-
-		return canMove;
+		
+		return true;
+		//return canMove;
 	}
 
 	@Override
@@ -1371,6 +1373,10 @@ public class Plateau implements BoardGames {
 	public boolean treasureCatched(Treasure treasureCatched){
 		if(this.jeuCourant.addTreasureCatched(treasureCatched)){
 			this.treasures.remove(treasureCatched);
+			this.jeuCourant.setTreasureToCatch(null);
+			if(this.jeuCourant.getScorePlayer() == getScoreMax()){
+				this.jeuCourant.setPrincessToCatch();
+			}
 			return true;
 		}else{
 			return false;
@@ -1409,6 +1415,10 @@ public class Plateau implements BoardGames {
 		return this.jeuVert.getScorePlayer();
 	}
 
+	public boolean setPrincessToCatch(){
+		return this.jeuCourant.setPrincessToCatch();
+	}
+	
 	private int scoreMax = 0;
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;

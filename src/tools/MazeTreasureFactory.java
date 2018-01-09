@@ -40,7 +40,7 @@ public class MazeTreasureFactory {
 		
 		//Si objets fixe, on recupere les coordonnees ecrites dans MazeTreasurePos
 		//Sinon, on recupere une piece amovible aleatoirement parmis la liste
-		for(int i = 0; i < MazeTreasurePos.values().length; i++){
+		for(int i = 0; i < 24; i++){
 			if(MazeTreasurePos.values()[i].type == "TreasureFixed"){
 				//Creation d'un tresor a une position fixe
 				Treasure theTreasure = new Treasure(MazeTreasurePos.values()[i].coord.x,
