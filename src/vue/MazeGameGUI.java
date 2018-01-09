@@ -33,7 +33,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel scores;
 	private JPanel activePlayer;
 	private Icon imageTreasureToCatch;
-	private Box b1,b2,b3;
+	private Box b1,b2,b3,b4;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
 	private JLabel scoreMario;
@@ -47,6 +47,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
+	private JButton regles;
 	private int yAdjustment;
 	private int xOrigine;
 	private ButtonGroup grpButton;
@@ -81,6 +82,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		nb3Button = new JRadioButton("3 JOUEURS");
 		nb4Button = new JRadioButton("4 JOUEURS");
 		
+		
 		nb2Button.setFont(myFont);
 		nb3Button.setFont(myFont);
 		nb4Button.setFont(myFont);
@@ -106,6 +108,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Border marginRadio3 = new EmptyBorder(8, 35, 8, 35);
 		Border compoundRadio3 = new CompoundBorder(lineRadio3, marginRadio3);
 		nb4Button.setBorder(compoundRadio3);
+
 		
 		// debug background color btn on Mac 
 		nb2Button.setOpaque(true); 
@@ -163,14 +166,36 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}			
 		});
 		b2.add(okButton);
+
+		//on cree le bouton qui va afficher les regles
+		regles  = new JButton("RÈGLES DU JEU");
+
+		regles.setFont(myFont);
+		regles.setForeground(Color.WHITE);
+		regles.setBackground(Color.BLACK);
+		regles.setOpaque(true);
+		Border lineRegles = new LineBorder(Color.WHITE);
+		Border marginRegles = new EmptyBorder(8, 35, 8, 35);
+		Border compoundRegles = new CompoundBorder(lineRegles, marginRegles);
+		regles.setBorder(compoundRegles);
+		
+		//box contenant le bouton des regles
+		b4 = Box.createHorizontalBox();
+		b4.setOpaque(false);
+		b4.add(regles);
+		
+
+		b4.setBorder(new EmptyBorder(10,0,0,0));
 			
 		b3 = Box.createVerticalBox();
 		b3.setOpaque(false); // background gris desactive
 		b3.add(b1);
 		b3.add(b2);
+		b3.add(b4);
 				
 		b3.setBorder(new EmptyBorder(100, 0, 0, 0));
 		b2.setBorder(new EmptyBorder(10,0,0,0));
+		
 		
 		File g = new File("");
 		String path = "/src/images/";
