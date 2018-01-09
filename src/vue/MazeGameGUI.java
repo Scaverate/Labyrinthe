@@ -26,6 +26,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel pushDown2, pushDown4, pushDown6, pushUp2, pushUp4, pushUp6, pushRight2, pushRight4, pushRight6, pushLeft2, pushLeft4, pushLeft6;
 	private JLabel bgGame;
 	private Icon bg;
+	private Icon pd2, pd4, pd6, pu2, pu4, pu6, pl2, pl4, pl6, pr2, pr4, pr6;
 	private JLayeredPane mazeContainer;
 	private JPanel generalBoard;
 	private JPanel menu;
@@ -65,7 +66,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public MazeGameGUI(Dimension dim) {
 		
 		this.dim = dim;
-		Dimension windowSize = new Dimension(960,740);
+		Dimension windowSize = new Dimension(950,700);
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
 		mazeContainer = new JLayeredPane();
@@ -411,30 +412,63 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		g = new File("");
 		path = "/src/images/";
-		 ret = g.getAbsolutePath() + path + "bgGame.jpg";
+		ret = g.getAbsolutePath() + path + "bgGame.jpg";
 		
 		bg = new ImageIcon(ret);
 		bgGame = new JLabel(); 
 		bgGame.setIcon(bg);
 		
 		pushDown2 = new JLabel();
-		pushDown2.setText("pushDown2");
+		ret = g.getAbsolutePath() + path + "pushDown2.png";
+		pd2 = new ImageIcon(ret);
+		pushDown2.setIcon(pd2);
+		
 		pushDown4 = new JLabel();
-		pushDown4.setText("pushDown4");
+		pd4 = new ImageIcon(ret);
+		pushDown4.setIcon(pd4);
+		
 		pushDown6 = new JLabel();
-		pushDown6.setText("pushDown6");
+		pd6 = new ImageIcon(ret);
+		pushDown6.setIcon(pd6);
 		
 		pushUp2 = new JLabel();
+		ret = g.getAbsolutePath() + path + "pushUp.png";
+		pu2 = new ImageIcon(ret);
+		pushUp2.setIcon(pu2);
+		
 		pushUp4 = new JLabel();
+		pu4 = new ImageIcon(ret);
+		pushUp4.setIcon(pu4);
+		
 		pushUp6 = new JLabel();
+		pu6 = new ImageIcon(ret);
+		pushUp6.setIcon(pu6);
 		
 		pushRight2 = new JLabel();
+		ret = g.getAbsolutePath() + path + "pushRight.png";
+		pr2 = new ImageIcon(ret);
+		pushRight2.setIcon(pr2);
+		
 		pushRight4 = new JLabel();
+		pr4 = new ImageIcon(ret);
+		pushRight4.setIcon(pr4);
+		
 		pushRight6 = new JLabel();
+		pr6 = new ImageIcon(ret);
+		pushRight6.setIcon(pr6);
 		
 		pushLeft2 = new JLabel();
+		ret = g.getAbsolutePath() + path + "pushLeft.png";
+		pl2 = new ImageIcon(ret);
+		pushLeft2.setIcon(pl2);
+		
 		pushLeft4 = new JLabel();
+		pl4 = new ImageIcon(ret);
+		pushLeft4.setIcon(pl4);
+		
 		pushLeft6 = new JLabel();
+		pl6 = new ImageIcon(ret);
+		pushLeft6.setIcon(pl6);
 		
 		generalBoard.add(pushDown2, "pos 0.1al 0.1al");
 		generalBoard.add(pushDown4, "pos 0.1al 0.2al");
@@ -453,7 +487,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(pushRight6, "pos 0.1al 0.1al");
 		
 		generalBoard.add(tresorToCatch,"pos 0.892al 0.458al");
-		generalBoard.add(mazeBoard, "pos 0.01al 0.01al");
+		
+
+		mazeBoard.setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, Color.LIGHT_GRAY));
+		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
 		generalBoard.add(rotateLeftButton, "pos 0.932al 0al");
