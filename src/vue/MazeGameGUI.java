@@ -92,6 +92,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		nb3Button.setForeground(Color.WHITE);
 		nb3Button.setBackground(Color.BLACK);
+
 		Border lineRadio2 = new LineBorder(Color.WHITE);
 		Border marginRadio2 = new EmptyBorder(8, 35, 8, 35);
 		Border compoundRadio2 = new CompoundBorder(lineRadio2, marginRadio2);
@@ -103,6 +104,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Border marginRadio3 = new EmptyBorder(8, 35, 8, 35);
 		Border compoundRadio3 = new CompoundBorder(lineRadio3, marginRadio3);
 		nb4Button.setBorder(compoundRadio3);
+		
+		// debug background color btn on Mac 
+		nb2Button.setOpaque(true); 
+		nb3Button.setOpaque(true); 
+		nb4Button.setOpaque(true);
+		nb3Button.setOpaque(true); 
 		
 		// ajout des boutons radio dans le groupe bg
 		grpButton.add(nb2Button);
@@ -138,6 +145,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		okButton = new JButton("JOUER");
 		okButton.setForeground(Color.WHITE);
 		okButton.setBackground(Color.BLACK);
+		okButton.setOpaque(true);
 		Border line = new LineBorder(Color.WHITE);
 		Border margin = new EmptyBorder(8, 35, 8, 35);
 		Border compound = new CompoundBorder(line, margin);
