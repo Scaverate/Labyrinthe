@@ -23,6 +23,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private MazeGameControlers mazeGameControler;
 	private JLayeredPane layeredPane;
 	private JLabel tresorToCatch;
+	private JLabel pushDown2, pushDown4, pushDown6, pushUp2, pushUp4, pushUp6, pushRight2, pushRight4, pushRight6, pushLeft2, pushLeft4, pushLeft6;
 	private JLabel bgGame;
 	private Icon bg;
 	private JLayeredPane mazeContainer;
@@ -64,7 +65,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	public MazeGameGUI(Dimension dim) {
 		
 		this.dim = dim;
-		Dimension windowSize = new Dimension(950,700);
+		Dimension windowSize = new Dimension(960,740);
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
 		mazeContainer = new JLayeredPane();
@@ -416,8 +417,43 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		bgGame = new JLabel(); 
 		bgGame.setIcon(bg);
 		
+		pushDown2 = new JLabel();
+		pushDown2.setText("pushDown2");
+		pushDown4 = new JLabel();
+		pushDown4.setText("pushDown4");
+		pushDown6 = new JLabel();
+		pushDown6.setText("pushDown6");
+		
+		pushUp2 = new JLabel();
+		pushUp4 = new JLabel();
+		pushUp6 = new JLabel();
+		
+		pushRight2 = new JLabel();
+		pushRight4 = new JLabel();
+		pushRight6 = new JLabel();
+		
+		pushLeft2 = new JLabel();
+		pushLeft4 = new JLabel();
+		pushLeft6 = new JLabel();
+		
+		generalBoard.add(pushDown2, "pos 0.1al 0.1al");
+		generalBoard.add(pushDown4, "pos 0.1al 0.2al");
+		generalBoard.add(pushDown6, "pos 0.1al 0.4al");
+		
+		generalBoard.add(pushUp2, "pos 0.1al 0.1al");
+		generalBoard.add(pushUp4, "pos 0.1al 0.1al");
+		generalBoard.add(pushUp6, "pos 0.1al 0.1al");
+		
+		generalBoard.add(pushLeft2, "pos 0.1al 0.1al");
+		generalBoard.add(pushLeft4, "pos 0.1al 0.1al");
+		generalBoard.add(pushLeft6, "pos 0.1al 0.1al");
+		
+		generalBoard.add(pushRight2, "pos 0.1al 0.1al");
+		generalBoard.add(pushRight4, "pos 0.1al 0.1al");
+		generalBoard.add(pushRight6, "pos 0.1al 0.1al");
+		
 		generalBoard.add(tresorToCatch,"pos 0.892al 0.458al");
-		generalBoard.add(mazeBoard, "pos 0 0");
+		generalBoard.add(mazeBoard, "pos 0.01al 0.01al");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
 		generalBoard.add(rotateLeftButton, "pos 0.932al 0al");
