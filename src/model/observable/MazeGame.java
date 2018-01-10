@@ -116,8 +116,6 @@ public class MazeGame extends Observable implements BoardGames{
 	
 	public boolean treasureCatchedPlateau(Treasure treasureCatched){
 		boolean treasureHasBeenCatched = this.plateau.treasureCatched(treasureCatched);
-		System.out.println("tresor a ete recupere : " + treasureHasBeenCatched);
-		System.out.println(treasureCatched);
 		this.notifyObservers(plateau.getTreasuresIHMs()); 
 		return treasureHasBeenCatched;
 	}

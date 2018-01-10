@@ -66,9 +66,7 @@ public class MazeImageProvider {
 		String ret, key, value, path; 
 		ret = null;
 		key = pieceType;
-		//System.out.println(key);
 		value = mapImageTresorsCard.get(key);
-		//System.out.println(value);
 		File g = new File("");
 		path = "/src/images/carte/";
 		ret = g.getAbsolutePath() + path + value;
@@ -96,8 +94,13 @@ public class MazeImageProvider {
 	}
 	
 	public static String getImageFile(int treasureID){
-		String ret, value, path;
-		value = mapImageTreasures.get(treasureID);
+		String ret, value = "", path;
+		if(mapImageTreasures.get(treasureID) != null){
+			value = mapImageTreasures.get(treasureID);
+		//Si image de princess pour carte
+		}else if(treasureID > 28){
+			value = "treasure_" + Integer.toString(treasureID) + ".png";
+		}
 		File g = new File("");
 		path = "/src/images/treasures/";
 		ret = g.getAbsolutePath()+path+value;
