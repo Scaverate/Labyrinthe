@@ -370,9 +370,42 @@ public class Plateau implements BoardGames {
 		return treasuresToAdd;
 	}
 
+	private void updateFromDirection(int position, String direction) {
+		switch(direction) {
+			case "down":
+				this.insertX = position;
+				this.insertY = 0;
+				this.unchangedAxe = "x";
+				this.updateX = 0;
+				this.updateY = 1;
+				break;
+			case "up":
+				this.insertX = position;
+				this.insertY = 6;
+				this.unchangedAxe = "x";
+				this.updateX = 0;
+				this.updateY = -1;
+				break;
+			case "right":
+				this.insertX = 0;
+				this.insertY = position;
+				this.unchangedAxe = "y";
+				this.updateX = 1;
+				this.updateY = 0;
+				break;
+			case "left":
+				this.insertX = 6;
+				this.insertY = position;
+				this.unchangedAxe = "y";
+				this.updateX = -1;
+				this.updateY = 0;
+				break;
+			default:
+				System.out.println("Impossible de récupérer x et y");
+		}
+	}
+
 	private void pushPlayers(int position, String direction) {
-		int x = -1, y = -1, updateX = 0, updateY = 0;
-		String unchangeAxe="";
 		List<Jeu> playerToMoveOut = new LinkedList<>();
 		List<Jeu> playerMoved = new LinkedList<>();
 
@@ -380,39 +413,10 @@ public class Plateau implements BoardGames {
 			return;
 		}
 
-		switch(direction) {
-			case "down":
-				x = position;
-				y = 0;
-				unchangeAxe = "x";
-				updateY = 1;
-				break;
-			case "up":
-				x = position;
-				y = 6;
-				unchangeAxe = "x";
-				updateY = -1;
-				break;
-			case "right":
-				x = 0;
-				y = position;
-				unchangeAxe = "y";
-				updateX = 1;
-				break;
-			case "left":
-				x = 6;
-				y = position;
-				unchangeAxe = "y";
-				updateX = -1;
-				break;
-			default:
-				System.out.println("Impossible de récupérer x et y");
-		}
-
-
+		this.updateFromDirection(position, direction);
 
 		for(Couloirs couloir : this.couloirs) {
-			if ((unchangeAxe.equals("x") && couloir.getX() == position) || (unchangeAxe.equals("y") && couloir.getY() == position)) {
+			if ((this.unchangedAxe.equals("x") && couloir.getX() == position) || (this.unchangedAxe.equals("y") && couloir.getY() == position)) {
 				// Suivant le type de push, on vérifie si le couloir est au bord du plateau
 				if ((direction.equals("up") && couloir.getY() == 0) ||
 						(direction.equals("down") && couloir.getY() == 6) ||
@@ -435,26 +439,26 @@ public class Plateau implements BoardGames {
 		}
 
 		for(Couloirs couloir : this.couloirs) {
-			if ((unchangeAxe.equals("x") && couloir.getX() == position) || (unchangeAxe.equals("y") && couloir.getY() == position)) {
+			if ((this.unchangedAxe.equals("x") && couloir.getX() == position) || (this.unchangedAxe.equals("y") && couloir.getY() == position)) {
 				if ((direction.equals("up") && couloir.getY() > 0) ||
 						(direction.equals("down") && couloir.getY() < 6) ||
 						(direction.equals("left") && couloir.getX() > 0) ||
 						(direction.equals("right") && couloir.getX() < 6)) {
 					// on déplace le joueur d'une case
 					if (this.jeuBleu != null && this.jeuBleu.isPieceHere(couloir.getX(), couloir.getY()) && !playerToMoveOut.contains(this.jeuBleu) && !playerMoved.contains(jeuBleu)) {
-						this.jeuBleu.move(couloir.getX(), couloir.getY(), couloir.getX() + updateX, couloir.getY() + updateY);
+						this.jeuBleu.move(couloir.getX(), couloir.getY(), couloir.getX() + this.updateX, couloir.getY() + this.updateY);
 						playerMoved.add(jeuBleu);
 					}
 					if (this.jeuRouge != null && this.jeuRouge.isPieceHere(couloir.getX(), couloir.getY()) && !playerToMoveOut.contains(this.jeuRouge) && !playerMoved.contains(jeuRouge)) {
-						this.jeuRouge.move(couloir.getX(), couloir.getY(), couloir.getX() + updateX, couloir.getY() + updateY);
+						this.jeuRouge.move(couloir.getX(), couloir.getY(), couloir.getX() + this.updateX, couloir.getY() + this.updateY);
 						playerMoved.add(jeuRouge);
 					}
 					if (this.jeuJaune != null && this.jeuJaune.isPieceHere(couloir.getX(), couloir.getY()) && !playerToMoveOut.contains(this.jeuJaune) && !playerMoved.contains(jeuJaune)) {
-						this.jeuJaune.move(couloir.getX(), couloir.getY(), couloir.getX() + updateX, couloir.getY() + updateY);
+						this.jeuJaune.move(couloir.getX(), couloir.getY(), couloir.getX() + this.updateX, couloir.getY() + this.updateY);
 						playerMoved.add(jeuJaune);
 					}
 					if (this.jeuVert != null && this.jeuVert.isPieceHere(couloir.getX(), couloir.getY()) && !playerToMoveOut.contains(this.jeuVert) && !playerMoved.contains(jeuVert)) {
-						this.jeuVert.move(couloir.getX(), couloir.getY(), couloir.getX() + updateX, couloir.getY() + updateY);
+						this.jeuVert.move(couloir.getX(), couloir.getY(), couloir.getX() + this.updateX, couloir.getY() + this.updateY);
 						playerMoved.add(jeuVert);
 					}
 				}
@@ -462,51 +466,22 @@ public class Plateau implements BoardGames {
 		}
 
 		for(Jeu jeu : playerToMoveOut) {
-			jeu.move(jeu.getCoord().x, jeu.getCoord().y, x, y);
+			jeu.move(jeu.getCoord().x, jeu.getCoord().y, this.insertX, this.insertY);
 		}
 	}
 
 	private List<Couloirs> pushCorridors(int position, String direction) {
-		int x = -1, y = -1, updateX = 0, updateY = 0;
-		String unchangeAxe="";
 		List<Couloirs> corridorsToAdd = new LinkedList<>();
 
 		if (!direction.equals("down") && !direction.equals("up") && !direction.equals("right") && !direction.equals("left")) {
 			return null;
 		}
 
-		switch(direction) {
-			case "down":
-				x = position;
-				y = 0;
-				unchangeAxe = "x";
-				updateY = 1;
-				break;
-			case "up":
-				x = position;
-				y = 6;
-				unchangeAxe = "x";
-				updateY = -1;
-				break;
-			case "right":
-				x = 0;
-				y = position;
-				unchangeAxe = "y";
-				updateX = 1;
-				break;
-			case "left":
-				x = 6;
-				y = position;
-				unchangeAxe = "y";
-				updateX = -1;
-				break;
-			default:
-				System.out.println("Impossible de récupérer x et y");
-		}
+		this.updateFromDirection(position, direction);
 
 		// On ajoute la pièce supplémentaire qu'on veut insérer dans le plateau
 		Couloirs oldExtraCorridor = new CouloirAmovible(
-				new Coord(x,y),
+				new Coord(this.insertX, this.insertY),
 				this.extraCorridor.isNorthOpened(),
 				this.extraCorridor.isSouthOpened(),
 				this.extraCorridor.isEastOpened(),
@@ -516,7 +491,7 @@ public class Plateau implements BoardGames {
 		corridorsToAdd.add(oldExtraCorridor);
 
 		for(Couloirs couloir : this.couloirs) {
-			if ((unchangeAxe.equals("x") && couloir.getX() == position) || (unchangeAxe.equals("y") && couloir.getY() == position)) {
+			if ((this.unchangedAxe.equals("x") && couloir.getX() == position) || (this.unchangedAxe.equals("y") && couloir.getY() == position)) {
 				// Suivant le type de push, on vérifie si le couloir est au bord du plateau
 				if ((direction.equals("up") && couloir.getY() == 0) ||
 						(direction.equals("down") && couloir.getY() == 6) ||
@@ -525,7 +500,7 @@ public class Plateau implements BoardGames {
 					this.extraCorridor = (CouloirAmovible) couloir;
 				} else {
 					CouloirAmovible newCorridor = new CouloirAmovible(
-							new Coord(couloir.getX() + updateX, couloir.getY() + updateY),
+							new Coord(couloir.getX() + this.updateX, couloir.getY() + this.updateY),
 							couloir.isNorthOpened(),
 							couloir.isSouthOpened(),
 							couloir.isEastOpened(),
@@ -1221,6 +1196,12 @@ public class Plateau implements BoardGames {
 	private Treasure extraTreasure;
 	private List<Treasures> treasures;
 	private List<Treasures> treasureToDraw;
+	private int insertX = 0;
+	private int insertY = 0;
+	private String unchangedAxe = "";
+	private int updateX = 0;
+	private int updateY = 0;
+
 
 	// tests
 	public static void main(String[] args){
