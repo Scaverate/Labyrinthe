@@ -649,7 +649,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						}
 					}
 				}
-				else {
+				if(this.mazeGameControler.getCurrentScorePlayer() == this.mazeGameControler.getScoreMax()){
+					Treasure treasurePrincess = mazeGameControler.currentTreasureToCatch();
+					JLabel princessIHM = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasurePrincess.getTreasureId())));
+					princessIHM.setPreferredSize(new Dimension(100, 100));
+					princessIHM.setBounds(0, 0, 100, 100);
+					princessIHM.setOpaque(false);
+					((JLayeredPane)this.mazeBoard.getComponent(treasurePrincess.getTreasureX() + 7*treasurePrincess.getTreasureY())).add(princessIHM, TREASURE_LAYER);
 					if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
 						int n = JOptionPane.showOptionDialog(frame,
 								"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
@@ -688,18 +694,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 				if(treasureToCatch != null){
 					if(treasureToCatch.getTreasureId() == 25){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(25));
-					}else if(treasureToCatch.getTreasureId() == 25){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(26));
-					}else if(treasureToCatch.getTreasureId() == 25){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(27));
-					}else if(treasureToCatch.getTreasureId() == 25){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(28));
-					}
-					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
-				}/*else{
-					imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
-				}*/
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(29));
+					}else if(treasureToCatch.getTreasureId() == 26){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(30));
+					}else if(treasureToCatch.getTreasureId() == 27){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(31));
+					}else if(treasureToCatch.getTreasureId() == 28){
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(32));
+					}else{
+						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+					}	
+				}
 				//On cree la zone pour la pile de cartes
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;
@@ -848,31 +853,32 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			//Re-creaction des tresors
 			for (TreasureIHMs treasureIHM : updatedList) {
 				// on récupère le trésor
-				this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
+					this.layeredPane = (JLayeredPane) this.mazeBoard.getComponent(7
 						* treasureIHM.getTreasureY() + treasureIHM.getTreasureX());
 
-				//On le supprime
-				if (this.layeredPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
-					for (int i = 0; i < this.layeredPane
+					//On le supprime
+					if (this.layeredPane.getComponentsInLayer(TREASURE_LAYER).length != 0) {
+						for (int i = 0; i < this.layeredPane
 							.getComponentsInLayer(TREASURE_LAYER).length; i++) {
-						this.layeredPane.remove(this.layeredPane
+							this.layeredPane.remove(this.layeredPane
 								.getComponentsInLayer(TREASURE_LAYER)[i]);
+						}
 					}
-				}
 
-				//On recrée le trésor
-				treasure = new JLabel(new ImageIcon(
+					//On recrée le trésor
+					treasure = new JLabel(new ImageIcon(
 						MazeImageProvider.getImageFile(treasureIHM.getTreasureId())));
-				treasure.setPreferredSize(new Dimension(100, 100));
-				treasure.setBounds(0, 0, 100, 100);
-				treasure.setOpaque(false);
-				// TODO moche ajouter tests
-				((JLayeredPane) this.mazeBoard.getComponent(treasureIHM
+				
+					treasure.setPreferredSize(new Dimension(100, 100));
+					treasure.setBounds(0, 0, 100, 100);
+					treasure.setOpaque(false);
+					// TODO moche ajouter tests
+					((JLayeredPane) this.mazeBoard.getComponent(treasureIHM
 						.getTreasureX() + 7 * treasureIHM.getTreasureY())).add(
 						treasure, TREASURE_LAYER);
+				}
+				this.treasureIHMs = updatedList;
 			}
-			this.treasureIHMs = updatedList;
-		}
 		// si mise à jour des couloirs
 		else if(((LinkedList<CouloirIHM>)arg).size() > 0 && ((LinkedList<CouloirIHM>)arg).getFirst() instanceof CouloirIHM) {
 			List<CouloirIHM> updatedList = (List<CouloirIHM>) arg;

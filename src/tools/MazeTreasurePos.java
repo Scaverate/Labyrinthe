@@ -28,7 +28,11 @@ public enum MazeTreasurePos {
 	NUAGE_ZAP(21, "TreasureMoveable", new Coord(0,0)),
 	FLEUR_GLACE(22, "TreasureMoveable", new Coord(0,0)),
 	BLOC_POW(23, "TreasureMoveable", new Coord(0,0)),
-	DOUBLE_CERISE(24, "TreasureMoveable", new Coord(0,0));
+	DOUBLE_CERISE(24, "TreasureMoveable", new Coord(0,0)),
+	PEACH(25, "TreasureFixed", new Coord(0,0)),
+	DAISY(26, "TreasureFixed", new Coord(6,6)),
+	BIRDO(27, "TreasureFixed", new Coord(6,0)),
+	TOADETTE(28, "TreasureFixed", new Coord(0,6));
 	
 	public int id;
 	public String type;
