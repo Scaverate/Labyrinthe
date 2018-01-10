@@ -24,8 +24,7 @@ public class Plateau implements BoardGames {
 		}
 		
 		//Score maximum que chaque joueur doit atteindre
-		//scoreMax = 24/nbPlayer;
-		scoreMax = 1;
+		scoreMax = 24/nbPlayer;
 		switch (nbPlayer) {
 		case 2 :
 			jeuRouge = new Jeu(Couleur.ROUGE);
