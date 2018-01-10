@@ -411,15 +411,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		tresorToCatch.setIcon(imageTreasureToCatch);
 
 		g = new File("");
-		path = "/src/images/";
 		ret = g.getAbsolutePath() + path + "bgGame.jpg";
+		path = "/src/images/arrow/";
 		
 		bg = new ImageIcon(ret);
 		bgGame = new JLabel(); 
 		bgGame.setIcon(bg);
 		
 		pushDown2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushDown2.png";
+		ret = g.getAbsolutePath() + path + "pushDown.png";
 		pd2 = new ImageIcon(ret);
 		pushDown2.setIcon(pd2);
 		
@@ -469,27 +469,26 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		pushLeft6 = new JLabel();
 		pl6 = new ImageIcon(ret);
 		pushLeft6.setIcon(pl6);
+
+		generalBoard.add(pushDown2, "pos 0.126al 0.5");
+		generalBoard.add(pushDown4, "pos 0.355al 0.5");
+		generalBoard.add(pushDown6, "pos 0.585al 0.5");
 		
-		generalBoard.add(pushDown2, "pos 0.1al 0.1al");
-		generalBoard.add(pushDown4, "pos 0.1al 0.2al");
-		generalBoard.add(pushDown6, "pos 0.1al 0.4al");
+		generalBoard.add(pushUp2, "pos 0.12al 0.699al");
+		generalBoard.add(pushUp4, "pos 0.35al 0.699al");
+		generalBoard.add(pushUp6, "pos 0.58al 0.699al");
 		
-		generalBoard.add(pushUp2, "pos 0.1al 0.1al");
-		generalBoard.add(pushUp4, "pos 0.1al 0.1al");
-		generalBoard.add(pushUp6, "pos 0.1al 0.1al");
+		generalBoard.add(pushLeft2, "pos 0.738al 0.116al");
+		generalBoard.add(pushLeft4, "pos 0.738al 0.333al");
+		generalBoard.add(pushLeft6, "pos 0.738al 0.553al");
 		
-		generalBoard.add(pushLeft2, "pos 0.1al 0.1al");
-		generalBoard.add(pushLeft4, "pos 0.1al 0.1al");
-		generalBoard.add(pushLeft6, "pos 0.1al 0.1al");
-		
-		generalBoard.add(pushRight2, "pos 0.1al 0.1al");
-		generalBoard.add(pushRight4, "pos 0.1al 0.1al");
-		generalBoard.add(pushRight6, "pos 0.1al 0.1al");
+		generalBoard.add(pushRight2, "pos 0.5 0.109al");
+		generalBoard.add(pushRight4, "pos 0.5 0.328al");
+		generalBoard.add(pushRight6, "pos 0.5 0.545al");
 		
 		generalBoard.add(tresorToCatch,"pos 0.892al 0.458al");
 		
-
-		mazeBoard.setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, Color.LIGHT_GRAY));
+		mazeBoard.setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, new Color(155, 216, 235)));
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
