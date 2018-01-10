@@ -47,7 +47,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
-	private JButton regles;
+	private JButton reglesButton;
 	private int yAdjustment;
 	private int xOrigine;
 	private ButtonGroup grpButton;
@@ -60,7 +60,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
-	private JFrame f1;
+	private JDialog rulesFrame;
+	private JPanel rulesPane;
 	private boolean mazeAltered = false;
 
 	
@@ -168,24 +169,77 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		b2.add(okButton);
 
 		//on cree le bouton qui va afficher les regles
-		regles  = new JButton("RÈGLES DU JEU");
+		reglesButton  = new JButton("RÈGLES DU JEU");
 
-		regles.setFont(myFont);
-		regles.setForeground(Color.WHITE);
-		regles.setBackground(Color.BLACK);
-		regles.setOpaque(true);
+		reglesButton.setFont(myFont);
+		reglesButton.setForeground(Color.WHITE);
+		reglesButton.setBackground(Color.BLACK);
+		reglesButton.setOpaque(true);
 		Border lineRegles = new LineBorder(Color.WHITE);
 		Border marginRegles = new EmptyBorder(8, 35, 8, 35);
 		Border compoundRegles = new CompoundBorder(lineRegles, marginRegles);
-		regles.setBorder(compoundRegles);
+		reglesButton.setBorder(compoundRegles);
+		
+		reglesButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//JOptionPane.showMessageDialog(mazeContainer,"lorem ipsum", "Règles du jeu", JOptionPane.PLAIN_MESSAGE);
+				
+				//creation de la fenetre des regles
+				rulesFrame = new JDialog();
+				rulesFrame.setSize(new Dimension(700,700));
+				rulesFrame.setLocationRelativeTo(getParent());
+				
+				//creation du panneau qui va etre ajoute dans la fenetre des regles
+				File f = new File("");
+				String path = "/src/images/";
+				String background = f.getAbsolutePath() + path + "bgGame.jpg";
+				System.out.println(background);
+				
+				ImageIcon backgroundImage = new ImageIcon(background);
+				rulesPane = new JPanel(new BorderLayout()) {
+					@Override
+					protected void paintComponent(Graphics g) {
+						super.paintComponent(g);
+						g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+					}
+					
+					@Override
+		            public Dimension getPreferredSize() {
+		                Dimension size = super.getPreferredSize();
+		                size.width = Math.max(backgroundImage.getIconWidth(), size.width);
+		                size.height = Math.max(backgroundImage.getIconHeight(), size.height);
+
+		                return size;
+					}
+				};
+				
+				
+		            /*@Override
+		            public Dimension getPreferredSize() {
+		                Dimension size = super.getPreferredSize();
+		                size.width = Math.max(backgroundImage.getIconWidth(), size.width);
+		                size.height = Math.max(backgroundImage.getIconHeight(), size.height);
+
+		                return size;
+		            }*/
+
+			
+				System.out.println(rulesPane);
+				//ajout des composants
+				rulesFrame.add(rulesPane);
+
+				rulesFrame.setModal(true);
+				rulesFrame.setVisible(true);
+			}			
+		});
 		
 		//box contenant le bouton des regles
 		b4 = Box.createHorizontalBox();
 		b4.setOpaque(false);
-		b4.add(regles);
+		b4.add(reglesButton);
 		
 
-		b4.setBorder(new EmptyBorder(10,0,0,0));
+		b4.setBorder(new EmptyBorder(350,0,0,0));
 			
 		b3 = Box.createVerticalBox();
 		b3.setOpaque(false); // background gris desactive
