@@ -188,12 +188,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				rulesFrame = new JDialog();
 				rulesFrame.setSize(new Dimension(700,700));
 				rulesFrame.setLocationRelativeTo(getParent());
+				rulesFrame.setTitle("Règles du jeu");
 				
 				//creation du panneau qui va etre ajoute dans la fenetre des regles
 				File f = new File("");
 				String path = "/src/images/";
 				String background = f.getAbsolutePath() + path + "bgGame.jpg";
-				System.out.println(background);
 				
 				ImageIcon backgroundImage = new ImageIcon(background);
 				rulesPane = new JPanel(new BorderLayout()) {
@@ -202,29 +202,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						super.paintComponent(g);
 						g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
 					}
-					
-					@Override
-		            public Dimension getPreferredSize() {
-		                Dimension size = super.getPreferredSize();
-		                size.width = Math.max(backgroundImage.getIconWidth(), size.width);
-		                size.height = Math.max(backgroundImage.getIconHeight(), size.height);
-
-		                return size;
-					}
 				};
 				
-				
-		            /*@Override
-		            public Dimension getPreferredSize() {
-		                Dimension size = super.getPreferredSize();
-		                size.width = Math.max(backgroundImage.getIconWidth(), size.width);
-		                size.height = Math.max(backgroundImage.getIconHeight(), size.height);
-
-		                return size;
-		            }*/
-
-			
-				System.out.println(rulesPane);
+				JButton testButton = new JButton("TEST");
+				testButton.setFont(myFont);
+				rulesPane.add(testButton);
 				//ajout des composants
 				rulesFrame.add(rulesPane);
 
