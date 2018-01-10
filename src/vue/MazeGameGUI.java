@@ -315,7 +315,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeGame.addObserver((Observer) this);
 		// on initialise le controleur
 		couloirIHMs = mazeGameControler.getCouloirsIHMs();
-		pieceIHMs = mazeGameControler.getPiecesIHMs();
+		pieceIHMs = mazeGameControler.getPiecesIHM();
 		treasureIHMs = mazeGameControler.getTreasuresIHMs();
 
 		//On cree une grille de 2 par 2 (4 cases)

@@ -80,7 +80,7 @@ public class MazeGame extends Observable implements BoardGames{
 	public List<CouloirIHM> getCouloirIHMs () { return this.plateau.getCouloirsIHMs(); }
 	public CouloirIHM getExtraCorridorIHM() { return this.plateau.getExtraCorridorIHM(); }
 	public TreasureIHM getExtraTreasureIHM() { return this.plateau.getExtraTreasureIHM(); }
-	public List<PieceIHMs> getPiecesIHMs() { return this.plateau.getPiecesIHMs(); }
+	public List<PieceIHMs> getPiecesIHM() { return this.plateau.getPiecesIHM(); }
 	public List<Coord> findPath(Coord coord) { return this.plateau.findPath(coord); }
 	public void rotateExtraCardLeft() {
 		this.plateau.rotateExtraCardLeft();

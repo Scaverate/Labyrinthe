@@ -61,7 +61,7 @@ public class Plateau implements BoardGames {
 			jeuVert.setCoordInit(new Coord(jeuVert.getPiecesIHM().get(0).getX(),jeuVert.getPiecesIHM().get(0).getY()));
 			break;
 		default:
-				System.out.println("La creation des jeux a echoue");
+			System.out.println("La creation des jeux a echoue");
 		}
 		this.jeuCourant = jeuRouge;
 		this.message = "";
@@ -124,6 +124,9 @@ public class Plateau implements BoardGames {
 			//Piocher une carte si le joueur n'a pas atteint le score final
 			this.jeuCourant.drawCard(this.treasureToDraw);
 		}
+
+		System.out.println("Trésor à attraper : " + this.jeuCourant.getTreasureToCatch());
+		System.out.println("Trésors attrapés : " + this.jeuCourant.getListTreasureCatched());
 	}
 
 	/*
@@ -141,7 +144,6 @@ public class Plateau implements BoardGames {
 	 * 	* si commande "pushRight" -> indique une ligne
 	 */
 	public boolean alterMaze(String command, int position) {
-		//TODO ajouter le décalage des personnages
 
 		boolean commandComplete;
 		List<Couloirs> couloirPushed = new LinkedList<>();
@@ -149,12 +151,12 @@ public class Plateau implements BoardGames {
 		List<Treasures> treasuresPushed = new LinkedList<>();
 		List<Treasures> treasuresToRemove = new LinkedList<>();
 
-		// si la position n'est pas bonne on arrête tout
+		// Les positions (lignes & colonnes) amovibles sont les colonnes 1,3,5
 		if(position != 1 && position != 3 && position != 5) {
 			return false;
 		}
 
-		// on retire les anciens couloirs de la colonne ciblée
+		// On ajoutes dans une liste les couloirs qui seront supprimés suivant le type de command
 		for(Couloirs couloir : this.couloirs) {
 			if(command.equals("pushDown") || command.equals("pushUp")){
 				if(couloir.getX() == position) {
@@ -168,7 +170,7 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		// on retire les anciens tresors de la colonne ciblée
+		// De même pour les trésors
 		for(Treasures treasure : this.treasures) {
 			if(command.equals("pushDown") || command.equals("pushUp")){
 				if(treasure.getTreasureX() == position) {
@@ -181,7 +183,8 @@ public class Plateau implements BoardGames {
 				}
 			}
 		}
-		// plus on retire l'extra tresor si besoin
+
+		// On supprime le trésor sur la pièce supplémentaire de la liste des trésors présents
 		if(this.extraTreasure != null) {
 			this.treasures.remove(this.extraTreasure);
 		}
@@ -191,28 +194,28 @@ public class Plateau implements BoardGames {
 			case "pushDown" : {
 				this.pushJoueursDown(position);
 				treasuresPushed = this.pushTreasuresDown(position);
-				couloirPushed = this.pushCouloirsDown(position);
+				couloirPushed = this.pushCorridors(position,"down");
 				commandComplete = true;
 				break;
 			}
 			case "pushUp" : {
 				this.pushJoueursUp(position);
 				treasuresPushed = this.pushTreasuresUp(position);
-				couloirPushed = this.pushCouloirsUp(position);
+				couloirPushed = this.pushCorridors(position,"up");
 				commandComplete = true;
 				break;
 			}
 			case "pushLeft" : {
 				this.pushJoueursLeft(position);
 				treasuresPushed = this.pushTreasuresLeft(position);
-				couloirPushed = this.pushCouloirsLeft(position);
+				couloirPushed = this.pushCorridors(position,"left");
 				commandComplete = true;
 				break;
 			}
 			case "pushRight" : {
 				this.pushJoueursRight(position);
 				treasuresPushed = this.pushTreasuresRight(position);
-				couloirPushed = this.pushCouloirsRight(position);
+				couloirPushed = this.pushCorridors(position,"right");
 				commandComplete = true;
 				break;
 			}
@@ -270,6 +273,7 @@ public class Plateau implements BoardGames {
 			treasuresToAdd.add(oldExtra);
 			//gestion des draw
 			for(Treasures treasure : this.treasureToDraw) {
+				//TODO voir avec Martin
 				if(treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
 					drawableTreasureToRemove.add(treasure);
 				}
@@ -413,38 +417,78 @@ public class Plateau implements BoardGames {
 			jeu.move(position, 6, position, 0);
 		}
 	}
-	private List<Couloirs> pushCouloirsDown(int position) {
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
-		Couloirs oldExtra = new CouloirAmovible(
-				new Coord(position, 0),
+
+	private List<Couloirs> pushCorridors(int position, String direction) {
+		int x = -1, y = -1, updateX = 0, updateY = 0;
+		String unchangeAxe="";
+		List<Couloirs> corridorsToAdd = new LinkedList<>();
+
+		if (!direction.equals("down") && !direction.equals("up") && !direction.equals("right") && !direction.equals("left")) {
+			return null;
+		}
+
+		switch(direction) {
+			case "down":
+				x = position;
+				y = 0;
+				unchangeAxe = "x";
+				updateY = 1;
+				break;
+			case "up":
+				x = position;
+				y = 6;
+				unchangeAxe = "x";
+				updateY = -1;
+				break;
+			case "right":
+				x = 0;
+				y = position;
+				unchangeAxe = "y";
+				updateX = 1;
+				break;
+			case "left":
+				x = 6;
+				y = position;
+				unchangeAxe = "y";
+				updateX = -1;
+				break;
+			default:
+				System.out.println("Impossible de récupérer x et y");
+		}
+
+		// On ajoute la pièce supplémentaire qu'on veut insérer dans le plateau
+		Couloirs oldExtraCorridor = new CouloirAmovible(
+				new Coord(x,y),
 				this.extraCorridor.isNorthOpened(),
 				this.extraCorridor.isSouthOpened(),
 				this.extraCorridor.isEastOpened(),
 				this.extraCorridor.isWestOpened()
 		);
-		couloirsToAdd.add(oldExtra);
+
+		corridorsToAdd.add(oldExtraCorridor);
+
 		for(Couloirs couloir : this.couloirs) {
-			// on ne traite que les couloirs sur l'axe sélectionné
-			if(couloir.getX() == position) {
-				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
-				if(couloir.getY() == 6) {
+			if ((unchangeAxe.equals("x") && couloir.getX() == position) || (unchangeAxe.equals("y") && couloir.getY() == position)) {
+				// Suivant le type de push, on vérifie si le couloir est au bord du plateau
+				if ((direction.equals("up") && couloir.getY() == 0) ||
+						(direction.equals("down") && couloir.getY() == 6) ||
+						(direction.equals("left") && couloir.getX() == 0) ||
+						(direction.equals("right") && couloir.getX() == 6)) {
 					this.extraCorridor = (CouloirAmovible) couloir;
-				}
-				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
-				else {
-					couloirsToAdd.add(
-						new CouloirAmovible(
-							new Coord(couloir.getX(), couloir.getY() + 1),
+				} else {
+					CouloirAmovible newCorridor = new CouloirAmovible(
+							new Coord(couloir.getX() + updateX, couloir.getY() + updateY),
 							couloir.isNorthOpened(),
 							couloir.isSouthOpened(),
 							couloir.isEastOpened(),
 							couloir.isWestOpened()
-						)
 					);
+
+					corridorsToAdd.add(newCorridor);
 				}
 			}
 		}
-		return couloirsToAdd;
+		return corridorsToAdd;
 	}
 
 	private List<Treasures> pushTreasuresUp(int position) {
@@ -625,39 +669,6 @@ public class Plateau implements BoardGames {
 			jeu.move(position, 0, position, 6);
 		}
 	}
-	private List<Couloirs> pushCouloirsUp(int position) {
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
-		Couloirs oldExtra = new CouloirAmovible(
-				new Coord(position, 6),
-				this.extraCorridor.isNorthOpened(),
-				this.extraCorridor.isSouthOpened(),
-				this.extraCorridor.isEastOpened(),
-				this.extraCorridor.isWestOpened()
-		);
-		couloirsToAdd.add(oldExtra);
-		for(Couloirs couloir : this.couloirs) {
-			// on ne traite que les couloirs sur l'axe sélectionné
-			if(couloir.getX() == position) {
-				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
-				if(couloir.getY() == 0) {
-					this.extraCorridor = (CouloirAmovible) couloir;
-				}
-				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
-				else {
-					couloirsToAdd.add(
-							new CouloirAmovible(
-									new Coord(couloir.getX(), couloir.getY() - 1),
-									couloir.isNorthOpened(),
-									couloir.isSouthOpened(),
-									couloir.isEastOpened(),
-									couloir.isWestOpened()
-							)
-					);
-				}
-			}
-		}
-		return couloirsToAdd;
-	}
 
 	private List<Treasures> pushTreasuresLeft(int position) {
 		List<Treasures> treasuresToAdd = new LinkedList<>();
@@ -836,39 +847,6 @@ public class Plateau implements BoardGames {
 		for(Jeu jeu : jeuxToMoveOut) {
 			jeu.move(0, position, 6, position);
 		}
-	}
-	private List<Couloirs> pushCouloirsLeft(int position) {
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
-		Couloirs oldExtra = new CouloirAmovible(
-				new Coord(6, position),
-				this.extraCorridor.isNorthOpened(),
-				this.extraCorridor.isSouthOpened(),
-				this.extraCorridor.isEastOpened(),
-				this.extraCorridor.isWestOpened()
-		);
-		couloirsToAdd.add(oldExtra);
-		for(Couloirs couloir : this.couloirs) {
-			// on ne traite que les couloirs sur l'axe sélectionné
-			if(couloir.getY() == position) {
-				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
-				if(couloir.getX() == 0) {
-					this.extraCorridor = (CouloirAmovible) couloir;
-				}
-				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
-				else {
-					couloirsToAdd.add(
-						new CouloirAmovible(
-							new Coord(couloir.getX() - 1, couloir.getY()),
-							couloir.isNorthOpened(),
-							couloir.isSouthOpened(),
-							couloir.isEastOpened(),
-							couloir.isWestOpened()
-						)
-					);
-				}
-			}
-		}
-		return couloirsToAdd;
 	}
 
 	private List<Treasures> pushTreasuresRight(int position) {
@@ -1049,39 +1027,6 @@ public class Plateau implements BoardGames {
 			jeu.move(6, position, 0, position);
 		}
 	}
-	private List<Couloirs> pushCouloirsRight(int position) {
-		List<Couloirs> couloirsToAdd = new LinkedList<>();
-		Couloirs oldExtra = new CouloirAmovible(
-				new Coord(0, position),
-				this.extraCorridor.isNorthOpened(),
-				this.extraCorridor.isSouthOpened(),
-				this.extraCorridor.isEastOpened(),
-				this.extraCorridor.isWestOpened()
-		);
-		couloirsToAdd.add(oldExtra);
-		for(Couloirs couloir : this.couloirs) {
-			// on ne traite que les couloirs sur l'axe sélectionné
-			if(couloir.getY() == position) {
-				// si dernier couloir on l'éjecte (pour le mettre en pièce supplémentaire)
-				if(couloir.getX() == 6) {
-					this.extraCorridor = (CouloirAmovible) couloir;
-				}
-				// sinon on met à jour et on ajoute à la liste de nouveaux couloirs
-				else {
-					couloirsToAdd.add(
-						new CouloirAmovible(
-							new Coord(couloir.getX() + 1, couloir.getY()),
-							couloir.isNorthOpened(),
-							couloir.isSouthOpened(),
-							couloir.isEastOpened(),
-							couloir.isWestOpened()
-						)
-					);
-				}
-			}
-		}
-		return couloirsToAdd;
-	}
 
 	public void rotateExtraCardLeft() { this.extraCorridor.rotateLeft(); }
 	public void rotateExtraCardRight() { this.extraCorridor.rotateRight(); }
@@ -1144,13 +1089,13 @@ public class Plateau implements BoardGames {
 		return this.jeuCourant.getPieceColor(x,y);
 	}
 
-
 	public List<PieceIHMs> getPiecesIHM(){
-		List<PieceIHMs> list1 = new LinkedList<PieceIHMs>();
-		List<PieceIHMs>	list2 = new LinkedList<PieceIHMs>();
-		List<PieceIHMs>	list3 = new LinkedList<PieceIHMs>();
-		List<PieceIHMs>	list4 = new LinkedList<PieceIHMs>();
-		List<PieceIHMs> listFinale = new LinkedList<PieceIHMs>();
+		List<PieceIHMs> list1 = new LinkedList<>();
+		List<PieceIHMs>	list2 = new LinkedList<>();
+		List<PieceIHMs>	list3 = new LinkedList<>();
+		List<PieceIHMs>	list4 = new LinkedList<>();
+		List<PieceIHMs> finalList = new LinkedList<>();
+
 		if(this.jeuRouge != null){
 			list1 = this.jeuRouge.getPiecesIHM();
 		}
@@ -1164,18 +1109,19 @@ public class Plateau implements BoardGames {
 			list4 = this.jeuVert.getPiecesIHM();
 		}
 		if(list1 != null){
-			listFinale.addAll(list1);
+			finalList.addAll(list1);
 		}
 		if(list2 != null){
-			listFinale.addAll(list2);
+			finalList.addAll(list2);
 		}
 		if(list3 != null){
-			listFinale.addAll(list3);
+			finalList.addAll(list3);
 		}
 		if(list4 != null){
-			listFinale.addAll(list4);
+			finalList.addAll(list4);
 		}
-		return listFinale;
+
+		return finalList;
 	}
 
 	public List<CouloirIHM> getCouloirsIHMs() {
@@ -1212,73 +1158,6 @@ public class Plateau implements BoardGames {
 		}
 
 		return treasureIHMs;
-	}
-
-	public List<PieceIHMs> getPiecesIHMs() {
-		List<PieceIHMs> pieceIHMs = new LinkedList<>();
-		List<PieceIHMs> jeuBleuIHMs = new LinkedList<>();
-		List<PieceIHMs> jeuRougeIHMs = new LinkedList<>();
-		List<PieceIHMs> jeuJauneIHMs = new LinkedList<>();
-		List<PieceIHMs> jeuVertIHMs = new LinkedList<>();
-
-		if(this.jeuBleu != null) {
-			jeuBleuIHMs = this.jeuBleu.getPiecesIHM();
-		}
-		if(this.jeuRouge != null) {
-			jeuRougeIHMs = this.jeuRouge.getPiecesIHM();
-		}
-		if(this.jeuJaune != null) {
-			jeuJauneIHMs = this.jeuJaune.getPiecesIHM();
-		}
-		if(this.jeuVert != null) {
-			jeuVertIHMs = this.jeuVert.getPiecesIHM();
-		}
-
-		pieceIHMs.addAll(jeuBleuIHMs);
-		pieceIHMs.addAll(jeuRougeIHMs);
-		pieceIHMs.addAll(jeuJauneIHMs);
-		pieceIHMs.addAll(jeuVertIHMs);
-
-		return pieceIHMs;
-	}
-
-	public Couleur getJeuCourant(){
-		Couleur couleur = null;
-		if(this.jeuCourant != null){
-			if(this.jeuCourant == jeuBleu){
-				couleur = Couleur.BLEU;
-			}
-			else if(this.jeuCourant == jeuRouge){
-				couleur = Couleur.ROUGE;
-			}
-			else if(this.jeuCourant == jeuJaune) {
-				couleur = Couleur.JAUNE;
-			}
-			else if(this.jeuCourant == jeuVert) {
-				couleur = Couleur.VERT;
-			}
-		}
-		return couleur;
-	}
-
-	public String toString(){
-		String string = "";
-		if(jeuRouge != null){
-			string += "Jeu blanc : " + jeuRouge.toString();
-		}
-		if(jeuBleu != null){
-			string += "\nJeu noir : " + jeuBleu.toString();
-		}
-		if(jeuJaune != null){
-			string += "\nJeu noir : " + jeuJaune.toString();
-		}
-		if(jeuVert != null){
-			string += "\nJeu noir : " + jeuVert.toString();
-		}
-		if(jeuCourant != null){
-			string += "\nJeu courant : " + this.getJeuCourant();
-		}
-		return string;
 	}
 
 	public List<Coord> findPath(Coord coord){
@@ -1440,7 +1319,7 @@ public class Plateau implements BoardGames {
 
 	// tests
 	public static void main(String[] args){
-		System.out.println("tests plateau");
+		System.out.println("Class Plateau.java\n");
 		Plateau plateau = new Plateau(2);
 		Comparator compareCouloirs = new Comparator<Couloirs>() {
 			@Override
@@ -1516,12 +1395,35 @@ public class Plateau implements BoardGames {
 		System.out.println(plateau.extraTreasure);
 		*/
 
-		// debug deplacement joueur
-		System.out.println(plateau.treasureToDraw);
-		System.out.println(plateau.treasureToDraw);
+		// Debug trésors amovibles
+
+
+
+		List<Treasures> moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
+
+		Collections.sort(moveableTreasures, compareTreasures);
+		System.out.println(moveableTreasures);
+
 		plateau.alterMaze("pushUp", 1);
-		System.out.println(plateau.treasureToDraw);
+		moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
+		Collections.sort(moveableTreasures, compareTreasures);
+		System.out.println(moveableTreasures);
+
 		plateau.alterMaze("pushUp", 1);
-		System.out.println(plateau.treasureToDraw);
+		moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
+		Collections.sort(moveableTreasures, compareTreasures);
+		System.out.println(moveableTreasures);
+	}
+
+	private List<Treasures> getMoveableTreasures(List<Treasures> listTreasures) {
+		List<Treasures> moveableTreasures = new LinkedList<>();
+
+		for (Treasures treasure: listTreasures) {
+			if (treasure.getTreasureType().equals("TreasureMoveable")) {
+				moveableTreasures.add(treasure);
+			}
+		}
+
+		return moveableTreasures;
 	}
 }
