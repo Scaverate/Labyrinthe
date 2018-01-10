@@ -1099,9 +1099,7 @@ public class Plateau implements BoardGames {
 				canMove = true;
 			}
 		}
-		
-		return true;
-		//return canMove;
+		return canMove;
 	}
 
 	@Override
