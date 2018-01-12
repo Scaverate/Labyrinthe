@@ -34,6 +34,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel activePlayer;
 	private Icon imageTreasureToCatch;
 	private Box b1,b2,b3,b4;
+	private Box rulesBox;
+	private Box generalRulesBox;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
 	private JLabel scoreMario;
@@ -48,6 +50,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
 	private JButton reglesButton;
+	private JButton testButton;
+	private JTextArea rules;
 	private int yAdjustment;
 	private int xOrigine;
 	private ButtonGroup grpButton;
@@ -61,7 +65,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
 	private JDialog rulesFrame;
-	private JPanel rulesPane;
+	private JPanel backgroundPane;
 	private boolean mazeAltered = false;
 
 	
@@ -196,7 +200,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				String background = f.getAbsolutePath() + path + "bgGame.jpg";
 				
 				ImageIcon backgroundImage = new ImageIcon(background);
-				rulesPane = new JPanel(new BorderLayout()) {
+				backgroundPane = new JPanel(new BorderLayout()) {
 					@Override
 					protected void paintComponent(Graphics g) {
 						super.paintComponent(g);
@@ -204,11 +208,52 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					}
 				};
 				
-				JButton testButton = new JButton("TEST");
+				testButton = new JButton("QUITTER");
 				testButton.setFont(myFont);
-				rulesPane.add(testButton);
+
+				testButton.setForeground(Color.WHITE);
+				testButton.setBackground(Color.BLACK);
+				testButton.setOpaque(true);
+				Border line = new LineBorder(Color.WHITE);
+				Border margin = new EmptyBorder(8, 35, 8, 35);
+				Border compound = new CompoundBorder(line, margin);
+				testButton.setBorder(compound);
+				testButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						rulesFrame.dispose();
+						System.out.println("Ferme la fenetre");
+					}
+				});
+				rulesBox = Box.createHorizontalBox();
+				rulesBox.setBorder(new EmptyBorder(0, 275, 50, 0));
+				rulesBox.add(testButton);
+				generalRulesBox = Box.createVerticalBox();
+				generalRulesBox.add(rulesBox);
+				//backgroundPane.add(generalRulesBox);
 				//ajout des composants
-				rulesFrame.add(rulesPane);
+				
+				rules = new JTextArea();
+				Border rulesBorder = new EmptyBorder(8, 35, 8, 35);
+				rules.setBorder(rulesBorder);
+				rules.setEditable(false);
+				rules.setFont(myFont);
+				rules.setText("Quel que soit le nombre de joueurs, Mario commence en premier.\n" + 
+						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
+						"1. Si le joueur n’a pas de trésor attribué, il en reçoit un qu’il doit aller récupérer.\n\n" + 
+						"2. Pour accéder à ce trésor, le joueur doit se frayer un chemin à travers les couloirs.\n\n" + 
+						"3. Pour cela, à chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu’il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
+						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c’est au joueur suivant de jouer.\n\n" + 
+						"5. Une fois qu’un joueur a ramassé une majorité de trésors (c’est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
+						"");
+				rules.setLineWrap(true);
+				rules.setWrapStyleWord(true);
+				rules.setOpaque(false);
+				backgroundPane.add(rules, BorderLayout.NORTH);
+				backgroundPane.add(rulesBox, BorderLayout.SOUTH);
+				rulesFrame.add(backgroundPane);
 
 				rulesFrame.setModal(true);
 				rulesFrame.setVisible(true);
