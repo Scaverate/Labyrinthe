@@ -173,7 +173,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		b2.add(okButton);
 
 		//on cree le bouton qui va afficher les regles
-		reglesButton  = new JButton("RÃˆGLES DU JEU");
+		reglesButton  = new JButton("REGLES DU JEU");
 
 		reglesButton.setFont(myFont);
 		reglesButton.setForeground(Color.WHITE);
@@ -186,13 +186,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		reglesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//JOptionPane.showMessageDialog(mazeContainer,"lorem ipsum", "RÃ¨gles du jeu", JOptionPane.PLAIN_MESSAGE);
 				
 				//creation de la fenetre des regles
 				rulesFrame = new JDialog();
 				rulesFrame.setSize(new Dimension(700,700));
 				rulesFrame.setLocationRelativeTo(getParent());
-				rulesFrame.setTitle("RÃ¨gles du jeu");
+				rulesFrame.setTitle("Règles du jeu");
 				
 				//creation du panneau qui va etre ajoute dans la fenetre des regles
 				File f = new File("");
@@ -241,12 +240,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				rules.setEditable(false);
 				rules.setFont(myFont);
 				rules.setText("Quel que soit le nombre de joueurs, Mario commence en premier.\n" + 
-						"Un tour de jeu se dÃ©roule de la maniÃ¨re suivante :\n\n" + 
-						"1. Si le joueur nâ€™a pas de trÃ©sor attribuÃ©, il en reÃ§oit un quâ€™il doit aller rÃ©cupÃ©rer.\n\n" + 
-						"2. Pour accÃ©der Ã  ce trÃ©sor, le joueur doit se frayer un chemin Ã  travers les couloirs.\n\n" + 
-						"3. Pour cela, Ã  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette Ã©tape est obligatoire. Pour cela il fait pivoter la piÃ¨ce supplÃ©mentaire pour la placer dans le sens quâ€™il souhaite, puis il clique sur le bouton Â« insÃ©rer la piÃ¨ce Â» pour pouvoir dÃ©cider du sens dans lequel insÃ©rer la piÃ¨ce et de la ligne ou colonne oÃ¹ insÃ©rer la piÃ¨ce.\n\n" + 
-						"4. Une fois le labyrinthe modifiÃ© comme il le souhaite, le joueur peut dÃ©placer son pion. Attention, une fois le pion relÃ¢chÃ© sur une case accessible au joueur, son tour se termine et câ€™est au joueur suivant de jouer.\n\n" + 
-						"5. Une fois quâ€™un joueur a ramassÃ© une majoritÃ© de trÃ©sors (câ€™est-Ã -dire au moins 24/(nombre de joueurs) trÃ©sors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
+						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
+						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
+						"2. Pour accéder à  ce trésor, le joueur doit se frayer un chemin à  travers les couloirs.\n\n" + 
+						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
+						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
+						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
 						"");
 				rules.setLineWrap(true);
 				rules.setWrapStyleWord(true);
