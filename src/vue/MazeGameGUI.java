@@ -33,7 +33,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel scores;
 	private JPanel activePlayer;
 	private Icon imageTreasureToCatch;
-	private Box b1,b2,b3,b4;
 	private Box rulesBox;
 	private Box generalRulesBox;
 	private JPanel mazeBoard;
@@ -49,7 +48,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
-	private JButton reglesButton;
 	private JButton testButton;
 	private JTextArea rules;
 	private int yAdjustment;
@@ -70,6 +68,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 	
 	public MazeGameGUI(Dimension dim) {
+		
+		Box b1,b2,b3,b4;
+		JButton reglesButton;
 		
 		this.dim = dim;
 		Dimension windowSize = new Dimension(950,700);
@@ -187,6 +188,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		reglesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				final String rulesText = "Quel que soit le nombre de joueurs, Mario commence en premier.\n" + 
+						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
+						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
+						"2. Pour accéder à  ce trésor, le joueur doit se frayer un chemin à  travers les couloirs.\n\n" + 
+						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
+						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
+						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
+						"";
+				
 				//creation de la fenetre des regles
 				rulesFrame = new JDialog();
 				rulesFrame.setSize(new Dimension(700,700));
@@ -239,14 +249,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				rules.setBorder(rulesBorder);
 				rules.setEditable(false);
 				rules.setFont(myFont);
-				rules.setText("Quel que soit le nombre de joueurs, Mario commence en premier.\n" + 
-						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
-						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
-						"2. Pour accéder à  ce trésor, le joueur doit se frayer un chemin à  travers les couloirs.\n\n" + 
-						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
-						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
-						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
-						"");
+				rules.setText(rulesText);
 				rules.setLineWrap(true);
 				rules.setWrapStyleWord(true);
 				rules.setOpaque(false);
