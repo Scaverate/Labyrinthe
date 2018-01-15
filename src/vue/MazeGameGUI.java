@@ -208,7 +208,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				String path = "/src/images/";
 				String background = f.getAbsolutePath() + path + "bgGame.jpg";
 				
-				ImageIcon backgroundImage = new ImageIcon(background);
+				final ImageIcon backgroundImage = new ImageIcon(background);
 				backgroundPane = new JPanel(new BorderLayout()) {
 					@Override
 					protected void paintComponent(Graphics g) {
@@ -233,7 +233,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						rulesFrame.dispose();
-						System.out.println("Ferme la fenetre");
 					}
 				});
 				rulesBox = Box.createHorizontalBox();
