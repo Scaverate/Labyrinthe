@@ -79,7 +79,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeContainer = new JLayeredPane();
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
-		Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
+		final Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
 		// on cree le container du menu
 	    b1 = Box.createHorizontalBox();
 		b1.setOpaque(true); // background gris desactive
