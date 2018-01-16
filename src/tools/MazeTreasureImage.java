@@ -27,11 +27,7 @@ public enum MazeTreasureImage {
 	NUAGE_ZAP(21, "treasure_21.png"),
 	FLEUR_GLACE(22, "treasure_22.png"),
 	BLOC_POW(23, "treasure_23.png"),
-	DOUBLE_CERISE(24, "treasure_24.png"),
-	PEACH(25, "treasure_25.png"),
-	DAISY(26, "treasure_26.png"),
-	BIRDO(27, "treasure_27.png"),
-	TOADETTE(28, "treasure_28.png");
+	DOUBLE_CERISE(24, "treasure_24.png");
 	
 	public int id;
 	public String imageFile;   

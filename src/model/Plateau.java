@@ -10,19 +10,9 @@ import tools.MazeTreasureFactory;
 
 public class Plateau implements BoardGames {
 	public Plateau(int nbPlayer) {
-		List<Treasures> treasures = new LinkedList<>();
+		this.treasures = MazeTreasureFactory.newTreasure();
 		//Liste correspondant à la pioche du jeu
-		this.treasureToDraw = new LinkedList<>();
-		this.treasures = new LinkedList<Treasures>();
-		
-		treasures = MazeTreasureFactory.newTreasure();
-		for(Treasures treasure : treasures){
-			if(treasure.getTreasureId() < 25){
-				treasureToDraw.add((Treasure) treasure);
-				this.treasures.add((Treasure) treasure);
-			}
-		}
-		
+		this.treasureToDraw = new LinkedList<>(this.treasures);
 		//Score maximum que chaque joueur doit atteindre
 		scoreMax = 24/nbPlayer;
 		switch (nbPlayer) {
@@ -1098,6 +1088,7 @@ public class Plateau implements BoardGames {
 				canMove = true;
 			}
 		}
+
 		return canMove;
 	}
 
@@ -1377,15 +1368,9 @@ public class Plateau implements BoardGames {
 		this.jeuCourant.setTreasureToCatch(treasureToCatch);
 	}
 
-	public boolean treasureCatched(Treasure treasuresCatched){
-		if(this.jeuCourant.addTreasureCatched(treasuresCatched)){
-			this.treasures.remove(treasuresCatched);
-			this.jeuCourant.setTreasureToCatch(null);
-			if(this.jeuCourant.getScorePlayer() == getScoreMax()){
-				Treasure princess = this.jeuCourant.getPrincessToCatch();
-				this.jeuCourant.setTreasureToCatch(princess);
-				this.treasures.add(jeuCourant.getTreasureToCatch());
-			}
+	public boolean treasureCatched(Treasure treasureCatched){
+		if(this.jeuCourant.addTreasureCatched(treasureCatched)){
+			this.treasures.remove(treasureCatched);
 			return true;
 		}else{
 			return false;
@@ -1423,7 +1408,7 @@ public class Plateau implements BoardGames {
 	public int getGreenPlayerScore() {
 		return this.jeuVert.getScorePlayer();
 	}
-	
+
 	private int scoreMax = 0;
 	private Jeu jeuBleu;
 	private Jeu jeuRouge;
