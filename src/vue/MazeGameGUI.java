@@ -283,7 +283,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("InsÃ©rer la piÃ¨ce");
+		rotateLeftButton = new JButton("Insérer la pièce");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeAltered = alterMaze();
@@ -470,25 +470,29 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		pl6 = new ImageIcon(ret);
 		pushLeft6.setIcon(pl6);
 
-		generalBoard.add(pushDown2, "pos 0.126al 0.5");
-		generalBoard.add(pushDown4, "pos 0.355al 0.5");
-		generalBoard.add(pushDown6, "pos 0.585al 0.5");
+		//on positionne les fleches en coordonnees pixel comme la fenetre ne change pas de taille
+		//fleches vers le bas
+		generalBoard.add(pushDown2, "pos 105 0");
+		generalBoard.add(pushDown4, "pos 305 0");
+		generalBoard.add(pushDown6, "pos 505 0");
 		
-		generalBoard.add(pushUp2, "pos 0.12al 0.699al");
-		generalBoard.add(pushUp4, "pos 0.35al 0.699al");
-		generalBoard.add(pushUp6, "pos 0.58al 0.699al");
+		//fleches vers le haut
+		generalBoard.add(pushUp2, "pos 95 680");
+		generalBoard.add(pushUp4, "pos 295 680");
+		generalBoard.add(pushUp6, "pos 495 680");
 		
-		generalBoard.add(pushLeft2, "pos 0.738al 0.116al");
-		generalBoard.add(pushLeft4, "pos 0.738al 0.333al");
-		generalBoard.add(pushLeft6, "pos 0.738al 0.553al");
+		//fleches vers la gauche
+		generalBoard.add(pushLeft2, "pos 680 105");
+		generalBoard.add(pushLeft4, "pos 680 305");
+		generalBoard.add(pushLeft6, "pos 680 505");
 		
-		generalBoard.add(pushRight2, "pos 0.5 0.109al");
-		generalBoard.add(pushRight4, "pos 0.5 0.328al");
-		generalBoard.add(pushRight6, "pos 0.5 0.545al");
+		//fleches vers la droite
+		generalBoard.add(pushRight2, "pos 0 95");
+		generalBoard.add(pushRight4, "pos 0 295");
+		generalBoard.add(pushRight6, "pos 0 495");
 		
+		//ajout des elements sur la fenetre de jeu
 		generalBoard.add(tresorToCatch,"pos 0.892al 0.458al");
-		
-		mazeBoard.setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, new Color(155, 216, 235)));
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
