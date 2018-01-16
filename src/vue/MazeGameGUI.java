@@ -33,7 +33,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JPanel scores;
 	private JPanel activePlayer;
 	private Icon imageTreasureToCatch;
-	private Box b1,b2,b3;
+	private Box rulesBox;
+	private Box generalRulesBox;
 	private JPanel mazeBoard;
 	private JLabel pawn = null;
 	private JLabel scoreMario;
@@ -47,6 +48,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
+	private JButton testButton;
+	private JTextArea rules;
 	private int yAdjustment;
 	private int xOrigine;
 	private ButtonGroup grpButton;
@@ -59,11 +62,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
-	private JFrame f1;
+	private JDialog rulesFrame;
+	private JPanel backgroundPane;
 	private boolean mazeAltered = false;
 
 	
 	public MazeGameGUI(Dimension dim) {
+		
+		Box b1,b2,b3,b4;
+		JButton reglesButton;
 		
 		this.dim = dim;
 		Dimension windowSize = new Dimension(950,700);
@@ -72,7 +79,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeContainer = new JLayeredPane();
 		mazeContainer.setPreferredSize(windowSize);
 		mazeContainer.setBounds(0, 0, windowSize.width, windowSize.height);
-		Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
+		final Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
 		// on cree le container du menu
 	    b1 = Box.createHorizontalBox();
 		b1.setOpaque(true); // background gris desactive
@@ -80,6 +87,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		nb2Button = new JRadioButton("2 JOUEURS");
 		nb3Button = new JRadioButton("3 JOUEURS");
 		nb4Button = new JRadioButton("4 JOUEURS");
+		
 		
 		nb2Button.setFont(myFont);
 		nb3Button.setFont(myFont);
@@ -106,6 +114,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Border marginRadio3 = new EmptyBorder(8, 35, 8, 35);
 		Border compoundRadio3 = new CompoundBorder(lineRadio3, marginRadio3);
 		nb4Button.setBorder(compoundRadio3);
+
 		
 		// debug background color btn on Mac 
 		nb2Button.setOpaque(true); 
@@ -163,14 +172,112 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}			
 		});
 		b2.add(okButton);
+
+		//on cree le bouton qui va afficher les regles
+		reglesButton  = new JButton("REGLES DU JEU");
+
+		reglesButton.setFont(myFont);
+		reglesButton.setForeground(Color.WHITE);
+		reglesButton.setBackground(Color.BLACK);
+		reglesButton.setOpaque(true);
+		Border lineRegles = new LineBorder(Color.WHITE);
+		Border marginRegles = new EmptyBorder(8, 35, 8, 35);
+		Border compoundRegles = new CompoundBorder(lineRegles, marginRegles);
+		reglesButton.setBorder(compoundRegles);
+		
+		reglesButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				final String rulesText = "Quel que soit le nombre de joueurs, Mario commence en premier.\n" + 
+						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
+						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
+						"2. Pour accéder à  ce trésor, le joueur doit se frayer un chemin à  travers les couloirs.\n\n" + 
+						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
+						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
+						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
+						"";
+				
+				//creation de la fenetre des regles
+				rulesFrame = new JDialog();
+				rulesFrame.setSize(new Dimension(700,700));
+				rulesFrame.setLocationRelativeTo(getParent());
+				rulesFrame.setTitle("Règles du jeu");
+				
+				//creation du panneau qui va etre ajoute dans la fenetre des regles
+				File f = new File("");
+				String path = "/src/images/";
+				String background = f.getAbsolutePath() + path + "bgGame.jpg";
+				
+				final ImageIcon backgroundImage = new ImageIcon(background);
+				backgroundPane = new JPanel(new BorderLayout()) {
+					@Override
+					protected void paintComponent(Graphics g) {
+						super.paintComponent(g);
+						g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+					}
+				};
+				
+				testButton = new JButton("QUITTER");
+				testButton.setFont(myFont);
+
+				testButton.setForeground(Color.WHITE);
+				testButton.setBackground(Color.BLACK);
+				testButton.setOpaque(true);
+				Border line = new LineBorder(Color.WHITE);
+				Border margin = new EmptyBorder(8, 35, 8, 35);
+				Border compound = new CompoundBorder(line, margin);
+				testButton.setBorder(compound);
+				testButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						rulesFrame.dispose();
+					}
+				});
+				rulesBox = Box.createHorizontalBox();
+				rulesBox.setBorder(new EmptyBorder(0, 275, 50, 0));
+				rulesBox.add(testButton);
+				generalRulesBox = Box.createVerticalBox();
+				generalRulesBox.add(rulesBox);
+				//backgroundPane.add(generalRulesBox);
+				//ajout des composants
+				
+				rules = new JTextArea();
+				Border rulesBorder = new EmptyBorder(8, 35, 8, 35);
+				rules.setBorder(rulesBorder);
+				rules.setEditable(false);
+				rules.setFont(myFont);
+				rules.setText(rulesText);
+				rules.setLineWrap(true);
+				rules.setWrapStyleWord(true);
+				rules.setOpaque(false);
+				backgroundPane.add(rules, BorderLayout.NORTH);
+				backgroundPane.add(rulesBox, BorderLayout.SOUTH);
+				rulesFrame.add(backgroundPane);
+
+				rulesFrame.setModal(true);
+				rulesFrame.setVisible(true);
+			}			
+		});
+		
+		//box contenant le bouton des regles
+		b4 = Box.createHorizontalBox();
+		b4.setOpaque(false);
+		b4.add(reglesButton);
+		
+
+		b4.setBorder(new EmptyBorder(350,0,0,0));
 			
 		b3 = Box.createVerticalBox();
 		b3.setOpaque(false); // background gris desactive
 		b3.add(b1);
 		b3.add(b2);
+		b3.add(b4);
 				
 		b3.setBorder(new EmptyBorder(100, 0, 0, 0));
 		b2.setBorder(new EmptyBorder(10,0,0,0));
+		
 		
 		File g = new File("");
 		String path = "/src/images/";
