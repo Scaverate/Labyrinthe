@@ -1,48 +1,73 @@
 package launcher.socketLauncher;
 
-import java.net.ServerSocket;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.logging.Level;
+import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
 import model.EnvoiSocket;
 import model.ReceptionSocket;
 
 public class SocketLauncher implements Runnable {
-	public SocketLauncher() {
-		ArrayList<Object> liste = new ArrayList<>();
-		liste.add("testtest");
+	public SocketLauncher(String host, int port) {
+		name += ++count;
 		try {
-			Socket socket = new Socket(serverIP, PORT);
-			
-			/*Thread envoi = new Thread(new EnvoiSocket(socket, liste));
-			envoi.start();
-			envoi.join();
-			System.out.println("Données envoyées");*/
-
-	        Thread reception = new Thread(new ReceptionSocket(socket, liste));
-	        reception.start();
-			reception.join();
-			System.out.println("Reception : " + liste);
-			(new Thread(this)).start();
-		} catch(Exception ex) {
-            Logger.getLogger(EnvoiSocket.class.getName()).log(Level.SEVERE, null, ex);
+			connexion = new Socket(host, port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void run() { }
 
-	static String IP = "127.0.0.1";
-	String serverIP = IP;
-	//String clientIP = IP;
-	static int PORT = 1234;
-	
-	public static void main(String[] args) {
-		SocketLauncherServer launcherServer = new SocketLauncherServer(IP, PORT);
-		//SocketLauncher launcherClient = new SocketLauncher();
+	public void run(){
+		for(int i =0; i < 5; i++){
+			try {
+				Thread.currentThread().sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
-		System.out.println(launcherServer);
+			try {
+				writer = new PrintWriter(connexion.getOutputStream(), true);
+				reader = new BufferedInputStream(connexion.getInputStream());
+				String commande = "toto";
+				writer.write(commande);
+				//TOUJOURS UTILISER flush() POUR ENVOYER RÉELLEMENT DES INFOS AU SERVEUR
+				writer.flush();
+				System.out.println("Commande " + commande + " envoyée au serveur");
+				//On attend la réponse
+				String response = read();
+				System.out.println("\t * " + name + " : Réponse reçue " + response);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			try {
+				Thread.currentThread().sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		writer.write("CLOSE");
+		writer.flush();
+		writer.close();
 	}
+
+	private String read() throws IOException{
+		String response;
+		int stream;
+		byte[] b = new byte[4096];
+		stream = reader.read(b);
+		response = new String(b, 0, stream);
+		return response;
+	}
+	private Socket connexion = null;
+	private PrintWriter writer = null;
+	private BufferedInputStream reader = null;
+	private static int count = 0;
+	private String name = "Client-";
 }

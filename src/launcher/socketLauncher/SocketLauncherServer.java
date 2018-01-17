@@ -35,14 +35,14 @@ public class SocketLauncherServer{
 						//Une fois reçue, on la traite dans un thread séparé
 						System.out.println("Connexion cliente reçue.");
 
-						// TODO Gerer connexion client
-						/*Thread t = new Thread(new ClientProcessor(client));
-						t.start();*/
+						Thread t = new Thread(new ClientProcessor(client));
+						t.start();
 
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
+				System.out.println("stopped running");
 
 				try {
 					serverSocket.close();
@@ -61,12 +61,19 @@ public class SocketLauncherServer{
 	}
 
 	private ServerSocket serverSocket;
-	private boolean isRunning;
+	private boolean isRunning = true;
 	private final String IP;
 	private final int PORT;
 	
 	public static void main(String[] args) {
-		SocketLauncherServer launcherServer = new SocketLauncherServer("127.0.0.1", 1234);
+		String host = "127.0.0.1";
+		int port = 1234;
+
+		SocketLauncherServer launcherServer = new SocketLauncherServer(host, port);
 		launcherServer.open();
+		System.out.println("Serveur initialisé.");
+
+		Thread t = new Thread(new SocketLauncher(host, port));
+		t.start();
 	}
 }
