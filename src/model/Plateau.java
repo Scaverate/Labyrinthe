@@ -22,52 +22,36 @@ public class Plateau implements BoardGames {
 			}
 		}
 		
-		//Score maximum que chaque joueur doit atteindre
-		scoreMax = 24/nbPlayer;
-		switch (nbPlayer) {
-		case 2 :
-			jeuRouge = new Jeu(Couleur.ROUGE);
-			jeuRouge.setCoordInit(new Coord(0,0));
-			jeuRouge.drawCard(this.treasureToDraw);
-			jeuBleu = new Jeu(Couleur.BLEU);
-			jeuBleu.drawCard(this.treasureToDraw);
-			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
-			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
-			break;
-		case 3 :
-			jeuRouge = new Jeu(Couleur.ROUGE);
-			jeuRouge.drawCard(this.treasureToDraw);
-			jeuBleu = new Jeu(Couleur.BLEU);
-			jeuBleu.drawCard(this.treasureToDraw);
-			jeuJaune = new Jeu(Couleur.JAUNE);
-			jeuJaune.drawCard(this.treasureToDraw);
-			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
-			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
-			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
-			break;
-		case 4 :
-			jeuRouge = new Jeu(Couleur.ROUGE);
-			jeuRouge.drawCard(this.treasureToDraw);
-			jeuBleu = new Jeu(Couleur.BLEU);
-			jeuBleu.drawCard(this.treasureToDraw);
-			jeuJaune = new Jeu(Couleur.JAUNE);
-			jeuJaune.drawCard(this.treasureToDraw);
-			jeuVert = new Jeu(Couleur.VERT);
-			jeuVert.drawCard(this.treasureToDraw);
-			jeuRouge.setCoordInit(new Coord(jeuRouge.getPiecesIHM().get(0).getX(),jeuRouge.getPiecesIHM().get(0).getY()));
-			jeuBleu.setCoordInit(new Coord(jeuBleu.getPiecesIHM().get(0).getX(),jeuBleu.getPiecesIHM().get(0).getY()));
-			jeuJaune.setCoordInit(new Coord(jeuJaune.getPiecesIHM().get(0).getX(),jeuJaune.getPiecesIHM().get(0).getY()));
-			jeuVert.setCoordInit(new Coord(jeuVert.getPiecesIHM().get(0).getX(),jeuVert.getPiecesIHM().get(0).getY()));
-			break;
-		default:
-			System.out.println("La creation des jeux a echoue");
+		scoreMax = 24/nbPlayer; //Score max que chaque joueur doit atteindre
+		
+		// Création des jeux Rouge et Bleu qui sont toujours en jeu
+		this.jeuRouge = new Jeu(Couleur.ROUGE);
+		this.jeuBleu = new Jeu(Couleur.BLEU);
+		
+		this.jeuRouge.drawCard(this.treasureToDraw);
+		this.jeuBleu.drawCard(this.treasureToDraw);
+		
+		this.jeuRouge.setCoordInit(new Coord(this.jeuRouge.getPiecesIHM().get(0).getX(),this.jeuRouge.getPiecesIHM().get(0).getY()));
+		this.jeuBleu.setCoordInit(new Coord(this.jeuBleu.getPiecesIHM().get(0).getX(),this.jeuBleu.getPiecesIHM().get(0).getY()));
+		
+		if (nbPlayer == 3 || nbPlayer == 4) {
+			this.jeuJaune = new Jeu(Couleur.JAUNE);
+			this.jeuJaune.drawCard(this.treasureToDraw);
+			this.jeuJaune.setCoordInit(new Coord(this.jeuJaune.getPiecesIHM().get(0).getX(),this.jeuJaune.getPiecesIHM().get(0).getY()));
+		
+			if (nbPlayer == 4) {
+				this.jeuVert = new Jeu(Couleur.VERT);
+				this.jeuVert.drawCard(this.treasureToDraw);
+				this.jeuVert.setCoordInit(new Coord(this.jeuVert.getPiecesIHM().get(0).getX(),this.jeuVert.getPiecesIHM().get(0).getY()));
+			}
 		}
-		this.jeuCourant = jeuRouge;
+		
+		this.jeuCourant = this.jeuRouge;
 		this.message = "";
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
 		this.extraCorridor = MazeCouloirsFactory.getExtraCorridor();
 		this.extraTreasure = null;
-
+		
 	}
 
 	/*
