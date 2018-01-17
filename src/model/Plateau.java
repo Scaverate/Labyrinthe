@@ -10,15 +10,15 @@ import tools.MazeTreasureFactory;
 
 public class Plateau implements BoardGames {
 	public Plateau(int nbPlayer) {
-		List<Treasures> tresorFactoryOutput = new LinkedList<>();
+		List<Treasures> tresorFactoryOutput;
 		this.treasureToDraw = new LinkedList<>(); // Liste correspondant à la pioche du jeu
-		this.treasures = new LinkedList<Treasures>();
+		this.treasures = new LinkedList<>();
 		
 		tresorFactoryOutput = MazeTreasureFactory.newTreasure();
 		for(Treasures treasure : tresorFactoryOutput){
 			if(treasure.getTreasureId() < 25){
-				treasureToDraw.add((Treasure) treasure);
-				this.treasures.add((Treasure) treasure);
+				treasureToDraw.add(treasure);
+				this.treasures.add(treasure);
 			}
 		}
 		
@@ -126,12 +126,11 @@ public class Plateau implements BoardGames {
 	 * 	* si commande "pushLeft" -> indique une ligne
 	 * 	* si commande "pushRight" -> indique une ligne
 	 */
-	public boolean alterMaze(String command, int position) {
+	public boolean alterMaze(int position, String direction) {
 
-		boolean commandComplete;
-		List<Couloirs> couloirPushed = new LinkedList<>();
+		List<Couloirs> couloirPushed;
 		List<Couloirs> couloirsToRemove = new LinkedList<>();
-		List<Treasures> treasuresPushed = new LinkedList<>();
+		List<Treasures> treasuresPushed;
 		List<Treasures> treasuresToRemove = new LinkedList<>();
 
 		// Les positions (lignes & colonnes) amovibles sont les colonnes 1,3,5
@@ -139,9 +138,13 @@ public class Plateau implements BoardGames {
 			return false;
 		}
 
+		if (!direction.equals("down") && !direction.equals("up") && !direction.equals("right") && !direction.equals("left")) {
+			return false;
+		}
+
 		// On ajoutes dans une liste les couloirs qui seront supprimés suivant le type de command
 		for(Couloirs couloir : this.couloirs) {
-			if(command.equals("pushDown") || command.equals("pushUp")){
+			if(direction.equals("down") || direction.equals("up")){
 				if(couloir.getX() == position) {
 					couloirsToRemove.add(couloir);
 				}
@@ -155,7 +158,7 @@ public class Plateau implements BoardGames {
 
 		// De même pour les trésors
 		for(Treasures treasure : this.treasures) {
-			if(command.equals("pushDown") || command.equals("pushUp")){
+			if(direction.equals("down") || direction.equals("up")){
 				if(treasure.getTreasureX() == position) {
 					treasuresToRemove.add(treasure);
 				}
@@ -172,53 +175,16 @@ public class Plateau implements BoardGames {
 			this.treasures.remove(this.extraTreasure);
 		}
 
-		// en fonction de la commande passe on traite
-		switch(command) {
-			case "pushDown" : {
-				this.pushPlayers(position,"down");
-				treasuresPushed = this.pushTreasures(position,"down");
-				couloirPushed = this.pushCorridors(position,"down");
-				commandComplete = true;
-				break;
-			}
-			case "pushUp" : {
-				this.pushPlayers(position,"up");
-				treasuresPushed = this.pushTreasures(position,"up");
-				couloirPushed = this.pushCorridors(position,"up");
-				commandComplete = true;
-				break;
-			}
-			case "pushLeft" : {
-				this.pushPlayers(position,"left");
-				treasuresPushed = this.pushTreasures(position,"left");
-				couloirPushed = this.pushCorridors(position,"left");
-				commandComplete = true;
-				break;
-			}
-			case "pushRight" : {
-				this.pushPlayers(position,"right");
-				treasuresPushed = this.pushTreasures(position,"right");
-				couloirPushed = this.pushCorridors(position,"right");
-				commandComplete = true;
-				break;
-			}
-			default : {
-				commandComplete = false;
-				break;
-			}
-		}
+		this.pushPlayers(position, direction);
+		treasuresPushed = this.pushTreasures(position,direction);
+		couloirPushed = this.pushCorridors(position,direction);
 
-		// on supprime toute la ligne
-		this.couloirs.removeAll(couloirsToRemove);
-		// pour la rajouter avec les nouvelles valeurs
-		this.couloirs.addAll(couloirPushed);
+		this.couloirs.removeAll(couloirsToRemove); // On supprime tous les anciens couloirs
+		this.couloirs.addAll(couloirPushed); //On ajoute les couloirs avec leurs nouvelles valeurs
+		this.treasures.removeAll(treasuresToRemove); // On supprime les anciens trésors
+		this.treasures.addAll(treasuresPushed); // On ajoute les trésors avec leurs nouvelles valeurs
 
-		// on supprime les anciens trésors
-		this.treasures.removeAll(treasuresToRemove);
-		// pour la rajouter avec les nouvelles valeurs
-		this.treasures.addAll(treasuresPushed);
-
-		return commandComplete;
+		return true;
 	}
 	
 	private void updateFromDirection(int position, String direction) {
@@ -548,14 +514,10 @@ public class Plateau implements BoardGames {
 	}
 
 	@Override
-	public boolean isEnd() {
-		return false;
-	}
+	public boolean isEnd() { return false; }
 
 	@Override
-	public String getMessage() {
-		return this.message;
-	}
+	public String getMessage() { return this.message; }
 
 	@Override
 	public Couleur getColorCurrentPlayer() {
@@ -576,9 +538,7 @@ public class Plateau implements BoardGames {
 	}
 
 	@Override
-	public Couleur getPieceColor(int x, int y) {
-		return this.jeuCourant.getPieceColor(x,y);
-	}
+	public Couleur getPieceColor(int x, int y) { return this.jeuCourant.getPieceColor(x,y); }
 
 	public List<PieceIHMs> getPiecesIHM(){
 		List<PieceIHMs> list1 = new LinkedList<>();
@@ -763,37 +723,21 @@ public class Plateau implements BoardGames {
 		}
 	}
 
-	public int getCurrentScorePlayer(){
-		return this.jeuCourant.getScorePlayer();
-	}
+	public int getCurrentScorePlayer() { return this.jeuCourant.getScorePlayer(); }
 
-	public Coord getCurrentCoordInitiale() {
-		return this.jeuCourant.getCoordInitiale();
-	}
+	public Coord getCurrentCoordInitiale() { return this.jeuCourant.getCoordInitiale(); }
 
-	public int getScoreMax(){
-		return this.scoreMax;
-	}
+	public int getScoreMax( ){ return this.scoreMax; }
 
-	public String getNamePlayer(){
-		return this.jeuCourant.getNamePlayer();
-	}
+	public String getNamePlayer() { return this.jeuCourant.getNamePlayer(); }
 	
-	public int getBluePlayerScore() {
-		return this.jeuBleu.getScorePlayer();
-	}
+	public int getBluePlayerScore() { return this.jeuBleu.getScorePlayer(); }
 	
-	public int getRedPlayerScore() {
-		return this.jeuRouge.getScorePlayer();
-	}
+	public int getRedPlayerScore() { return this.jeuRouge.getScorePlayer(); }
 	
-	public int getYellowPlayerScore() {
-		return this.jeuJaune.getScorePlayer();
-	}
+	public int getYellowPlayerScore() { return this.jeuJaune.getScorePlayer(); }
 	
-	public int getGreenPlayerScore() {
-		return this.jeuVert.getScorePlayer();
-	}
+	public int getGreenPlayerScore() { return this.jeuVert.getScorePlayer(); }
 	
 	private List<Treasures> getMoveableTreasures(List<Treasures> listTreasures) {
 		List<Treasures> moveableTreasures = new LinkedList<>();
@@ -880,12 +824,12 @@ public class Plateau implements BoardGames {
 		Collections.sort(moveableTreasures, compareTreasures);
 		System.out.println(moveableTreasures);
 
-		plateau.alterMaze("pushUp", 1);
+		plateau.alterMaze(1, "up");
 		moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
 		Collections.sort(moveableTreasures, compareTreasures);
 		System.out.println(moveableTreasures);
 
-		plateau.alterMaze("pushUp", 1);
+		plateau.alterMaze(1, "up");
 		moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
 		Collections.sort(moveableTreasures, compareTreasures);
 		System.out.println(moveableTreasures);

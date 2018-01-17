@@ -156,9 +156,9 @@ public class MazeGame extends Observable implements BoardGames{
 		this.plateau.switchJoueur();
 	}
 
-	public boolean alterMaze(String command, int position){
+	public boolean alterMaze(int position, String direction){
 		boolean commandComplete;
-		commandComplete = this.plateau.alterMaze(command, position);
+		commandComplete = this.plateau.alterMaze(position, direction);
 		this.notifyObservers(plateau.getCouloirsIHMs());
 		this.notifyObservers(plateau.getPiecesIHM());
 		this.notifyObservers(plateau.getTreasuresIHMs());

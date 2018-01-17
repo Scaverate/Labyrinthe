@@ -56,5 +56,5 @@ public interface MazeGameControlers {
 	public List<Coord> findPath(Coord coord);
 	public void rotateExtraCardLeft();
 	public void rotateExtraCardRight();
-	public boolean alterMaze(String command, int position);
+	public boolean alterMaze(int position, String direction);
 }

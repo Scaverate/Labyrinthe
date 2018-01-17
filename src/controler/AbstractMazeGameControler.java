@@ -140,5 +140,5 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 	public List<Coord> findPath(Coord coord) { return this.mazeGame.findPath(coord); }
 	public void rotateExtraCardLeft() { this.mazeGame.rotateExtraCardLeft(); }
 	public void rotateExtraCardRight() { this.mazeGame.rotateExtraCardRight(); }
-	public boolean alterMaze(String command, int position){ return this.mazeGame.alterMaze(command, position); }
+	public boolean alterMaze(int position, String description){ return this.mazeGame.alterMaze(position, description); }
 }

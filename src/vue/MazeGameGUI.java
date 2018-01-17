@@ -1129,23 +1129,23 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		selectedValueNumber = selectedValueNumber == null ? CMD_1 : selectedValueNumber;
 		switch((String) selectedValueDirection) {
 			case CMD_HAUT : {
-				command = "pushUp";
+				command = "up";
 				break;
 			}
 			case CMD_BAS : {
-				command = "pushDown";
+				command = "down";
 				break;
 			}
 			case CMD_GAUCHE : {
-				command = "pushLeft";
+				command = "left";
 				break;
 			}
 			case CMD_DROITE : {
-				command = "pushRight";
+				command = "right";
 				break;
 			}
 			default: {
-				command = "pushUp";
+				command = "up";
 				break;
 			}
 		}
@@ -1167,7 +1167,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				break;
 			}
 		}
-		this.mazeGameControler.alterMaze(command, selectedNumber);
+		this.mazeGameControler.alterMaze(selectedNumber, command);
 		return true;
 	}
 
