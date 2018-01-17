@@ -12,7 +12,7 @@ import model.ReceptionSocket;
 public class SocketLauncher implements Runnable {
 	public SocketLauncher() {
 		ArrayList<Object> liste = new ArrayList<>();
-		liste.add(new String("testtest"));
+		liste.add("testtest");
 		try {
 			Socket socket = new Socket(serverIP, PORT);
 			
@@ -20,12 +20,11 @@ public class SocketLauncher implements Runnable {
 			envoi.start();
 			envoi.join();
 			System.out.println("Données envoyées");*/
-			
-	        ArrayList<Object> objets = new ArrayList<Object>();
-	        Thread reception = new Thread(new ReceptionSocket(socket, objets));
+
+	        Thread reception = new Thread(new ReceptionSocket(socket, liste));
 	        reception.start();
 			reception.join();
-			System.out.println("Reception : " + objets);
+			System.out.println("Reception : " + liste);
 			(new Thread(this)).start();
 		} catch(Exception ex) {
             Logger.getLogger(EnvoiSocket.class.getName()).log(Level.SEVERE, null, ex);
@@ -35,12 +34,15 @@ public class SocketLauncher implements Runnable {
 	@Override
 	public void run() { }
 
-	String clientIP = "134.214.50.39";
-	String serverIP = "134.214.50.39";
-	int PORT = 1234;
+	static String IP = "127.0.0.1";
+	String serverIP = IP;
+	//String clientIP = IP;
+	static int PORT = 1234;
 	
 	public static void main(String[] args) {
-		SocketLauncherServer launcherServer = new SocketLauncherServer();
-		SocketLauncher launcherClient = new SocketLauncher();
+		SocketLauncherServer launcherServer = new SocketLauncherServer(IP, PORT);
+		//SocketLauncher launcherClient = new SocketLauncher();
+
+		System.out.println(launcherServer);
 	}
 }
