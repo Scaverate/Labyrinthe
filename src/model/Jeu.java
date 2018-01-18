@@ -178,7 +178,15 @@ public class Jeu implements Game {
 		Treasure princess = new Treasure(coordPrincessX, coordPrincessY, id, "TreasureFixed", false); 
 		return princess;
 	}
-	
+
+	// moche mais assumé
+	public Coord getCoord() {
+		return new Coord(
+				this.pieces.get(0).getX(),
+				this.pieces.get(0).getY()
+		);
+	}
+
 	private List<Pieces> pieces;
 	private List<Treasures> listTreasureCatched = new LinkedList<>();
 }
