@@ -529,6 +529,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ret = g.getAbsolutePath() + path + "pushDown.png";
 		pd2 = new ImageIcon(ret);
 		pushDown2.setIcon(pd2);
+		pushDown2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(2, "down");
+			}
+		});
 		
 		pushDown4 = new JLabel();
 		pd4 = new ImageIcon(ret);
