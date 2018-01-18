@@ -113,18 +113,10 @@ public class Plateau implements BoardGames {
 	}
 
 	/*
-	 * Modifie le labyrinthe
-	 * @param String commande - Code de la commande a effectuer
-	 * 	* "pushDown" -> pousser vers le bas
-	 * 	* "pushUp" -> pousser vers le haut
-	 * 	* "pushLeft" -> pousser vers la gauche
-	 * 	* "pushRight" -> pousser vers la droite
-	 *  * Si pas de code correct, return false TODO thrower une erreur
-	 * @param int position - indice de la colonne OU ligne a pousser
-	 * 	* si commande "pushDown" -> indique une colonne
-	 * 	* si commande "pushUp" -> indique une colonne
-	 * 	* si commande "pushLeft" -> indique une ligne
-	 * 	* si commande "pushRight" -> indique une ligne
+	 * Modifie le Labyrinthe
+	 *
+	 * @param int    position  - indique la ligne (ou colonne) à déplacer
+	 * @param String direction - indique la direction (up, down, left, right)
 	 */
 	public boolean alterMaze(int position, String direction) {
 
@@ -251,7 +243,7 @@ public class Plateau implements BoardGames {
 			jeuJauneTreasureToCatch = this.jeuJaune.getTreasureToCatch();
 		}
 		
-		//On regare su un trésor est présent sur la pièce supplémentaire
+		//On regarde si un trésor est présent sur la pièce supplémentaire
 		if (this.extraTreasure != null) {
 			Treasure oldExtra = new Treasure(
 				this.insertX, 
