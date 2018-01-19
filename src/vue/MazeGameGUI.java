@@ -44,7 +44,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel player,playerText;
 	private ImagePanel contentPane;
 	private int xAdjustment;
-	private JButton rotateLeftButton, rotateRightButton;
+	private JButton rotateRightButton;
 	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
@@ -192,7 +192,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
 						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
 						"2. Pour accéder à  ce trésor, le joueur doit se frayer un chemin à  travers les couloirs.\n\n" + 
-						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
+						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur la flèche correspondant à la ligne ou colonne où il veut insérer sa pièce, et suivant le sens dans lequel il souhaite modifier le labyrinthe.\n\n" + 
 						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
 						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
 						"";
@@ -389,21 +389,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//Il faut la deuxieme car la premiere est un angle de depart
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
-		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("Insérer la pièce");
-		rotateLeftButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mazeAltered = alterMaze();
-				if(mazeAltered) {
-					rotateLeftButton.setEnabled(false);
-					rotateRightButton.setEnabled(false);
-				}
-				else {
-					rotateLeftButton.setEnabled(true);
-					rotateRightButton.setEnabled(true);
-				}
-			}
-		});
 		//Bouton de rotation droit
 		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
@@ -675,7 +660,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
-		generalBoard.add(rotateLeftButton, "pos 0.932al 0al");
 		generalBoard.add(rotateRightButton, "pos 0.90al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
@@ -892,7 +876,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;
 				// rÃ©autoriser les boutons pour le prochain joueur
-				rotateLeftButton.setEnabled(true);
 				rotateRightButton.setEnabled(true);
 			}
 		}
