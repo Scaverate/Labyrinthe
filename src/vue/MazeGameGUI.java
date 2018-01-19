@@ -390,7 +390,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("Insérer la pièce");
+		/*rotateLeftButton = new JButton("Insérer la pièce");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeAltered = alterMaze();
@@ -403,7 +403,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					rotateRightButton.setEnabled(true);
 				}
 			}
-		});
+		});*/
 		//Bouton de rotation droit
 		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
@@ -532,56 +532,122 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		pushDown2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mazeGameControler.alterMaze(2, "down");
+				mazeGameControler.alterMaze(1, "down");
 			}
 		});
 		
 		pushDown4 = new JLabel();
 		pd4 = new ImageIcon(ret);
 		pushDown4.setIcon(pd4);
+		pushDown4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "down");
+			}
+		});
 		
 		pushDown6 = new JLabel();
 		pd6 = new ImageIcon(ret);
 		pushDown6.setIcon(pd6);
+		pushDown6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "down");
+			}
+		});
 		
 		pushUp2 = new JLabel();
 		ret = g.getAbsolutePath() + path + "pushUp.png";
 		pu2 = new ImageIcon(ret);
 		pushUp2.setIcon(pu2);
+		pushUp2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "up");
+			}
+		});
 		
 		pushUp4 = new JLabel();
 		pu4 = new ImageIcon(ret);
 		pushUp4.setIcon(pu4);
+		pushUp4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "up");
+			}
+		});
 		
 		pushUp6 = new JLabel();
 		pu6 = new ImageIcon(ret);
 		pushUp6.setIcon(pu6);
+		pushUp6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "up");
+			}
+		});
 		
 		pushRight2 = new JLabel();
 		ret = g.getAbsolutePath() + path + "pushRight.png";
 		pr2 = new ImageIcon(ret);
 		pushRight2.setIcon(pr2);
+		pushRight2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "right");
+			}
+		});
 		
 		pushRight4 = new JLabel();
 		pr4 = new ImageIcon(ret);
 		pushRight4.setIcon(pr4);
+		pushRight4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "right");
+			}
+		});
 		
 		pushRight6 = new JLabel();
 		pr6 = new ImageIcon(ret);
 		pushRight6.setIcon(pr6);
+		pushRight6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "right");
+			}
+		});
 		
 		pushLeft2 = new JLabel();
 		ret = g.getAbsolutePath() + path + "pushLeft.png";
 		pl2 = new ImageIcon(ret);
 		pushLeft2.setIcon(pl2);
+		pushLeft2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "left");
+			}
+		});
 		
 		pushLeft4 = new JLabel();
 		pl4 = new ImageIcon(ret);
 		pushLeft4.setIcon(pl4);
+		pushLeft4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "left");
+			}
+		});
 		
 		pushLeft6 = new JLabel();
 		pl6 = new ImageIcon(ret);
 		pushLeft6.setIcon(pl6);
+		pushLeft6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "left");
+			}
+		});
 
 		//on positionne les fleches en coordonnees pixel comme la fenetre ne change pas de taille
 		//fleches vers le bas
