@@ -518,6 +518,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "down");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -528,6 +530,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "down");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -538,6 +542,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "down");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -549,6 +555,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "up");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -559,6 +567,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "up");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -569,6 +579,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "up");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -580,6 +592,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "right");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -590,6 +604,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "right");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -600,6 +616,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "right");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -611,6 +629,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "left");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -621,6 +641,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "left");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 		
@@ -631,6 +653,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "left");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
 			}
 		});
 
@@ -1136,94 +1160,4 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		this.repaint();
 		this.revalidate();
 	}
-
-	private boolean alterMaze() {
-		final String CMD_HAUT =  "\u2191";
-		final String CMD_BAS = "\u2193";
-		final String CMD_GAUCHE = "\u2190";
-		final String CMD_DROITE = "\u2192";
-		final String CMD_1 = "2";
-		final String CMD_3 = "4";
-		final String CMD_5 = "6";
-		String command;
-		int selectedNumber;
-		// choix modification du labyrinthe
-		String[] possibleValuesDirection = {CMD_HAUT, CMD_BAS, CMD_GAUCHE, CMD_DROITE};
-		Object selectedValueDirection = JOptionPane.showInputDialog(
-				null,
-				"Choisir une valeur pour la direction",
-				"Direction",
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				possibleValuesDirection,
-				possibleValuesDirection[0]
-		);
-		if(selectedValueDirection == null) {
-			return false;
-		}
-		boolean upDown = (possibleValuesDirection.equals(CMD_HAUT) || possibleValuesDirection.equals(CMD_BAS));
-		String columnOrLine = (upDown ? "colonne" : "ligne");
-		String[] possibleValuesNumber = { CMD_1, CMD_3, CMD_5 };
-		Object selectedValueNumber = JOptionPane.showInputDialog(
-				null,
-				"Choisir une valeur pour la " +  columnOrLine + " à pousser",
-				"Choix " + columnOrLine,
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				possibleValuesNumber,
-				possibleValuesNumber[0]
-		);
-
-		// si annulation d'un des deux prompt
-		if(selectedValueDirection == null || selectedValueNumber == null) {
-			return false;
-		}
-
-		// modification du labyrinthe
-		selectedValueDirection = selectedValueDirection == null ? CMD_HAUT : selectedValueDirection;
-		selectedValueNumber = selectedValueNumber == null ? CMD_1 : selectedValueNumber;
-		switch((String) selectedValueDirection) {
-			case CMD_HAUT : {
-				command = "up";
-				break;
-			}
-			case CMD_BAS : {
-				command = "down";
-				break;
-			}
-			case CMD_GAUCHE : {
-				command = "left";
-				break;
-			}
-			case CMD_DROITE : {
-				command = "right";
-				break;
-			}
-			default: {
-				command = "up";
-				break;
-			}
-		}
-		switch((String) selectedValueNumber) {
-			case CMD_1 : {
-				selectedNumber = 1;
-				break;
-			}
-			case CMD_3 : {
-				selectedNumber = 3;
-				break;
-			}
-			case CMD_5 : {
-				selectedNumber = 5;
-				break;
-			}
-			default: {
-				selectedNumber = 1;
-				break;
-			}
-		}
-		this.mazeGameControler.alterMaze(selectedNumber, command);
-		return true;
-	}
-
 }
