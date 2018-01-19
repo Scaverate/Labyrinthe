@@ -390,7 +390,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation gauche
-		/*rotateLeftButton = new JButton("Insérer la pièce");
+		rotateLeftButton = new JButton("Insérer la pièce");
 		rotateLeftButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mazeAltered = alterMaze();
@@ -403,7 +403,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					rotateRightButton.setEnabled(true);
 				}
 			}
-		});*/
+		});
 		//Bouton de rotation droit
 		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
