@@ -70,7 +70,6 @@ public class MazeImageProvider {
 		File g = new File("");
 		path = "/src/images/carte/";
 		ret = g.getAbsolutePath() + path + value;
-		System.out.println(ret);
 		return ret;
 	}
 

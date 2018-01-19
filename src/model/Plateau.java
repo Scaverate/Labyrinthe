@@ -110,9 +110,6 @@ public class Plateau implements BoardGames {
 			//Piocher une carte si le joueur n'a pas atteint le score final
 			this.jeuCourant.drawCard(this.treasureToDraw);
 		}
-
-		System.out.println("Trésor à attraper : " + this.jeuCourant.getTreasureToCatch());
-		System.out.println("Trésors attrapés : " + this.jeuCourant.getListTreasureCatched());
 	}
 
 	/*
@@ -274,7 +271,7 @@ public class Plateau implements BoardGames {
 			
 			drawableTreasureToAdd.add(oldExtra);
 			
-			// Changement de trésor à attraper
+			// Changement de tresor a� attraper
 			//TODO Voir avec Martin
 			if(jeuRougeTreasureToCatch != null) {
 				//Ajouter print : extraTreasure + jeuRougeTreasureToCatch
