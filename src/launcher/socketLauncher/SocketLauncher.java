@@ -3,12 +3,7 @@ package launcher.socketLauncher;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.logging.Logger;
-
-import model.EnvoiSocket;
-import model.ReceptionSocket;
+import java.net.*;
 
 public class SocketLauncher implements Runnable {
 	public SocketLauncher(String host, int port) {
@@ -23,7 +18,24 @@ public class SocketLauncher implements Runnable {
 	}
 
 	public void run(){
-		for(int i =0; i < 5; i++){
+		try{
+			InetAddress group = InetAddress.getByName("224.0.0.1");
+			socket = new MulticastSocket(1235);
+			socket.joinGroup(group);
+
+			DatagramPacket packet;
+			byte[] buf = new byte[256];
+			packet = new DatagramPacket(buf, buf.length);
+			socket.receive(packet);
+
+			String received = new String(packet.getData());
+			System.out.println("Quote of the Moment: " + received);
+		} catch(Exception e) {e.printStackTrace();}
+
+		//socket.leaveGroup(group);
+		//socket.close();
+
+		for(int i =0; i < 2; i++){
 			try {
 				Thread.currentThread().sleep(1000);
 			} catch (InterruptedException e) {
@@ -66,6 +78,7 @@ public class SocketLauncher implements Runnable {
 		return response;
 	}
 	private Socket connexion = null;
+	private MulticastSocket socket = null;
 	private PrintWriter writer = null;
 	private BufferedInputStream reader = null;
 	private static int count = 0;

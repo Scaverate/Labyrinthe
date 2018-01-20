@@ -56,6 +56,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private int yOrigine;
 	private int nbPlayer = 2;
 	private String theme = "green";
+	private boolean playOnline = false;
 	private Component previouslyHoveredComponent;
 	private List<TreasureIHMs> treasureIHMs;
 	private List<CouloirIHM> couloirIHMs;
@@ -71,7 +72,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 	
 	public MazeGameGUI(Dimension dim) {
-		
 		Box bPlayers,bOK,bMenu,bRules,bTheme,bimgTheme;
 		JButton reglesButton, okButton;
 		ButtonGroup grpButton, grpButton2, grpButton3;
@@ -80,6 +80,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		this.dim = dim; //Dimension du plateau de jeu 
 		Dimension windowSize = new Dimension(950,700); //dimension de la fenetre
+		JRadioButton onlineButton;
 		
 		// on cree un conteneur general qui acceuillera le tableau de jeu + l'element dragge
 		mazeContainer = new JLayeredPane();
@@ -91,6 +92,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		nb2Button = new JRadioButton("2 JOUEURS");
 		nb3Button = new JRadioButton("3 JOUEURS");
 		nb4Button = new JRadioButton("4 JOUEURS");
+		onlineButton = new JRadioButton("PLAY ONLINE");
 		
 		nb2Button.setFont(myFont);
 		nb3Button.setFont(myFont);
@@ -103,6 +105,17 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		nb2Button.setBackground(Color.BLACK);
 		nb3Button.setBackground(Color.BLACK);
 		nb4Button.setBackground(Color.BLACK);
+		Border lineRadio3 = new LineBorder(Color.WHITE);
+		Border marginRadio3 = new EmptyBorder(8, 35, 8, 35);
+		Border compoundRadio3 = new CompoundBorder(lineRadio3, marginRadio3);
+		nb4Button.setBorder(compoundRadio3);
+
+		onlineButton.setForeground(Color.WHITE);
+		onlineButton.setBackground(Color.BLACK);
+		Border lineOnlineButton = new LineBorder(Color.WHITE);
+		Border marginOnlineButton = new EmptyBorder(8, 35, 8, 35);
+		Border compoundOnlineButton = new CompoundBorder(lineOnlineButton, marginOnlineButton);
+		onlineButton.setBorder(compoundOnlineButton);
 		
 		Border lineRadio = new LineBorder(Color.WHITE);
 		Border marginRadio = new EmptyBorder(8, 35, 8, 35);
@@ -116,11 +129,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		nb2Button.setOpaque(true); 
 		nb3Button.setOpaque(true); 
 		nb4Button.setOpaque(true);
+		nb3Button.setOpaque(true);
+		onlineButton.setOpaque(true);
 		
 		// ajout des boutons radio dans le groupe bg
 		grpButton.add(nb2Button);
 		grpButton.add(nb3Button);
 		grpButton.add(nb4Button);
+		grpButton.add(onlineButton);
 		
 		//init à deux joueurs
 		nb2Button.setSelected(true);
@@ -140,7 +156,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				nbPlayer = 4;
 			}
 		});
-		
 		// on cree le container du menu
 	    bPlayers = Box.createHorizontalBox();
 		bPlayers.setOpaque(false); 
@@ -149,6 +164,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		bPlayers.add(nb4Button);
 		bPlayers.setBorder(BorderFactory.createMatteBorder(
                 1, 1, 1, 1, Color.WHITE));
+
+		onlineButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				nbPlayer = 2;
+				playOnline = true;
+			}
+		});
 		
 		grpButton2 = new ButtonGroup();
 		theme1 = new JRadioButton(/*"LA PRAIRIE MEUH MEUH"*/);
@@ -259,6 +282,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		okButton.setBackground(Color.BLACK);
 		okButton.setOpaque(true);
 		okButton.setBorder(compoundRadio);
+		Border line = new LineBorder(Color.WHITE);
+		Border margin = new EmptyBorder(8, 35, 8, 35);
+		Border compound = new CompoundBorder(line, margin);
+		okButton.setBorder(compound);
 		okButton.setFont(myFont);
 		okButton.setIcon(new ImageIcon(getClass().getResource("../images/icon_play.png")));
 		
@@ -403,7 +430,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ImageIcon gal;
 		String greyArrowRight;
 		ImageIcon gar;
-		
 
 	   	setContentPane(mazeContainer);
 	   	
@@ -411,9 +437,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		pack();
 
 		mazeGame = new MazeGame(nbPlayer);
-		mazeGameControler = new MazeGameControler(mazeGame);
+		mazeGameControler = this.playOnline ? null : new MazeGameControler(mazeGame);
 		this.mazeGameControler = mazeGameControler;
-		mazeGame.addObserver((Observer) this);
+		mazeGame.addObserver(this);
 		// on initialise le controleur
 		couloirIHMs = mazeGameControler.getCouloirsIHMs();
 		pieceIHMs = mazeGameControler.getPiecesIHM();
@@ -1361,5 +1387,92 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
 		this.repaint();
 		this.revalidate();
+	}
+
+	private boolean alterMaze() {
+		final String CMD_HAUT =  "\u2191";
+		final String CMD_BAS = "\u2193";
+		final String CMD_GAUCHE = "\u2190";
+		final String CMD_DROITE = "\u2192";
+		final String CMD_1 = "2";
+		final String CMD_3 = "4";
+		final String CMD_5 = "6";
+		String command;
+		int selectedNumber;
+		// choix modification du labyrinthe
+		String[] possibleValuesDirection = {CMD_HAUT, CMD_BAS, CMD_GAUCHE, CMD_DROITE};
+		Object selectedValueDirection = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la direction",
+				"Direction",
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesDirection,
+				possibleValuesDirection[0]
+		);
+		if(selectedValueDirection == null) {
+			return false;
+		}
+		boolean upDown = (selectedValueDirection.equals(CMD_HAUT) || selectedValueDirection.equals(CMD_BAS));
+		String columnOrLine = (upDown ? "colonne" : "ligne");
+		String[] possibleValuesNumber = { CMD_1, CMD_3, CMD_5 };
+		Object selectedValueNumber = JOptionPane.showInputDialog(
+				null,
+				"Choisir une valeur pour la " +  columnOrLine + " à pousser",
+				"Choix " + columnOrLine,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				possibleValuesNumber,
+				possibleValuesNumber[0]
+		);
+
+		// si annulation d'un des deux prompt
+		if(selectedValueNumber == null) {
+			return false;
+		}
+
+		// modification du labyrinthe
+		switch((String) selectedValueDirection) {
+			case CMD_HAUT : {
+				command = "pushUp";
+				break;
+			}
+			case CMD_BAS : {
+				command = "pushDown";
+				break;
+			}
+			case CMD_GAUCHE : {
+				command = "pushLeft";
+				break;
+			}
+			case CMD_DROITE : {
+				command = "pushRight";
+				break;
+			}
+			default: {
+				command = "pushUp";
+				break;
+			}
+		}
+		switch((String) selectedValueNumber) {
+			case CMD_1 : {
+				selectedNumber = 1;
+				break;
+			}
+			case CMD_3 : {
+				selectedNumber = 3;
+				break;
+			}
+			case CMD_5 : {
+				selectedNumber = 5;
+				break;
+			}
+			default: {
+				selectedNumber = 1;
+				break;
+			}
+		}
+		this.mazeGameControler.alterMaze(command, selectedNumber);
+		return true;
 	}
 }

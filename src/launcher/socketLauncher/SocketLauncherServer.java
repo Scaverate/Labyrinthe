@@ -1,15 +1,12 @@
 package launcher.socketLauncher;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import controler.controlerOnline.ClientProcessor;
 import model.EnvoiSocket;
-import model.ReceptionSocket;
 
 public class SocketLauncherServer{
 	public SocketLauncherServer(String IP, int PORT) {

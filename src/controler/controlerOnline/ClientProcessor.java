@@ -1,22 +1,24 @@
-package launcher.socketLauncher;
+package controler.controlerOnline;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
 import java.text.DateFormat;
 import java.util.Date;
 
 public class ClientProcessor implements Runnable{
 
     private Socket sock;
+    private DatagramSocket socket;
     private PrintWriter writer = null;
     private BufferedInputStream reader = null;
 
     public ClientProcessor(Socket pSock){
         sock = pSock;
+        try{
+        socket = new DatagramSocket(4445);
+        } catch(Exception e) {e.printStackTrace();}
     }
 
     public void run(){
@@ -48,6 +50,22 @@ public class ClientProcessor implements Runnable{
                     reader = null;
                     sock.close();
                     break;
+                }
+                else if(response.equals("MULTICAST")){
+                    try {
+                        byte[] buf;
+                        String dString;
+                        dString = "toAll";
+                        buf = dString.getBytes();
+
+                        InetAddress group = InetAddress.getByName("203.0.113.0");
+                        DatagramPacket packet;
+                        packet = new DatagramPacket(buf, buf.length, group, 4446);
+                        socket.send(packet);
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }catch(SocketException e){
                 System.err.println("LA CONNEXION A ETE INTERROMPUE ! ");
