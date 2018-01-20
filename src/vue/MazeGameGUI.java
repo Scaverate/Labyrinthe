@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.Socket;
 import java.util.*;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import controler.controlerOnline.MazeGameControlerOnlineClient;
+import controler.controlerOnline.MazeGameControlerOnlineServer;
 import model.*;
 import tools.MazeImageProvider;
 import net.miginfocom.swing.MigLayout;
@@ -411,7 +414,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	}
 	
 	public void initMazeGame() {
-		Dimension windowSize = new Dimension(950,1000);		
+		Dimension windowSize = new Dimension(950,1000);
 		Icon imageIcon;
 		Icon disabledIcon;
 		List<PieceIHMs> pieceIHMs;
@@ -430,6 +433,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ImageIcon gal;
 		String greyArrowRight;
 		ImageIcon gar;
+		final String IP = "127.0.0.1";
+		final int PORT = 1234;
 
 	   	setContentPane(mazeContainer);
 	   	
@@ -437,13 +442,30 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		pack();
 
 		mazeGame = new MazeGame(nbPlayer);
-		mazeGameControler = this.playOnline ? null : new MazeGameControler(mazeGame);
-		this.mazeGameControler = mazeGameControler;
+
+		// mode en reseau
+		if(this.playOnline) {
+			// on détecte si un serveur existe deja
+			try (Socket s = new Socket(IP, PORT)) {
+				// la socket a réussi à se connecter, on va donc jouer le rôle du client (un serveur est deja la)
+				this.mazeGameControler = new MazeGameControlerOnlineClient(mazeGame, IP, PORT);
+				System.out.println("Mode client");
+			} catch (IOException ex) {
+				// pas de serveur détecté (connexion de test échouée), on joue donc le rôle de serveur
+				this.mazeGameControler = new MazeGameControlerOnlineServer(mazeGame, IP, PORT);
+				System.out.println("Mode serveur");
+			}
+		}
+		// mode local
+		else {
+			this.mazeGameControler = new MazeGameControler(mazeGame);
+		}
+
 		mazeGame.addObserver(this);
 		// on initialise le controleur
-		couloirIHMs = mazeGameControler.getCouloirsIHMs();
-		pieceIHMs = mazeGameControler.getPiecesIHM();
-		treasureIHMs = mazeGameControler.getTreasuresIHMs();
+		couloirIHMs = this.mazeGameControler.getCouloirsIHMs();
+		pieceIHMs = this.mazeGameControler.getPiecesIHMs();
+		treasureIHMs = this.mazeGameControler.getTreasuresIHMs();
 
 		//On cree une grille de 2 par 2 (4 cases)
 		//Le plateau sera dans la premiere case, les elements de jeu dans les autres
@@ -517,7 +539,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On cree la carte supplementaire, recuperant la deuxieme piece de la liste
 		//On garde le côte aleatoire comme la liste est aleatoire
 		//Il faut la deuxieme car la premiere est un angle de depart
-		extraCard = mazeGameControler.getExtraCorridorIHM();
+		extraCard = this.mazeGameControler.getExtraCorridorIHM();
 
 		//Bouton de rotation droit
 		rotateRightButton = new JButton("\u21BB");
