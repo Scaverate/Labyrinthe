@@ -103,13 +103,13 @@ public class Plateau implements BoardGames {
 				this.jeuCourant = this.jeuBleu;
 			}
 		}
+
+		this.isMazeAltered = false; //On remet le déplacement du Labyrinthe
+
 		if(this.jeuCourant.getTreasureToCatch() == null && this.jeuCourant.getScorePlayer() < this.scoreMax){
 			//Piocher une carte si le joueur n'a pas atteint le score final
 			this.jeuCourant.drawCard(this.treasureToDraw);
 		}
-
-		System.out.println("Trésor à attraper : " + this.jeuCourant.getTreasureToCatch());
-		System.out.println("Trésors attrapés : " + this.jeuCourant.getListTreasureCatched());
 	}
 
 	/*
@@ -124,6 +124,11 @@ public class Plateau implements BoardGames {
 		List<Couloirs> couloirsToRemove = new LinkedList<>();
 		List<Treasures> treasuresPushed;
 		List<Treasures> treasuresToRemove = new LinkedList<>();
+
+		if(this.isMazeAltered) {
+			System.out.println("ERREUR : Tu as déjà déplacé le labyrinthe ce tour-ci");
+			return false;
+		}
 
 		// Les positions (lignes & colonnes) amovibles sont les colonnes 1,3,5
 		if(position != 1 && position != 3 && position != 5) {
@@ -175,6 +180,8 @@ public class Plateau implements BoardGames {
 		this.couloirs.addAll(couloirPushed); //On ajoute les couloirs avec leurs nouvelles valeurs
 		this.treasures.removeAll(treasuresToRemove); // On supprime les anciens trésors
 		this.treasures.addAll(treasuresPushed); // On ajoute les trésors avec leurs nouvelles valeurs
+
+		this.isMazeAltered = true;
 
 		return true;
 	}
@@ -264,7 +271,7 @@ public class Plateau implements BoardGames {
 			
 			drawableTreasureToAdd.add(oldExtra);
 			
-			// Changement de trésor à attraper
+			// Changement de tresor a� attraper
 			//TODO Voir avec Martin
 			if(jeuRougeTreasureToCatch != null) {
 				//Ajouter print : extraTreasure + jeuRougeTreasureToCatch
@@ -744,6 +751,7 @@ public class Plateau implements BoardGames {
 	}
 	
 	private int scoreMax = 0;
+	private boolean isMazeAltered = false;
 	private Jeu jeuBleu, jeuRouge, jeuJaune, jeuVert, jeuCourant;
 	private String message;
 	private List<Couloirs> couloirs;

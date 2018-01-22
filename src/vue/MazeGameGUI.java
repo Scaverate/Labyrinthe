@@ -44,7 +44,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JLabel player,playerText;
 	private ImagePanel contentPane;
 	private int xAdjustment;
-	private JButton rotateLeftButton, rotateRightButton;
+	private JButton rotateRightButton;
 	private JLayeredPane extraCardPane;
 	private JButton okButton; 
 	private JRadioButton nb2Button, nb3Button, nb4Button;
@@ -192,7 +192,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
 						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
 						"2. Pour accéder à  ce trésor, le joueur doit se frayer un chemin à  travers les couloirs.\n\n" + 
-						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur le bouton « insérer la pièce » pour pouvoir décider du sens dans lequel insérer la pièce et de la ligne ou colonne où insérer la pièce.\n\n" + 
+						"3. Pour cela, à  chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur la flèche correspondant à la ligne ou colonne où il veut insérer sa pièce, et suivant le sens dans lequel il souhaite modifier le labyrinthe.\n\n" + 
 						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
 						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
 						"";
@@ -389,21 +389,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//Il faut la deuxieme car la premiere est un angle de depart
 		extraCard = mazeGameControler.getExtraCorridorIHM();
 
-		//Bouton de rotation gauche
-		rotateLeftButton = new JButton("Insérer la pièce");
-		rotateLeftButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mazeAltered = alterMaze();
-				if(mazeAltered) {
-					rotateLeftButton.setEnabled(false);
-					rotateRightButton.setEnabled(false);
-				}
-				else {
-					rotateLeftButton.setEnabled(true);
-					rotateRightButton.setEnabled(true);
-				}
-			}
-		});
 		//Bouton de rotation droit
 		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
@@ -529,53 +514,149 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ret = g.getAbsolutePath() + path + "pushDown.png";
 		pd2 = new ImageIcon(ret);
 		pushDown2.setIcon(pd2);
+		pushDown2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "down");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushDown4 = new JLabel();
 		pd4 = new ImageIcon(ret);
 		pushDown4.setIcon(pd4);
+		pushDown4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "down");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushDown6 = new JLabel();
 		pd6 = new ImageIcon(ret);
 		pushDown6.setIcon(pd6);
+		pushDown6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "down");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushUp2 = new JLabel();
 		ret = g.getAbsolutePath() + path + "pushUp.png";
 		pu2 = new ImageIcon(ret);
 		pushUp2.setIcon(pu2);
+		pushUp2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "up");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushUp4 = new JLabel();
 		pu4 = new ImageIcon(ret);
 		pushUp4.setIcon(pu4);
+		pushUp4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "up");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushUp6 = new JLabel();
 		pu6 = new ImageIcon(ret);
 		pushUp6.setIcon(pu6);
+		pushUp6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "up");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushRight2 = new JLabel();
 		ret = g.getAbsolutePath() + path + "pushRight.png";
 		pr2 = new ImageIcon(ret);
 		pushRight2.setIcon(pr2);
+		pushRight2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "right");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushRight4 = new JLabel();
 		pr4 = new ImageIcon(ret);
 		pushRight4.setIcon(pr4);
+		pushRight4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "right");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushRight6 = new JLabel();
 		pr6 = new ImageIcon(ret);
 		pushRight6.setIcon(pr6);
+		pushRight6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "right");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushLeft2 = new JLabel();
 		ret = g.getAbsolutePath() + path + "pushLeft.png";
 		pl2 = new ImageIcon(ret);
 		pushLeft2.setIcon(pl2);
+		pushLeft2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(1, "left");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushLeft4 = new JLabel();
 		pl4 = new ImageIcon(ret);
 		pushLeft4.setIcon(pl4);
+		pushLeft4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(3, "left");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 		
 		pushLeft6 = new JLabel();
 		pl6 = new ImageIcon(ret);
 		pushLeft6.setIcon(pl6);
+		pushLeft6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mazeGameControler.alterMaze(5, "left");
+				rotateRightButton.setEnabled(false);
+				mazeAltered = true;
+			}
+		});
 
 		//on positionne les fleches en coordonnees pixel comme la fenetre ne change pas de taille
 		//fleches vers le bas
@@ -603,7 +684,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		generalBoard.add(mazeBoard, "pos 0 0");
 		generalBoard.add(tresorCard, "pos 0.93al 0.45al");
 		generalBoard.add(extraCardPane, "pos 0.92al 0.03al"); //AbsoluteLayout : on positionne en pourcentage de la fenetre
-		generalBoard.add(rotateLeftButton, "pos 0.932al 0al");
 		generalBoard.add(rotateRightButton, "pos 0.90al 0.135al");
 		generalBoard.add(activePlayer, "pos 0.901al 0.25al");
 		generalBoard.add(scores, "pos 0.98al 0.65al");
@@ -820,7 +900,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				tresorToCatch.setIcon(imageTreasureToCatch);
 				mazeAltered = false;
 				// rÃ©autoriser les boutons pour le prochain joueur
-				rotateLeftButton.setEnabled(true);
 				rotateRightButton.setEnabled(true);
 			}
 		}
@@ -1081,94 +1160,4 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		this.repaint();
 		this.revalidate();
 	}
-
-	private boolean alterMaze() {
-		final String CMD_HAUT =  "\u2191";
-		final String CMD_BAS = "\u2193";
-		final String CMD_GAUCHE = "\u2190";
-		final String CMD_DROITE = "\u2192";
-		final String CMD_1 = "2";
-		final String CMD_3 = "4";
-		final String CMD_5 = "6";
-		String command;
-		int selectedNumber;
-		// choix modification du labyrinthe
-		String[] possibleValuesDirection = {CMD_HAUT, CMD_BAS, CMD_GAUCHE, CMD_DROITE};
-		Object selectedValueDirection = JOptionPane.showInputDialog(
-				null,
-				"Choisir une valeur pour la direction",
-				"Direction",
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				possibleValuesDirection,
-				possibleValuesDirection[0]
-		);
-		if(selectedValueDirection == null) {
-			return false;
-		}
-		boolean upDown = (possibleValuesDirection.equals(CMD_HAUT) || possibleValuesDirection.equals(CMD_BAS));
-		String columnOrLine = (upDown ? "colonne" : "ligne");
-		String[] possibleValuesNumber = { CMD_1, CMD_3, CMD_5 };
-		Object selectedValueNumber = JOptionPane.showInputDialog(
-				null,
-				"Choisir une valeur pour la " +  columnOrLine + " Ã  pousser",
-				"Choix " + columnOrLine,
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				possibleValuesNumber,
-				possibleValuesNumber[0]
-		);
-
-		// si annulation d'un des deux prompt
-		if(selectedValueDirection == null || selectedValueNumber == null) {
-			return false;
-		}
-
-		// modification du labyrinthe
-		selectedValueDirection = selectedValueDirection == null ? CMD_HAUT : selectedValueDirection;
-		selectedValueNumber = selectedValueNumber == null ? CMD_1 : selectedValueNumber;
-		switch((String) selectedValueDirection) {
-			case CMD_HAUT : {
-				command = "up";
-				break;
-			}
-			case CMD_BAS : {
-				command = "down";
-				break;
-			}
-			case CMD_GAUCHE : {
-				command = "left";
-				break;
-			}
-			case CMD_DROITE : {
-				command = "right";
-				break;
-			}
-			default: {
-				command = "up";
-				break;
-			}
-		}
-		switch((String) selectedValueNumber) {
-			case CMD_1 : {
-				selectedNumber = 1;
-				break;
-			}
-			case CMD_3 : {
-				selectedNumber = 3;
-				break;
-			}
-			case CMD_5 : {
-				selectedNumber = 5;
-				break;
-			}
-			default: {
-				selectedNumber = 1;
-				break;
-			}
-		}
-		this.mazeGameControler.alterMaze(selectedNumber, command);
-		return true;
-	}
-
 }
