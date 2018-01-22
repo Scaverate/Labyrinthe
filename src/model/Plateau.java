@@ -487,36 +487,13 @@ public class Plateau implements BoardGames {
 	public Couleur getPieceColor(int x, int y) { return this.jeuCourant.getPieceColor(x,y); }
 
 	public List<PieceIHMs> getPiecesIHM(){
-		List<PieceIHMs> list1 = new LinkedList<>();
-		List<PieceIHMs>	list2 = new LinkedList<>();
-		List<PieceIHMs>	list3 = new LinkedList<>();
-		List<PieceIHMs>	list4 = new LinkedList<>();
 		List<PieceIHMs> finalList = new LinkedList<>();
 
-		if(this.jeuRouge != null){
-			list1 = this.jeuRouge.getPiecesIHM();
-		}
-		if(this.jeuBleu != null){
-			list2 = this.jeuBleu.getPiecesIHM();
-		}
-		if(this.jeuJaune != null){
-			list3 = this.jeuJaune.getPiecesIHM();
-		}
-		if(this.jeuVert != null){
-			list4 = this.jeuVert.getPiecesIHM();
-		}
-		if(list1 != null){
-			finalList.addAll(list1);
-		}
-		if(list2 != null){
-			finalList.addAll(list2);
-		}
-		if(list3 != null){
-			finalList.addAll(list3);
-		}
-		if(list4 != null){
-			finalList.addAll(list4);
-		}
+		for (Jeu game : gameList) {
+			if (game.getPiecesIHM() != null) {
+				finalList.addAll(game.getPiecesIHM());
+			}
+ 		}
 
 		return finalList;
 	}
