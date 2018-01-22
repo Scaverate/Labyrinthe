@@ -1,11 +1,9 @@
 package controler.controlerOnline;
 
 import model.observable.MazeGame;
-import model.ReceptionSocket;
+import tools.ReceptionSocket;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -20,21 +18,23 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        //this.mazeGame = this.getMazeGame();
+
+        Thread t = new Thread(this);
+        t.start();
+
     }
 
     public void run(){
         try {
             writer = new PrintWriter(connexion.getOutputStream(), true);
             reader = new BufferedInputStream(connexion.getInputStream());
-            String commande = "toto";
+            String commande = "GETMAZEGAME";
             writer.write(commande);
             writer.flush();
-            System.out.println("Commande '" + commande + "' envoyée au serveur");
-            //On attend la réponse
-            String response = read();
-            System.out.println("Réponse reçue : " + response);
+
+            //System.out.println(this.getMazeGame());
+            this.mazeGame = this.getMazeGame();
+
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -54,19 +54,21 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         return response;
     }
     
-    /*private MazeGame getMazeGame(){
-    	ArrayList<Object> objets = new ArrayList<Object>();
-        Thread reception = null;
+    private MazeGame getMazeGame(){
+        ArrayList<Object> recieveObjects = new ArrayList<>();
         try {
-            reception = new Thread(new ReceptionSocket(this.connexion,objets));
-            reception.start();
-            reception.join();
-        } catch (IOException | InterruptedException ex) {
-            Logger.getLogger("log").log(Level.SEVERE, null, ex);
+            ObjectInputStream entree = new ObjectInputStream(connexion.getInputStream());
+            int taille = (int) entree.readObject();
+            for(int i=0;i<taille;i++){
+                recieveObjects.add(entree.readObject());
+            }
+            System.out.println(recieveObjects);
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(ReceptionSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return objets != null ? (MazeGame) objets.get(0) : null;
-    }*/
+        return recieveObjects.size() > 0 ? (MazeGame) recieveObjects.get(0) : null;
+    }
 
     private Socket connexion;
     private PrintWriter writer;

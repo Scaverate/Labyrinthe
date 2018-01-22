@@ -1,50 +1,48 @@
 package controler.controlerOnline;
 
+import model.observable.MazeGame;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.ArrayList;
 
 public class ClientProcessor implements Runnable{
-
-    private Socket sock;
-    private PrintWriter writer = null;
-    private BufferedInputStream reader = null;
-
-    public ClientProcessor(Socket pSock){
-        sock = pSock;
+    public ClientProcessor(Socket socket, MazeGame mazeGame){
+        this.mazeGame = mazeGame;
+        this.socket = socket;
     }
 
     public void run(){
+        PrintWriter writer = null;
         System.out.println("Lancement du traitement de la connexion cliente");
-        while(!sock.isClosed()){
+        while(!this.socket.isClosed()){
             try {
-            	System.out.println("test");
-                writer = new PrintWriter(sock.getOutputStream());
-                reader = new BufferedInputStream(sock.getInputStream());
+                writer = new PrintWriter(this.socket.getOutputStream());
+                reader = new BufferedInputStream(this.socket.getInputStream());
 
                 String query = read();
-            	System.out.println("testtest");
-                InetSocketAddress remote = (InetSocketAddress)sock.getRemoteSocketAddress();
 
                 String debug;
-                debug = "Thread : " + Thread.currentThread().getName() + ". ";
-                debug += "Demande de l'adresse : " + remote.getAddress().getHostAddress() +".";
-                debug += " Sur le port : " + remote.getPort() + ".\n";
-                debug += "\t -> Commande reçue : " + query + "\n";
+                debug = "\t -> Commande reçue : " + query + "\n";
                 System.err.println("\n" + debug);
 
-                writer.write(query.toUpperCase());
-                //Il FAUT IMPERATIVEMENT UTILISER flush()
-                //Sinon les données ne seront pas transmises au client
-                //et il attendra indéfiniment
-                writer.flush();
+                ArrayList<Object> objects = new ArrayList<>();
+                objects.add(this.mazeGame);
+                ObjectOutputStream sortie = new ObjectOutputStream(this.socket.getOutputStream());
+                sortie.writeObject(objects.size());
+                for(Object tmp : objects){
+                    sortie.writeObject(tmp);
+                }
+                sortie.flush();
 
                 if(query.equals("CLOSE")){
                     System.err.println("COMMANDE CLOSE DETECTEE ! ");
                     writer = null;
                     reader = null;
-                    sock.close();
+                    this.socket.close();
                     break;
                 }
             }catch(SocketException e){
@@ -65,5 +63,9 @@ public class ClientProcessor implements Runnable{
         response = new String(b, 0, stream);
         return response;
     }
+
+    private Socket socket;
+    private MazeGame mazeGame;
+    private BufferedInputStream reader = null;
 
 }

@@ -1,9 +1,8 @@
 package model;
 
-/**
- * Created by Martin on 10/10/2017.
- */
-public class AbstractCouloir implements Couloirs{
+import java.io.Serializable;
+
+public class AbstractCouloir implements Couloirs, Serializable{
 
     public AbstractCouloir(boolean northOpened, boolean southOpened, boolean eastOpened, boolean westOpened, int x, int y){
         this.x = x;

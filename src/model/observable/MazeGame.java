@@ -1,19 +1,13 @@
 package model.observable;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import model.*;
 
-
-/**
- * Cette classe est fortement couplée à un Labyrinthe qu'elle crée
- * Elle le rend Observable et en simplifie l'interface
- * (DP Proxy, Facade, Observer)
- *
- */
-public class MazeGame extends Observable implements BoardGames{
+public class MazeGame extends Observable implements BoardGames, Serializable{
 
 	private Plateau plateau;
 

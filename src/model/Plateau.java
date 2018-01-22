@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import tools.MazeCouloirsFactory;
 import tools.MazeTreasureFactory;
 
-public class Plateau implements BoardGames {
+public class Plateau implements BoardGames, Serializable{
 	public Plateau(int nbPlayer) {
 		List<Treasures> tresorFactoryOutput;
 		this.treasureToDraw = new LinkedList<>(); // Liste correspondant à la pioche du jeu

@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import controler.controlerOnline.ClientProcessor;
-import model.EnvoiSocket;
+import tools.EnvoiSocket;
 
 public class SocketLauncherServer{
 	public SocketLauncherServer(String IP, int PORT) {
@@ -32,7 +32,7 @@ public class SocketLauncherServer{
 						//Une fois reçue, on la traite dans un thread séparé
 						System.out.println("Connexion cliente reçue.");
 
-						Thread t = new Thread(new ClientProcessor(client));
+						Thread t = new Thread(new ClientProcessor(client, null));
 						t.start();
 
 					} catch (IOException e) {

@@ -1,6 +1,6 @@
 package controler.controlerOnline;
 
-import model.EnvoiSocket;
+import tools.EnvoiSocket;
 import model.observable.MazeGame;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline {
                         //Une fois reçue, on la traite dans un thread séparé
                         System.out.println("Connexion cliente reçue.");
 
-                        Thread t = new Thread(new ClientProcessor(client));
+                        Thread t = new Thread(new ClientProcessor(client, mazeGame));
                         t.start();
 
                     } catch (IOException e) {
