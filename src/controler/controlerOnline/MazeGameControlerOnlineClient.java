@@ -1,10 +1,15 @@
 package controler.controlerOnline;
 
 import model.observable.MazeGame;
+import model.ReceptionSocket;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MazeGameControlerOnlineClient extends MazeGameControlerOnline implements Runnable{
     public MazeGameControlerOnlineClient(MazeGame mazeGame, String host, int port) {
@@ -15,6 +20,8 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        //this.mazeGame = this.getMazeGame();
     }
 
     public void run(){
@@ -32,9 +39,10 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
             e1.printStackTrace();
         }
 
-        writer.write("CLOSE");
+       /* writer.write("CLOSE");
         writer.flush();
-        writer.close();
+        writer.close();*/
+        
     }
 
     private String read() throws IOException{
@@ -45,6 +53,20 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         response = new String(b, 0, stream);
         return response;
     }
+    
+    /*private MazeGame getMazeGame(){
+    	ArrayList<Object> objets = new ArrayList<Object>();
+        Thread reception = null;
+        try {
+            reception = new Thread(new ReceptionSocket(this.connexion,objets));
+            reception.start();
+            reception.join();
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger("log").log(Level.SEVERE, null, ex);
+        }
+        
+        return objets != null ? (MazeGame) objets.get(0) : null;
+    }*/
 
     private Socket connexion;
     private PrintWriter writer;

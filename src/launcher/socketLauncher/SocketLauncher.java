@@ -18,50 +18,25 @@ public class SocketLauncher implements Runnable {
 	}
 
 	public void run(){
-		try{
-			InetAddress group = InetAddress.getByName("224.0.0.1");
-			socket = new MulticastSocket(1235);
-			socket.joinGroup(group);
+		try {
+			writer = new PrintWriter(connexion.getOutputStream(), true);
+			reader = new BufferedInputStream(connexion.getInputStream());
+			String commande = "toto";
+			writer.write(commande);
+			//TOUJOURS UTILISER flush() POUR ENVOYER RÉELLEMENT DES INFOS AU SERVEUR
+			writer.flush();
+			System.out.println("Commande " + commande + " envoyée au serveur");
+			//On attend la réponse
+			String response = read();
+			System.out.println("\t * " + name + " : Réponse reçue " + response);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
-			DatagramPacket packet;
-			byte[] buf = new byte[256];
-			packet = new DatagramPacket(buf, buf.length);
-			socket.receive(packet);
-
-			String received = new String(packet.getData());
-			System.out.println("Quote of the Moment: " + received);
-		} catch(Exception e) {e.printStackTrace();}
-
-		//socket.leaveGroup(group);
-		//socket.close();
-
-		for(int i =0; i < 2; i++){
-			try {
-				Thread.currentThread().sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				writer = new PrintWriter(connexion.getOutputStream(), true);
-				reader = new BufferedInputStream(connexion.getInputStream());
-				String commande = "toto";
-				writer.write(commande);
-				//TOUJOURS UTILISER flush() POUR ENVOYER RÉELLEMENT DES INFOS AU SERVEUR
-				writer.flush();
-				System.out.println("Commande " + commande + " envoyée au serveur");
-				//On attend la réponse
-				String response = read();
-				System.out.println("\t * " + name + " : Réponse reçue " + response);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-
-			try {
-				Thread.currentThread().sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		try {
+			Thread.currentThread().sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 
 		writer.write("CLOSE");
@@ -78,7 +53,6 @@ public class SocketLauncher implements Runnable {
 		return response;
 	}
 	private Socket connexion = null;
-	private MulticastSocket socket = null;
 	private PrintWriter writer = null;
 	private BufferedInputStream reader = null;
 	private static int count = 0;

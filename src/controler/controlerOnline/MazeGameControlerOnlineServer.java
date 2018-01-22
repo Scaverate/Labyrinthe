@@ -55,9 +55,9 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline {
         t.start();
     }
 
-    /*public void close(){
+    public void close(){
         this.isRunning = false;
-    }*/
+    }
 
     private ServerSocket serverSocket;
     private boolean isRunning = true;

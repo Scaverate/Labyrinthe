@@ -27,14 +27,6 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		this.mazeGame = mazeGame;	 
 	}
 
-	/* (non-Javadoc)
-	 * @see controler.MazeGameControlers#move(model.Coord, model.Coord)
-	 * 
-	 * Cette méthode illustre le DP "Template Method" 
-	 * avec une partie commune implémentée dans cette classe
-	 * et une partie variable implémentée dans les classes dérivées
-	 */
-
 	public boolean isMoveOk (int xInit, int yInit, int xFinal, int yFinal){
 		return mazeGame.isMoveOk(xInit, yInit, xFinal, yFinal);
 	}
