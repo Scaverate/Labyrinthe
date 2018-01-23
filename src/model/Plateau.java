@@ -406,8 +406,7 @@ public class Plateau implements BoardGames {
 		return corridorsToAdd;
 	}
 
-	public void rotateExtraCardLeft() { this.extraCorridor.rotateLeft(); }
-	public void rotateExtraCardRight() { this.extraCorridor.rotateRight(); }
+	public void rotateExtraCorridor() { this.extraCorridor.rotate(); }
 
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
 		boolean canMove = false;

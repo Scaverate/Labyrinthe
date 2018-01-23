@@ -54,7 +54,6 @@ public interface MazeGameControlers {
 	public TreasureIHM getExtraTreasureIHM();
 	public List<PieceIHMs> getPiecesIHM();
 	public List<Coord> findPath(Coord coord);
-	public void rotateExtraCardLeft();
-	public void rotateExtraCardRight();
+	public void rotateExtraCorridor();
 	public boolean alterMaze(int position, String direction);
 }
