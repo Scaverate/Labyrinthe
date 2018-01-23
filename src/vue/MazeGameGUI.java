@@ -144,9 +144,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
                 1, 1, 1, 1, Color.WHITE));
 		
 		grpButton2 = new ButtonGroup();
-		theme1 = new JRadioButton("PRAIRIE MEUH MEUH");
+		theme1 = new JRadioButton("LA PRAIRIE MEUH MEUH");
 		theme2 = new JRadioButton("LE CHÂTEAU DE BOWSER");
-		theme3 = new JRadioButton("toto tata");
+		theme3 = new JRadioButton("LA MONTAGNE GLA GLA");
 		
 		theme1.setFont(myFont);
 		theme2.setFont(myFont);
@@ -186,7 +186,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		});
 		theme3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				theme = "rainbow";
+				theme = "snow";
 			}
 		});
 		
