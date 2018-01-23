@@ -348,6 +348,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel extraCardImage;
 		final MazeGame mazeGame;
 		final MazeGameControlers mazeGameControler;
+		String greyArrowDown;
+		ImageIcon gad;
+		String greyArrowUp;
+		ImageIcon gau;
+		String greyArrowLeft;
+		ImageIcon gal;
+		String greyArrowRight;
+		ImageIcon gar;
 		
 
 	   	setContentPane(mazeContainer);
@@ -556,14 +564,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ret = g.getAbsolutePath() + path + "bgGame.jpg";
 		path = "/src/images/arrow/";
 		
-		String greyArrowDown = g.getAbsolutePath() + path + "greytone/pushDown.png";
-		ImageIcon gad = new ImageIcon(greyArrowDown);
-		String greyArrowUp = g.getAbsolutePath() + path + "greytone/pushUp.png";
-		ImageIcon gau = new ImageIcon(greyArrowUp);
-		String greyArrowLeft = g.getAbsolutePath() + path + "greytone/pushLeft.png";
-		ImageIcon gal = new ImageIcon(greyArrowLeft);
-		String greyArrowRight = g.getAbsolutePath() + path + "greytone/pushRight.png";
-		ImageIcon gar = new ImageIcon(greyArrowRight);
+		greyArrowDown = g.getAbsolutePath() + path + "greytone/pushDown.png";
+		gad = new ImageIcon(greyArrowDown);
+		greyArrowUp = g.getAbsolutePath() + path + "greytone/pushUp.png";
+		gau = new ImageIcon(greyArrowUp);
+		greyArrowLeft = g.getAbsolutePath() + path + "greytone/pushLeft.png";
+		gal = new ImageIcon(greyArrowLeft);
+		greyArrowRight = g.getAbsolutePath() + path + "greytone/pushRight.png";
+		gar = new ImageIcon(greyArrowRight);
 		
 		bg = new ImageIcon(ret);
 		bgGame = new JLabel(); 
