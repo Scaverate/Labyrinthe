@@ -348,6 +348,14 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		JLabel extraCardImage;
 		final MazeGame mazeGame;
 		final MazeGameControlers mazeGameControler;
+		String greyArrowDown;
+		ImageIcon gad;
+		String greyArrowUp;
+		ImageIcon gau;
+		String greyArrowLeft;
+		ImageIcon gal;
+		String greyArrowRight;
+		ImageIcon gar;
 		
 
 	   	setContentPane(mazeContainer);
@@ -556,6 +564,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ret = g.getAbsolutePath() + path + "bgGame.jpg";
 		path = "/src/images/arrow/";
 		
+		greyArrowDown = g.getAbsolutePath() + path + "greytone/pushDown.png";
+		gad = new ImageIcon(greyArrowDown);
+		greyArrowUp = g.getAbsolutePath() + path + "greytone/pushUp.png";
+		gau = new ImageIcon(greyArrowUp);
+		greyArrowLeft = g.getAbsolutePath() + path + "greytone/pushLeft.png";
+		gal = new ImageIcon(greyArrowLeft);
+		greyArrowRight = g.getAbsolutePath() + path + "greytone/pushRight.png";
+		gar = new ImageIcon(greyArrowRight);
+		
 		bg = new ImageIcon(ret);
 		bgGame = new JLabel(); 
 		bgGame.setIcon(bg);
@@ -564,147 +581,303 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		ret = g.getAbsolutePath() + path + "pushDown.png";
 		pd2 = new ImageIcon(ret);
 		pushDown2.setIcon(pd2);
+		
+		pushDown4 = new JLabel();
+		pd4 = new ImageIcon(ret);
+		pushDown4.setIcon(pd4);
+		
+		pushDown6 = new JLabel();
+		pd6 = new ImageIcon(ret);
+		pushDown6.setIcon(pd6);
+		
+		pushUp2 = new JLabel();
+		ret = g.getAbsolutePath() + path + "pushUp.png";
+		pu2 = new ImageIcon(ret);
+		pushUp2.setIcon(pu2);
+		
+		pushUp4 = new JLabel();
+		pu4 = new ImageIcon(ret);
+		pushUp4.setIcon(pu4);
+		
+		pushUp6 = new JLabel();
+		pu6 = new ImageIcon(ret);
+		pushUp6.setIcon(pu6);
+		
+		pushRight2 = new JLabel();
+		ret = g.getAbsolutePath() + path + "pushRight.png";
+		pr2 = new ImageIcon(ret);
+		pushRight2.setIcon(pr2);
+		
+		pushRight4 = new JLabel();
+		pr4 = new ImageIcon(ret);
+		pushRight4.setIcon(pr4);
+		
+		pushRight6 = new JLabel();
+		pr6 = new ImageIcon(ret);
+		pushRight6.setIcon(pr6);
+		
+		pushLeft2 = new JLabel();
+		ret = g.getAbsolutePath() + path + "pushLeft.png";
+		pl2 = new ImageIcon(ret);
+		pushLeft2.setIcon(pl2);
+		
+		pushLeft4 = new JLabel();
+		pl4 = new ImageIcon(ret);
+		pushLeft4.setIcon(pl4);
+		
+		pushLeft6 = new JLabel();
+		pl6 = new ImageIcon(ret);
+		pushLeft6.setIcon(pl6);
+
 		pushDown2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "down");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushDown4 = new JLabel();
-		pd4 = new ImageIcon(ret);
-		pushDown4.setIcon(pd4);
+
 		pushDown4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "down");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushDown6 = new JLabel();
-		pd6 = new ImageIcon(ret);
-		pushDown6.setIcon(pd6);
+
 		pushDown6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "down");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushUp2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushUp.png";
-		pu2 = new ImageIcon(ret);
-		pushUp2.setIcon(pu2);
+
 		pushUp2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "up");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushUp4 = new JLabel();
-		pu4 = new ImageIcon(ret);
-		pushUp4.setIcon(pu4);
+
 		pushUp4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "up");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushUp6 = new JLabel();
-		pu6 = new ImageIcon(ret);
-		pushUp6.setIcon(pu6);
+
 		pushUp6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "up");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushRight2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushRight.png";
-		pr2 = new ImageIcon(ret);
-		pushRight2.setIcon(pr2);
+
 		pushRight2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "right");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushRight4 = new JLabel();
-		pr4 = new ImageIcon(ret);
-		pushRight4.setIcon(pr4);
+
 		pushRight4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "right");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushRight6 = new JLabel();
-		pr6 = new ImageIcon(ret);
-		pushRight6.setIcon(pr6);
+
 		pushRight6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "right");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushLeft2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushLeft.png";
-		pl2 = new ImageIcon(ret);
-		pushLeft2.setIcon(pl2);
+
 		pushLeft2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(1, "left");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
-		
-		pushLeft4 = new JLabel();
-		pl4 = new ImageIcon(ret);
-		pushLeft4.setIcon(pl4);
+
 		pushLeft4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(3, "left");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
 		
-		pushLeft6 = new JLabel();
-		pl6 = new ImageIcon(ret);
-		pushLeft6.setIcon(pl6);
 		pushLeft6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				mazeGameControler.alterMaze(5, "left");
 				rotateRightButton.setEnabled(false);
 				mazeAltered = true;
+				pushDown2.setIcon(gad);
+				pushDown4.setIcon(gad);
+				pushDown6.setIcon(gad);
+				pushUp2.setIcon(gau);
+				pushUp4.setIcon(gau);
+				pushUp6.setIcon(gau);
+				pushLeft2.setIcon(gal);
+				pushLeft4.setIcon(gal);
+				pushLeft6.setIcon(gal);
+				pushRight2.setIcon(gar);
+				pushRight4.setIcon(gar);
+				pushRight6.setIcon(gar);
 			}
 		});
 
@@ -955,6 +1128,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				mazeAltered = false;
 				// réautoriser les boutons pour le prochain joueur
 				rotateRightButton.setEnabled(true);
+
+				pushDown2.setIcon(pd2);
+				pushDown4.setIcon(pd4);
+				pushDown6.setIcon(pd6);
+				pushUp2.setIcon(pu2);
+				pushUp4.setIcon(pu4);
+				pushUp6.setIcon(pu6);
+				pushLeft2.setIcon(pl2);
+				pushLeft4.setIcon(pl4);
+				pushLeft6.setIcon(pl6);
+				pushRight2.setIcon(pr2);
+				pushRight4.setIcon(pr4);
+				pushRight6.setIcon(pr6);
 			}
 		}
 		else {
