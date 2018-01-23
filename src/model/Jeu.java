@@ -14,6 +14,8 @@ public class Jeu implements Game {
 	public Jeu(Couleur couleur){
 		this.pieces = MazePiecesFactory.newPieces(couleur);
 		this.jeuCouleur = couleur;
+		this.listTreasureCatched.clear();
+		this.treasureToCatch = null;
 	}
 	
 	public Couleur getPieceColor(int x, int y){

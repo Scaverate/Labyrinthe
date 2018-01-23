@@ -76,9 +76,15 @@ public class MazeCouloirsFactory {
             }
             couloirs.add(couloirGenerated);
         }
-
+        
         // fusion des deux listes
         return couloirs;
+    }
+    
+    public static void resetCorridors() {
+    	typeI=12;
+        typeL=16;
+        typeT=6;
     }
     
     public static CouloirAmovible getExtraCorridor(){
