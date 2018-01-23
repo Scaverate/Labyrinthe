@@ -128,9 +128,7 @@ public abstract class AbstractMazeGameControler implements MazeGameControlers {
 		return this.mazeGame.getCurrentNamePlayer();
 	}
 	
-	public void switchJoueur() {
-		this.mazeGame.switchJoueur();
-	}
+	public void switchPlayer() { this.mazeGame.switchPlayer(); }
 	
 	public List<TreasureIHMs> getTreasuresIHMs() { return this.mazeGame.getTreasureIHMs(); }
 	public List<CouloirIHM> getCouloirsIHMs() { return this.mazeGame.getCouloirIHMs(); }
