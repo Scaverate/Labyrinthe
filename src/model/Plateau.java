@@ -100,16 +100,18 @@ public class Plateau implements BoardGames {
 		List<Treasures> treasuresToRemove = new LinkedList<>();
 
 		if(this.isMazeAltered) {
-			System.out.println("ERREUR : Tu as déjà déplacé le labyrinthe ce tour-ci");
+			System.err.println("ERREUR : Tu as déjà déplacé le labyrinthe ce tour-ci");
 			return false;
 		}
 
 		// Les positions (lignes & colonnes) amovibles sont les colonnes 1,3,5
 		if(position != 1 && position != 3 && position != 5) {
+			System.err.println("ERREUR : Mauvaise position");
 			return false;
 		}
 
 		if (!direction.equals("down") && !direction.equals("up") && !direction.equals("right") && !direction.equals("left")) {
+			System.err.println("ERREUR : Mauvaise direction");
 			return false;
 		}
 
@@ -404,8 +406,7 @@ public class Plateau implements BoardGames {
 		return corridorsToAdd;
 	}
 
-	public void rotateExtraCardLeft() { this.extraCorridor.rotateLeft(); }
-	public void rotateExtraCardRight() { this.extraCorridor.rotateRight(); }
+	public void rotateExtraCorridor() { this.extraCorridor.rotate(); }
 
 	public boolean isMoveOk(int xInit, int yInit, int xFinal, int yFinal){
 		boolean canMove = false;

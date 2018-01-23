@@ -393,7 +393,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		rotateRightButton = new JButton("\u21BB");
 		rotateRightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mazeGameControler.rotateExtraCardRight();
+				mazeGameControler.rotateExtraCorridor();
 			}
 		});
 		// on cree un panneau contenant differents plans
