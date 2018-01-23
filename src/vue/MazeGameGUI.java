@@ -3,19 +3,24 @@ package vue;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
 import model.*;
 import tools.MazeImageProvider;
 import net.miginfocom.swing.MigLayout;
 import model.observable.MazeGame;
 import controler.MazeGameControlers;
 import controler.controlerLocal.MazeGameControler;
+import launcher.localLauncher.LauncherGUI;
 
 public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
 
@@ -214,7 +219,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				initMazeGame();
-			}			
+			}
 		});
 		
 		bOK.add(okButton);
@@ -546,7 +551,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
 		//On cree la zone pour la pile de cartes
 		tresorToCatch.setIcon(imageTreasureToCatch);
-
 		g = new File("");
 		path = "/src/images/theme/" + theme + "/";
 		ret = g.getAbsolutePath() + path + "bgGame.jpg";
@@ -838,7 +842,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		int CoordInitialeY = this.mazeGameControler.getCurrentCoordInitiale().y;
 		String nameJeuCourant = this.mazeGameControler.getCurrentNamePlayer();
 		Object[] options = {
-				"Quitter"};
+				"Quitter", "Retourner au Menu"};
 
 		JLayeredPane layeredPane;
 		JLayeredPane parentComponentHere;
@@ -894,6 +898,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					princessIHM.setOpaque(false);
 					((JLayeredPane)this.mazeBoard.getComponent(treasurePrincess.getTreasureX() + 7*treasurePrincess.getTreasureY())).add(princessIHM, TREASURE_LAYER);
 					if(destinationX == CoordInitialeX && destinationY == CoordInitialeY){
+						this.mazeGameControler.treasureCatchedPlateau(treasurePrincess);
 						int n = JOptionPane.showOptionDialog(frame,
 								"Félicitation, le vainqueur de cette bataille acharnée est " + nameJeuCourant + ". Allez retrouver votre dulcinée !",
 								"VICTOIRE",
@@ -901,9 +906,12 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 								JOptionPane.PLAIN_MESSAGE,
 								null,
 								options,
-								options[0]);
+								options[1]);
 						if(n==0){
 							System.exit(0);
+						}else if(n == 1){
+							super.dispose();
+							LauncherGUI.main(null);
 						}
 					}
 				}

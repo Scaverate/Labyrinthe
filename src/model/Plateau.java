@@ -25,7 +25,7 @@ public class Plateau implements BoardGames {
 		}
 		
 		scoreMax = 24/nbPlayer; //Score max que chaque joueur doit atteindre
-		
+
 		// Création des jeux Rouge et Bleu qui sont toujours en jeu
 		this.jeuRouge = new Jeu(Couleur.ROUGE);
 		this.jeuBleu = new Jeu(Couleur.BLEU);
@@ -50,6 +50,7 @@ public class Plateau implements BoardGames {
 		
 		this.jeuCourant = this.jeuRouge;
 		this.message = "";
+		MazeCouloirsFactory.resetCorridors();
 		this.couloirs = MazeCouloirsFactory.newCouloirs();
 		this.extraCorridor = MazeCouloirsFactory.getExtraCorridor();
 		this.extraTreasure = null;
@@ -420,7 +421,7 @@ public class Plateau implements BoardGames {
 				canMove = true;
 			}
 		}
-
+		
 		return canMove;
 	}
 
