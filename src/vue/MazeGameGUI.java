@@ -104,8 +104,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		nb2Button.setBorder(compoundRadio);
 		nb3Button.setBorder(compoundRadio);
 		nb4Button.setBorder(compoundRadio);
-		
-		
+			
 		// debug background color btn on Mac 
 		nb2Button.setOpaque(true); 
 		nb3Button.setOpaque(true); 
@@ -145,8 +144,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
                 1, 1, 1, 1, Color.WHITE));
 		
 		grpButton2 = new ButtonGroup();
-		theme1 = new JRadioButton("Test");
-		theme2 = new JRadioButton("Test Test");
+		theme1 = new JRadioButton("PRAIRIE MEUH MEUH");
+		theme2 = new JRadioButton("LE CHÂTEAU DE BOWSER");
 		theme3 = new JRadioButton("toto tata");
 		
 		theme1.setFont(myFont);
@@ -197,8 +196,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	    bTheme.add(theme1);
 	    bTheme.add(theme2);
 	    bTheme.add(theme3);
-	    
-		
+	    bTheme.setBorder(BorderFactory.createMatteBorder(
+                1, 1, 1, 1, Color.WHITE));
+
 		bOK = Box.createHorizontalBox();
 		bOK.setOpaque(false); // background gris desactive
 		// Lancer le jeu
@@ -304,23 +304,23 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		bRules = Box.createHorizontalBox();
 		bRules.setOpaque(false);
 		bRules.add(reglesButton);
-			
+		
+		Box bSpace = Box.createHorizontalBox();
+		bSpace.setOpaque(false);
+		bSpace.setBorder(new EmptyBorder(10,0,0,0));
+		
 		bMenu = Box.createVerticalBox();
 		bMenu.setOpaque(false); // background gris desactive
 		
 		bMenu.add(bPlayers);
+		bMenu.add(bSpace);
 		bMenu.add(bTheme);
 		bMenu.add(bOK);
 		bMenu.add(bRules);
 				
 		bMenu.setBorder(new EmptyBorder(100, 0, 0, 0));
 		bOK.setBorder(new EmptyBorder(10,0,0,0));
-		bTheme.setBorder(new EmptyBorder(10,0,0,0));
 		bRules.setBorder(new EmptyBorder(350,0,0,0));
-		
-
-		bTheme.setBorder(BorderFactory.createMatteBorder(
-                1, 1, 1, 1, Color.WHITE));
 		
 		File g = new File("");
 		String path = "/src/images/";
