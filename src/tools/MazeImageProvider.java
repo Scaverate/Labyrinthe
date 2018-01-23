@@ -62,13 +62,13 @@ public class MazeImageProvider {
 		return ret;		
 	}
 	
-	public static String getImageCardTresorsFile(String pieceType) {
+	public static String getImageCardTresorsFile(String pieceType, String theme) {
 		String ret, key, value, path; 
 		ret = null;
 		key = pieceType;
 		value = mapImageTresorsCard.get(key);
 		File g = new File("");
-		path = "/src/images/carte/";
+		path = "/src/images/theme/" + theme + "/";
 		ret = g.getAbsolutePath() + path + value;
 		return ret;
 	}
@@ -81,13 +81,13 @@ public class MazeImageProvider {
 	 * @param westOpened
 	 * @return nom fichier contenant image de la piece
 	 */
-	public static String getImageFile(String pieceType, boolean northOpened, boolean southOpened, boolean eastOpened, boolean westOpened, boolean isGreyTone){
+	public static String getImageFile(String pieceType, String theme, boolean northOpened, boolean southOpened, boolean eastOpened, boolean westOpened, boolean isGreyTone){
 		String ret, key, value, path;
 		ret = null;
 		key = pieceType + "_" + (northOpened ? "1" : "0") + "_" + (eastOpened ? "1" : "0") + "_" + (southOpened ? "1" : "0") + "_" + (westOpened ? "1" : "0");
 		value = mapImageCouloirs.get(key);
 		File g = new File("");
-		path = "/src/images/couloirs/" + (isGreyTone ? "greytone/" : "");
+		path = "/src/images/theme/" + theme + "/" + (isGreyTone ? "greytone/" : "");
 		ret = g.getAbsolutePath()+ path + value;
 		return ret;
 	}
