@@ -232,19 +232,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			public void actionPerformed(ActionEvent e) {
 				
 				final String rulesText = "Quel que soit le nombre de joueurs, Mario commence en premier.\n" + 
-						"Un tour de jeu se d�roule de la mani�re suivante :\n\n" + 
-						"1. Si le joueur n'a pas de tr�sor attribu�, il en re�oit un qu'il doit aller r�cup�rer.\n\n" + 
-						"2. Pour acc�der � ce tr�sor, le joueur doit se frayer un chemin � travers les couloirs.\n\n" + 
-						"3. Pour cela, � chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette �tape est obligatoire. Pour cela il fait pivoter la pi�ce suppl�mentaire pour la placer dans le sens qu'il souhaite, puis il clique sur la fl�che correspondant � la ligne ou colonne o� il veut ins�rer sa pi�ce, et suivant le sens dans lequel il souhaite modifier le labyrinthe.\n\n" + 
-						"4. Une fois le labyrinthe modifi� comme il le souhaite, le joueur peut d�placer son pion. Attention, une fois le pion rel�ch� sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
-						"5. Une fois qu'un joueur a ramass� une majorit� de tr�sors (c'est-�-dire au moins 24/(nombre de joueurs) tr�sors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
+						"Un tour de jeu se déroule de la manière suivante :\n\n" + 
+						"1. Si le joueur n'a pas de trésor attribué, il en reçoit un qu'il doit aller récupérer.\n\n" + 
+						"2. Pour accéder à ce trésor, le joueur doit se frayer un chemin à travers les couloirs.\n\n" + 
+						"3. Pour cela, à chaque tour avant de bouger son pion, le joueur doit modifier le labyrinthe. Cette étape est obligatoire. Pour cela il fait pivoter la pièce supplémentaire pour la placer dans le sens qu'il souhaite, puis il clique sur la flêche correspondant à la ligne ou colonne où il veut insérer sa pièce, et suivant le sens dans lequel il souhaite modifier le labyrinthe.\n\n" + 
+						"4. Une fois le labyrinthe modifié comme il le souhaite, le joueur peut déplacer son pion. Attention, une fois le pion relâché sur une case accessible au joueur, son tour se termine et c'est au joueur suivant de jouer.\n\n" + 
+						"5. Une fois qu'un joueur a ramassé une majorité de trésors (c'est-à-dire au moins 24/(nombre de joueurs) trésors), il doit retourner sur sa position initiale pour gagner la partie.\n" + 
 						"";
 				
 				//creation de la fenetre des regles
 				rulesFrame = new JDialog();
 				rulesFrame.setSize(new Dimension(dim));
 				rulesFrame.setLocationRelativeTo(getParent());
-				rulesFrame.setTitle("R�gles du jeu");
+				rulesFrame.setTitle("Règles du jeu");
 				
 				//creation du panneau qui va etre ajoute dans la fenetre des regles
 				File f = new File("");

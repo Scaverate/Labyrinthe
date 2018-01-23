@@ -46,11 +46,6 @@ public class MazeImageProvider {
 	 */
 	private MazeImageProvider() {}
 	
-	/**
-	 * @param pieceType
-	 * @param pieceCouleur
-	 * @return nom fichier contenant image de la piece
-	 */
 	public static String getImageFile(String pieceType, Couleur pieceCouleur){
 		String ret, key, value, path;
 		ret = null;
@@ -73,14 +68,6 @@ public class MazeImageProvider {
 		return ret;
 	}
 
-	/**
-	 * @param pieceType
-	 * @param northOpened
-	 * @param southOpened
-	 * @param eastOpened
-	 * @param westOpened
-	 * @return nom fichier contenant image de la piece
-	 */
 	public static String getImageFile(String pieceType, String theme, boolean northOpened, boolean southOpened, boolean eastOpened, boolean westOpened, boolean isGreyTone){
 		String ret, key, value, path;
 		ret = null;
