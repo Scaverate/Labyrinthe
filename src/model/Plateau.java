@@ -14,6 +14,7 @@ public class Plateau implements BoardGames {
 		this.treasureToDraw = new LinkedList<>(); // Liste correspondant à la pioche du jeu
 		this.treasures = new LinkedList<>();
 		this.gameList = new LinkedList<>();
+		this.nbPlayer = nbPlayer;
 		
 		tresorFactoryOutput = MazeTreasureFactory.newTreasure();
 		for(Treasures treasure : tresorFactoryOutput){
@@ -59,57 +60,29 @@ public class Plateau implements BoardGames {
 	 * Changement de joueur en respectant l'ordre des aiguilles d'une montre:
 	 * Rouge - Jaune - Bleu - Vert - Rouge - Jaune - ...
 	*/
-	public void switchJoueur(){
-		if(this.jeuCourant == this.jeuRouge) {
-			if(this.jeuJaune != null) {
+	public void switchPlayer() {
+		if (this.jeuCourant == this.jeuRouge) {
+			if (this.nbPlayer == 2) {
+				this.jeuCourant = this.jeuBleu;
+			} else {
 				this.jeuCourant = this.jeuJaune;
 			}
-			else if(this.jeuBleu != null){
-				this.jeuCourant = this.jeuBleu;
-			}
-			else if(this.jeuVert != null) {
+		} else if (this.jeuCourant == this.jeuBleu) {
+			if (this.nbPlayer == 2 || this.nbPlayer == 3) {
+				this.jeuCourant = this.jeuRouge;
+			} else {
 				this.jeuCourant = this.jeuVert;
 			}
-		}
-		else if(this.jeuCourant == this.jeuJaune) {
-			if(this.jeuBleu != null) {
-				this.jeuCourant = this.jeuBleu;
-			}
-			else if(this.jeuVert != null) {
-				this.jeuCourant = this.jeuVert;
-			}
-			else if(this.jeuRouge != null) {
-				this.jeuCourant = this.jeuRouge;
-			}
-		}
-		else if(this.jeuCourant == this.jeuBleu) {
-			if(this.jeuVert != null) {
-				this.jeuCourant = this.jeuVert;
-			}
-			else if (this.jeuRouge != null) {
-				this.jeuCourant = this.jeuRouge;
-			}
-			else if(this.jeuJaune != null) {
-				this.jeuCourant = this.jeuJaune;
-			}
-		}
-		else if(this.jeuCourant == this.jeuVert) {
-			if(this.jeuRouge != null) {
-				this.jeuCourant = this.jeuRouge;
-			}
-			else if(this.jeuJaune != null) {
-				this.jeuCourant = this.jeuJaune;
-			}
-			else if(this.jeuBleu != null) {
-				this.jeuCourant = this.jeuBleu;
-			}
+		} else if (this.jeuCourant == this.jeuJaune) {
+			this.jeuCourant = this.jeuBleu;
+		} else if (this.jeuCourant == this.jeuVert) {
+			this.jeuCourant = this.jeuRouge;
 		}
 
 		this.isMazeAltered = false; //On remet le déplacement du Labyrinthe
 
 		if(this.jeuCourant.getTreasureToCatch() == null && this.jeuCourant.getScorePlayer() < this.scoreMax){
-			//Piocher une carte si le joueur n'a pas atteint le score final
-			this.jeuCourant.drawCard(this.treasureToDraw);
+			this.jeuCourant.drawCard(this.treasureToDraw); //Piocher une carte si le joueur n'a pas atteint le score final
 		}
 	}
 
@@ -676,6 +649,7 @@ public class Plateau implements BoardGames {
 	
 	private int scoreMax = 0;
 	private boolean isMazeAltered = false;
+	private int nbPlayer;
 	private Jeu jeuBleu, jeuRouge, jeuJaune, jeuVert, jeuCourant;
 	private List<Jeu> gameList;
 	private String message;

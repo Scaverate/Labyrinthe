@@ -152,9 +152,7 @@ public class MazeGame extends Observable implements BoardGames{
 		return this.plateau.getGreenPlayerScore();
 	}
 	
-	public void switchJoueur() {
-		this.plateau.switchJoueur();
-	}
+	public void switchPlayer() { this.plateau.switchPlayer(); }
 
 	public boolean alterMaze(int position, String direction){
 		boolean commandComplete;

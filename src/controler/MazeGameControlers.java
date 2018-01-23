@@ -43,7 +43,7 @@ public interface MazeGameControlers {
 	public int getRedPlayerScore();
 	public int getYellowPlayerScore();
 	public int getGreenPlayerScore();
-	public void switchJoueur();
+	public void switchPlayer();
 	public int getScoreMax();
 	public String getCurrentNamePlayer();
 	public Couleur getColorCurrentPlayer();

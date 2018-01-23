@@ -861,7 +861,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						}
 					}
 				}
-				this.mazeGameControler.switchJoueur();
+				this.mazeGameControler.switchPlayer();
 
 				File g = new File("");
 				String path = "/src/images/";
