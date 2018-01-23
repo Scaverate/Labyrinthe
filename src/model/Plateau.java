@@ -100,18 +100,18 @@ public class Plateau implements BoardGames {
 		List<Treasures> treasuresToRemove = new LinkedList<>();
 
 		if(this.isMazeAltered) {
-			System.out.println("ERREUR : Tu as déjà déplacé le labyrinthe ce tour-ci");
+			System.err.println("ERREUR : Tu as déjà déplacé le labyrinthe ce tour-ci");
 			return false;
 		}
 
 		// Les positions (lignes & colonnes) amovibles sont les colonnes 1,3,5
 		if(position != 1 && position != 3 && position != 5) {
-			System.out.println("ERREUR : Mauvaise position");
+			System.err.println("ERREUR : Mauvaise position");
 			return false;
 		}
 
 		if (!direction.equals("down") && !direction.equals("up") && !direction.equals("right") && !direction.equals("left")) {
-			System.out.println("ERREUR : Mauvaise direction");
+			System.err.println("ERREUR : Mauvaise direction");
 			return false;
 		}
 
