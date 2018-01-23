@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MazeGameControlerOnlineClient extends MazeGameControlerOnline implements Runnable{
+public class MazeGameControlerOnlineClient extends MazeGameControlerOnline implements Runnable {
     public MazeGameControlerOnlineClient(MazeGame mazeGame, String host, int port) {
         super(mazeGame);
 
@@ -18,25 +18,26 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Thread t = new Thread(this);
-        t.start();
+        
+        try {
+            Thread t = new Thread(this);
+            t.start();
+            //t.join();
+        } catch(Exception e) { }
 
     }
 
     public void run(){
         try {
             writer = new PrintWriter(connexion.getOutputStream(), true);
-            reader = new BufferedInputStream(connexion.getInputStream());
             String commande = "GETMAZEGAME";
             writer.write(commande);
             writer.flush();
 
-            //System.out.println(this.getMazeGame());
             this.mazeGame = this.getMazeGame();
 
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException ex) {
+        	ex.printStackTrace();
         }
 
        /* writer.write("CLOSE");
@@ -44,22 +45,13 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         writer.close();*/
         
     }
-
-    private String read() throws IOException{
-        String response;
-        int stream;
-        byte[] b = new byte[4096];
-        stream = reader.read(b);
-        response = new String(b, 0, stream);
-        return response;
-    }
     
     private MazeGame getMazeGame(){
         ArrayList<Object> recieveObjects = new ArrayList<>();
         try {
             ObjectInputStream entree = new ObjectInputStream(connexion.getInputStream());
             int taille = (int) entree.readObject();
-            for(int i=0;i<taille;i++){
+            for(int i=0; i<taille; i++){
                 recieveObjects.add(entree.readObject());
             }
             System.out.println(recieveObjects);
@@ -72,5 +64,4 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
 
     private Socket connexion;
     private PrintWriter writer;
-    private BufferedInputStream reader;
 }

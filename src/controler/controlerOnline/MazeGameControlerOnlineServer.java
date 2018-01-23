@@ -4,13 +4,17 @@ import tools.EnvoiSocket;
 import model.observable.MazeGame;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MazeGameControlerOnlineServer extends MazeGameControlerOnline {
+public class MazeGameControlerOnlineServer extends MazeGameControlerOnline implements Observer{
     public MazeGameControlerOnlineServer(MazeGame mazeGame, String host, int port) {
         super(mazeGame);
 
@@ -21,7 +25,30 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline {
         } catch(Exception ex) {
             Logger.getLogger(EnvoiSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        this.mazeGame.addObserver((Observer) this);
     }
+
+    public void close(){
+        this.isRunning = false;
+    }
+    
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println("update mazegame");
+		if(client != null) {
+			try{
+		        ArrayList<Object> objects = new ArrayList<>();
+		        objects.add("UPDATED_SERVER");
+		        ObjectOutputStream sortie = new ObjectOutputStream(this.client.getOutputStream());
+		        sortie.writeObject(objects.size());
+		        for(Object tmp : objects){
+		            sortie.writeObject(tmp);
+		        }
+		        sortie.flush();
+			} catch(IOException e) { e.printStackTrace(); }
+		}
+	}
 
     private void open(){
         Thread t = new Thread(new Runnable(){
@@ -29,7 +56,7 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline {
                 while(isRunning){
                     try {
                         //On attend une connexion d'un client
-                        Socket client = serverSocket.accept();
+                        client = serverSocket.accept();
 
                         //Une fois reçue, on la traite dans un thread séparé
                         System.out.println("Connexion cliente reçue.");
@@ -54,11 +81,8 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline {
 
         t.start();
     }
-
-    public void close(){
-        this.isRunning = false;
-    }
-
+    
     private ServerSocket serverSocket;
+    private Socket client;
     private boolean isRunning = true;
 }
