@@ -27,26 +27,21 @@ public class Jeu implements Game {
 		return couleur;
 	}
 	
-	public Treasure drawCard(List<Treasures> listTreasure){
-		List<Treasure> curatedList = new LinkedList<>();
+	public void drawCard(List<Treasures> listTreasure){
 		Treasure treasureDraw;
 		int randomNumber;
 		Random rand = new Random();
 
-		for(Treasures treasure : listTreasure) {
-			if(treasure.getTreasureX() != -1 && treasure.getTreasureY() != -1) {
-				curatedList.add((Treasure) treasure);
-			}
+		if(listTreasure.size() == 0) {
+			return;
 		}
-		if(curatedList.size() == 0) {
-			listTreasure.clear();
-			return null;
-		}
-		randomNumber = rand.nextInt(curatedList.size());
-		treasureDraw = curatedList.get(randomNumber);
-		this.setTreasureToCatch(treasureDraw);
+
+		randomNumber = rand.nextInt(listTreasure.size());
+		treasureDraw = (Treasure) listTreasure.get(randomNumber);
+
+		this.setTreasureToCatch(treasureDraw); //On met à jour le trésor du joueur courant
+
 		listTreasure.remove(treasureDraw);
-		return treasureDraw;
 	}
 	
 	private Pieces findPiece(int x, int y){
