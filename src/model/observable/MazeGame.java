@@ -146,10 +146,14 @@ public class MazeGame extends Observable implements BoardGames, Serializable{
 		return this.plateau.getGreenPlayerScore();
 	}
 
-	public void switchPlayer() {
-		this.plateau.switchPlayer();
-		this.notifyObservers(this.plateau.getPiecesIHM());
+<<<<<<< 2c6cd4371cc41e5d14532e281d5a548f4b9b300b
+	public void switchPlayer() { this.plateau.switchPlayer(); }
+=======
+	public void switchJoueur() {
+		this.plateau.switchJoueur();
+		this.notifyObservers(plateau.getPiecesIHM());
 	}
+>>>>>>> echanges reseau fonctionnels
 
 	public boolean alterMaze(int position, String direction){
 		boolean commandComplete;

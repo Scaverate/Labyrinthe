@@ -3,9 +3,6 @@ package vue;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.Socket;
 import java.util.*;
 import java.util.List;
 
@@ -28,7 +25,7 @@ import launcher.localLauncher.LauncherGUI;
 public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionListener, Observer {
 
 	private static final long serialVersionUID = 1L;
-	private MazeGameControlers mazeGameControler;
+	private MazeGameControlers mazeGameControler = null;
 	private JLayeredPane layeredPane;
 	private JLabel tresorToCatch;
 	private JLabel pushDown2, pushDown4, pushDown6, pushUp2, pushUp4, pushUp6, pushRight2, pushRight4, pushRight6, pushLeft2, pushLeft4, pushLeft6;
@@ -446,7 +443,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		CouloirIHM extraCard;
 		JLabel extraCardImage;
 		final MazeGame mazeGame;
-		final MazeGameControlers mazeGameControler;
 		String greyArrowDown;
 		ImageIcon gad;
 		String greyArrowUp;
@@ -501,7 +497,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeGame.addObserver(this);
 		// on initialise le controleur
 		couloirIHMs = this.mazeGameControler.getCouloirsIHMs();
-		pieceIHMs = this.mazeGameControler.getPiecesIHMs();
+		pieceIHMs = this.mazeGameControler.getPiecesIHM();
 		treasureIHMs = this.mazeGameControler.getTreasuresIHMs();
 
 		//On cree une grille de 2 par 2 (4 cases)
@@ -1660,7 +1656,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				break;
 			}
 		}
-		this.mazeGameControler.alterMaze(command, selectedNumber);
+		this.mazeGameControler.alterMaze(selectedNumber, command);
 		return true;
 	}
 
