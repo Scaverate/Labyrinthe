@@ -74,8 +74,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private boolean playOnline = false;
 	private boolean isServerPlayer = false;
 	private boolean isClientPlayer = false;
-	final JDialog waitDialog = new JDialog();
-	final JFrame overlayFrame = new JFrame("Transparent Window");
 
 	
 	public MazeGameGUI(Dimension dim) {
@@ -484,13 +482,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			
 			if(this.isClientPlayer) {
 				// la socket a réussi à se connecter, on va donc jouer le rôle du client (un serveur est deja la)
-				this.mazeGameControler = new MazeGameControlerOnlineClient(mazeGame, IP, PORT);
+				this.mazeGameControler = new MazeGameControlerOnlineClient(mazeGame, IP, PORT, this);
 				System.out.println("Mode client");
 				this.setTitle(this.getTitle() + " - mode client");
 			}
 			else if (this.isServerPlayer){
 				// pas de serveur détecté (connexion de test échouée), on joue donc le rôle de serveur
-				this.mazeGameControler = new MazeGameControlerOnlineServer(mazeGame, IP, PORT);
+				this.mazeGameControler = new MazeGameControlerOnlineServer(mazeGame, IP, PORT, this);
 				System.out.println("Mode serveur");
 				this.setTitle(this.getTitle() + " - mode serveur");
 			}
@@ -977,6 +975,25 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		mazeContainer.add(generalBoard);
 		mazeBoard.addMouseListener(this);
 		mazeBoard.addMouseMotionListener(this);
+
+        if(
+                (
+                        this.playOnline
+                                && this.isServerPlayer
+                                && this.mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU
+                )
+                        ||
+                        (
+                                this.playOnline
+                                        && this.isClientPlayer
+                                        && this.mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE
+                        )
+                ) {
+            this.togglePlayerInput(false);
+        }
+        else {
+            this.togglePlayerInput(true);
+        }
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -1169,6 +1186,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						}
 					}
 				}
+                if(playOnline) {
+                    // réautoriser les boutons pour le prochain joueur
+                    rotateLeftButton.setEnabled(true);
+                    rotateRightButton.setEnabled(true);
+                }
 				this.mazeGameControler.switchPlayer();
 
 				File g = new File("");
@@ -1206,13 +1228,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 				//On cree la zone pour la pile de cartes
 				tresorToCatch.setIcon(imageTreasureToCatch);
-				mazeAltered = false;
-				// réautoriser les boutons pour le prochain joueur
-				rotateRightButton.setEnabled(true);
-
+                mazeAltered = false;
 				for(JLabel arrow : arrowsList) {
 					arrow.setEnabled(true);
 				}
+
+                if(!playOnline) {
+                    // réautoriser les boutons pour le prochain joueur
+                    rotateLeftButton.setEnabled(true);
+                    rotateRightButton.setEnabled(true);
+                }
 			}
 		}
 		else {
@@ -1227,9 +1252,13 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		if(this.mazeBoard == null || arg == null) {
-			return;
-		}
+        if(this.mazeBoard == null) {
+            return;
+        }
+
+        if(this.playOnline && this.isClientPlayer){
+            System.out.println("update cote client !");
+        }
 		
 		if(
 			(
@@ -1286,6 +1315,10 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		//On cree la zone pour la pile de cartes
 		tresorToCatch.setIcon(imageTreasureToCatch);
+
+        if(arg == null) {
+            return;
+        }
 
 		// attention l'ordre des if est important...
 		// si mise à jour de la piece supplémentaire
@@ -1632,43 +1665,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	}
 
 	private void togglePlayerInput(boolean enable) {
-		
-		/*
-		final JOptionPane optionPane = new JOptionPane(
-			"Attente autre joueur",
-			JOptionPane.INFORMATION_MESSAGE,
-			JOptionPane.DEFAULT_OPTION,
-			null,
-			new Object[]{},
-			null
-		);
-	   	waitDialog.setTitle("Message");
-	   	waitDialog.setModal(true);
-	   	waitDialog.setContentPane(optionPane);
-	   	waitDialog.pack();
-	   	*/
-/*
-        this.overlayFrame.setUndecorated(true);
-        this.overlayFrame.setBackground(new Color(0, 0, 0, 0));
-        this.overlayFrame.setAlwaysOnTop(true);
-        this.overlayFrame.getRootPane().putClientProperty("apple.awt.draggableWindowBackground", false);
-        this.overlayFrame.getContentPane().setLayout(new java.awt.BorderLayout());
-        this.overlayFrame.getContentPane().add(new JTextField("text field north"), java.awt.BorderLayout.NORTH);
-        this.overlayFrame.getContentPane().add(new JTextField("text field south"), java.awt.BorderLayout.SOUTH);
-        this.overlayFrame.setSize(this.getSize());
-        this.overlayFrame.setBounds(this.getBounds());
-        this.overlayFrame.setVisible(true);
-        this.overlayFrame.pack();
-       */
 		Component[] dragLayerComponents = this.mazeBoard.getComponents();
-		/*if(!waitDialog.isVisible()){
-			waitDialog.setVisible(true);
-		}*/
 
 		for(Component component : dragLayerComponents){
 			if(((JLayeredPane)component).getComponentsInLayer(PAWN_LAYER).length > 0) {
 				((JLayeredPane)component).getComponentsInLayer(PAWN_LAYER)[0].setEnabled(enable);
 			}
 		}
+
+        rotateLeftButton.setEnabled(enable);
+        rotateRightButton.setEnabled(enable);
 	}
 }
