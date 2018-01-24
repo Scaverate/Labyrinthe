@@ -66,14 +66,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private JDialog rulesFrame;
 	private JPanel backgroundPane;
 	private boolean mazeAltered = false;
+	private JLabel test;
 
 	
 	public MazeGameGUI(Dimension dim) {
 		
-		Box bPlayers,bOK,bMenu,bRules,bTheme;
+		Box bPlayers,bOK,bMenu,bRules,bTheme,bimgTheme;
 		JButton reglesButton, okButton;
-		ButtonGroup grpButton, grpButton2;
-		JRadioButton nb2Button, nb3Button, nb4Button, theme1, theme2, theme3;
+		ButtonGroup grpButton, grpButton2, grpButton3;
+		JRadioButton nb2Button, nb3Button, nb4Button, theme1, theme2, theme3, imgTheme1, imgTheme2, imgTheme3;
 		final Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
 
 		this.dim = dim; //Dimension du plateau de jeu 
@@ -149,9 +150,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
                 1, 1, 1, 1, Color.WHITE));
 		
 		grpButton2 = new ButtonGroup();
-		theme1 = new JRadioButton("LA PRAIRIE MEUH MEUH");
-		theme2 = new JRadioButton("LE CHÂTEAU DE BOWSER");
-		theme3 = new JRadioButton("LA MONTAGNE GLA GLA");
+		theme1 = new JRadioButton(/*"LA PRAIRIE MEUH MEUH"*/);
+		theme2 = new JRadioButton(/*"LE CHÂTEAU DE BOWSER"*/);
+		theme3 = new JRadioButton(/*"LA MONTAGNE GLA GLA"*/);
 		
 		theme1.setFont(myFont);
 		theme2.setFont(myFont);
@@ -173,6 +174,42 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		theme2.setOpaque(true); 
 		theme3.setOpaque(true);
 		
+		grpButton3 = new ButtonGroup();
+		imgTheme1 = new JRadioButton();
+		imgTheme2 = new JRadioButton();
+		imgTheme3 = new JRadioButton();
+		
+		imgTheme1.setIcon(new ImageIcon(getClass().getResource("../images/theme/green/ico.jpg")));
+		imgTheme2.setIcon(new ImageIcon(getClass().getResource("../images/theme/lava/ico.jpg")));
+		imgTheme3.setIcon(new ImageIcon(getClass().getResource("../images/theme/snow/ico.jpg")));
+
+		imgTheme1.setOpaque(false);
+		imgTheme2.setOpaque(false);
+		imgTheme3.setOpaque(false);
+		
+		imgTheme1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				theme = "green";
+				theme1.setSelected(true);				
+			}
+		});
+		imgTheme2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				theme = "lava";
+				theme2.setSelected(true);
+			}
+		});
+		imgTheme3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				theme = "snow";
+				theme3.setSelected(true);
+			}
+		});
+		
+		grpButton3.add(imgTheme1);
+		grpButton3.add(imgTheme2);
+		grpButton3.add(imgTheme3);
+		
 		grpButton2.add(theme1);
 		grpButton2.add(theme2);
 		grpButton2.add(theme3);
@@ -182,20 +219,28 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		theme1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theme = "green";
+				imgTheme1.setSelected(true);
 			}
 		});
 		theme2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theme = "lava";
+				imgTheme2.setSelected(true);
 			}
 		});
 		theme3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				theme = "snow";
+				imgTheme3.setSelected(true);
 			}
 		});
 		
-		// on cree le container du choix des themes 
+		// on cree le container du choix des themes
+		bimgTheme = Box.createHorizontalBox();
+		bimgTheme.add(imgTheme1);
+	    bimgTheme.add(imgTheme2);
+	    bimgTheme.add(imgTheme3);
+
 	    bTheme = Box.createHorizontalBox();
 	    bTheme.setOpaque(false); 
 	    bTheme.add(theme1);
@@ -319,6 +364,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		bMenu.add(bPlayers);
 		bMenu.add(bSpace);
+		bMenu.add(bimgTheme);
 		bMenu.add(bTheme);
 		bMenu.add(bOK);
 		bMenu.add(bRules);
