@@ -562,7 +562,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		g = new File("");
 		path = "/src/images/theme/" + theme + "/";
 		ret = g.getAbsolutePath() + path + "bgGame.jpg";
-		path = "/src/images/arrow/";
+		path = "/src/images/theme/" + theme + "/arrow/";
 		
 		greyArrowDown = g.getAbsolutePath() + path + "greytone/pushDown.png";
 		gad = new ImageIcon(greyArrowDown);
