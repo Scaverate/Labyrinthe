@@ -371,7 +371,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				
 		bMenu.setBorder(new EmptyBorder(100, 0, 0, 0));
 		bOK.setBorder(new EmptyBorder(10,0,0,0));
-		bRules.setBorder(new EmptyBorder(350,0,0,0));
+		bRules.setBorder(new EmptyBorder(200,0,0,0));
 		
 		File g = new File("");
 		String path = "/src/images/";
