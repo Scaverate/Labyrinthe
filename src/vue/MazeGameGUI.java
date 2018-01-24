@@ -459,7 +459,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		player = new JLabel();
 		playerText = new JLabel();
 		if (theme == "lava") {
-			playerText.setForeground(Color.WHITE);
+			playerText.setForeground(Color.WHITE); 
 		}
 		playerText.setText("JOUEUR  :" + " ");
 		//On initialise le joueur devant jouer à "Mario"
