@@ -458,6 +458,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		//On crée le label sur lequel le joueur actif sera récupéré
 		player = new JLabel();
 		playerText = new JLabel();
+		if (theme == "lava") {
+			playerText.setForeground(Color.WHITE);
+		}
 		playerText.setText("JOUEUR  :" + " ");
 		//On initialise le joueur devant jouer à "Mario"
 		File g = new File("");
