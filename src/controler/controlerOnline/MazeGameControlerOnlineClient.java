@@ -17,6 +17,9 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         } catch (IOException e) {
             e.printStackTrace();
         }
+		if(this.mazeGame != null) {
+			this.mazeGame.addObserver(this);
+		}
     }
 
     @Override
@@ -24,7 +27,7 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
         System.out.println("update client mazegame");
 
         // envoi vers le client
-        sendMessage("testDepuisClient");
+		sendMessage(this.mazeGame);
     }
     
     private void open() {
@@ -34,8 +37,17 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
                 while(!connexion.isClosed()){
                     // reception depuis le serveur
                     ArrayList<Object> reception = recieveUpdate();
-                    if(reception.size() > 0 ) { System.out.println(reception); }
-                    System.out.println(reception);
+                    if(reception.size() > 0 ) {
+                    	if(reception.get(0) != null) {
+                            System.out.println(reception.get(0));
+                        	mazeGame.updateFromExternalMazeGame((MazeGame) reception.get(0));
+                        	mazeGame.notifyObservers(mazeGame.getTreasureIHMs());
+                        	mazeGame.notifyObservers(mazeGame.getCouloirIHMs());
+                        	mazeGame.notifyObservers(mazeGame.getExtraCorridorIHM());
+                        	//mazeGame.notifyObservers(mazeGame.getExtraTreasureIHM());
+                        	mazeGame.notifyObservers(mazeGame.getPiecesIHMs());
+                    	}
+                    }
 
                     // fermer la connexion
                     /*if(query.equals("CLOSE")){
@@ -68,15 +80,28 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
     }
 
     private ArrayList<Object> recieveUpdate() {
+		
         ObjectInputStream entree;
         ArrayList<Object> reception = new ArrayList<>();
+		if(connexion == null) {
+			return reception;
+		}
         try {
+        	/*
             entree = new ObjectInputStream(connexion.getInputStream());
             int taille = (int) entree.readObject();
             for(int i = 0; i < taille; i++){
                 reception.add(entree.readObject());
             }
-        } catch (IOException | ClassNotFoundException ex) { ex.printStackTrace(); }
+            */
+            entree = new ObjectInputStream(connexion.getInputStream());
+            reception.add(entree.readObject());
+        } catch (IOException | ClassNotFoundException ex) {
+        	ex.printStackTrace();
+        	try{
+            	connexion.close();
+        	} catch (IOException exc) { exc.printStackTrace(); }
+        }
         return reception;
     }
 

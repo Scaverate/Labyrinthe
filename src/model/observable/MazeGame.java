@@ -9,6 +9,7 @@ import model.*;
 
 public class MazeGame extends Observable implements BoardGames, Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Plateau plateau;
 
 	public MazeGame(int nbPlayer) {
@@ -17,12 +18,15 @@ public class MazeGame extends Observable implements BoardGames, Serializable{
 		this.notifyObservers(plateau.getPiecesIHM());
 		this.notifyObservers(plateau.getTreasuresIHMs());
 	}
+	
+	public void updateFromExternalMazeGame(MazeGame newMazeGame) {
+		this.plateau = newMazeGame.plateau;
+	}
 
 	@Override
 	public String toString() {
 		String st = "";
-		st += "\n" + plateau.getMessage() + "\n";
-		st = plateau.toString();
+		st += "\n" + plateau.getTreasuresIHMs() + "\n";
 		return  st;
 	}
 
@@ -141,8 +145,11 @@ public class MazeGame extends Observable implements BoardGames, Serializable{
 	public int getGreenPlayerScore() {
 		return this.plateau.getGreenPlayerScore();
 	}
-	
-	public void switchPlayer() { this.plateau.switchPlayer(); }
+
+	public void switchPlayer() {
+		this.plateau.switchPlayer();
+		this.notifyObservers(this.plateau.getPiecesIHM());
+	}
 
 	public boolean alterMaze(int position, String direction){
 		boolean commandComplete;

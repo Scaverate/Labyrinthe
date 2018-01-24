@@ -1,6 +1,7 @@
 package controler.controlerOnline;
 
 import model.observable.MazeGame;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,7 +32,7 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 		System.out.println("update server mazegame");
 
 		// envoi vers le client
-		sendMessage("testDepuisServ");
+		sendMessage(this.mazeGame);
 	}
 
 	private void open(){
@@ -40,10 +41,24 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 				try {
 					client = serverSocket.accept();
 					System.out.println("Traitement de la connexion cliente - côté serveur");
+					sendMessage(mazeGame);
 					while(!serverSocket.isClosed()){
+						//sendMessage("testDepuisServ");
+						//update(null, null);
+						
 						// reception depuis le client
-						/*ArrayList<Object> reception = recieveUpdate();
-						if(reception.size() > 0 ) { System.out.println(reception); }*/
+	                    ArrayList<Object> reception = recieveUpdate();
+	                    if(reception.size() > 0 ) {
+	                    	if(reception.get(0) != null) {
+	                            System.out.println(reception.get(0));
+	                        	mazeGame.updateFromExternalMazeGame((MazeGame) reception.get(0));
+	                        	mazeGame.notifyObservers(mazeGame.getTreasureIHMs());
+	                        	mazeGame.notifyObservers(mazeGame.getCouloirIHMs());
+	                        	mazeGame.notifyObservers(mazeGame.getExtraCorridorIHM());
+	                        	//mazeGame.notifyObservers(mazeGame.getExtraTreasureIHM());
+	                        	mazeGame.notifyObservers(mazeGame.getPiecesIHMs());
+	                    	}
+	                    }
 
 						// fermer la connexion
 						/*
@@ -70,6 +85,7 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 		}
 
 		try {
+			/*
 			ArrayList<Object> objects = new ArrayList<>();
 			objects.add(command);
 			ObjectOutputStream sortie = new ObjectOutputStream(client.getOutputStream());
@@ -77,6 +93,11 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 			for(Object object : objects){
 				sortie.writeObject(object);
 			}
+			sortie.writeObject(object);
+			sortie.flush();
+			*/
+			ObjectOutputStream sortie = new ObjectOutputStream(client.getOutputStream());
+			sortie.writeObject(command);
 			sortie.flush();
 		} catch(IOException ex) { ex.printStackTrace(); }
 	}
@@ -84,13 +105,25 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 	private ArrayList<Object> recieveUpdate() {
 		ObjectInputStream entree;
 		ArrayList<Object> reception = new ArrayList<>();
+		if(client == null) {
+			return reception;
+		}
 		try {
-			entree = new ObjectInputStream(client.getInputStream());
-			int taille = (int) entree.readObject();
-			for(int i = 0; i < taille; i++){
-				reception.add(entree.readObject());
-			}
-		} catch (IOException | ClassNotFoundException ex) { ex.printStackTrace(); }
+        	/*
+            entree = new ObjectInputStream(client.getInputStream());
+            int taille = (int) entree.readObject();
+            for(int i = 0; i < taille; i++){
+                reception.add(entree.readObject());
+            }
+            */
+            entree = new ObjectInputStream(client.getInputStream());
+            reception.add(entree.readObject());
+        } catch (IOException | ClassNotFoundException ex) {
+        	ex.printStackTrace();
+        	try{
+        		client.close();
+        	} catch (IOException exc) { exc.printStackTrace(); }
+        }
 		return reception;
 	}
 
@@ -99,15 +132,36 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 
 	// tests
 	public static void main(String[] args) {
-		MazeGameControlerOnlineServer mazeGameControlerOnlineServer = new MazeGameControlerOnlineServer(
-			null,
-			"127.0.0.1",
-			1234
-		);
-		MazeGameControlerOnlineClient mazeGameControlerOnlineClient = new MazeGameControlerOnlineClient(
-			null,
-			"127.0.0.1",
-			1234
-		);
+		final String IP = "127.0.0.1";
+		final int PORT = 1234;
+		// on détecte si un serveur existe deja
+		try (Socket s = new Socket(IP, PORT)) {
+			s.close();
+			MazeGameControlerOnlineClient mazeGameControlerOnlineClient = new MazeGameControlerOnlineClient(
+				null,
+				IP,
+				1234
+			);
+		} catch (IOException ex) {
+			MazeGameControlerOnlineServer mazeGameControlerOnlineServer = new MazeGameControlerOnlineServer(
+				null,
+				IP,
+				1234
+			);
+		}
+		try (Socket s = new Socket(IP, PORT)) {
+			s.close();
+			MazeGameControlerOnlineClient mazeGameControlerOnlineClient = new MazeGameControlerOnlineClient(
+				null,
+				IP,
+				1234
+			);
+		} catch (IOException ex) {
+			MazeGameControlerOnlineServer mazeGameControlerOnlineServer = new MazeGameControlerOnlineServer(
+				null,
+				IP,
+				1234
+			);
+		}
 	}
 }

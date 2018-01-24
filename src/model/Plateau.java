@@ -9,6 +9,9 @@ import tools.MazeCouloirsFactory;
 import tools.MazeTreasureFactory;
 
 public class Plateau implements BoardGames, Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	public Plateau(int nbPlayer) {
 		List<Treasures> tresorFactoryOutput;
 		this.treasureToDraw = new LinkedList<>(); // Liste correspondant à la pioche du jeu

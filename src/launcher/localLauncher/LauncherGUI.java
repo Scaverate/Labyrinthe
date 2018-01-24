@@ -1,13 +1,7 @@
 package launcher.localLauncher;
 
 import java.awt.Dimension;
-import java.util.Observer;
-
 import javax.swing.JFrame;
-
-import controler.MazeGameControlers;
-import controler.controlerLocal.MazeGameControler;
-import model.observable.MazeGame;
 import vue.MazeGameGUI;
 
 public class LauncherGUI {

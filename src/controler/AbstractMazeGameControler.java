@@ -6,18 +6,6 @@ import model.*;
 import model.observable.MazeGame;
 import model.Treasure;
 
-
-/**
- * 
- * le controleur illustre le DP Strategy vis-à-vis de la Vue
- * 
- * Méthodes communes des controleurs
- * dont le travail essentiel est de faire communiquer
- * la vue et le modèle pour gérer le déplacement des pièces
- * déplacement figé à ce niveau de la hiérarchie dans un Template Method 
- * les petites lignes étant implémentées dans les classes dérivées
- *
- */
 public abstract class AbstractMazeGameControler implements MazeGameControlers {
 
 	protected MazeGame mazeGame;	 
