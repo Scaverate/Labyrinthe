@@ -1,6 +1,7 @@
 package controler.controlerOnline;
 
 import model.observable.MazeGame;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -40,12 +41,15 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
                     if(reception.size() > 0 ) {
                     	if(reception.get(0) != null) {
                             System.out.println(reception.get(0));
-                        	mazeGame.updateFromExternalMazeGame((MazeGame) reception.get(0));
-                        	mazeGame.notifyObservers(mazeGame.getTreasureIHMs());
-                        	mazeGame.notifyObservers(mazeGame.getCouloirIHMs());
-                        	mazeGame.notifyObservers(mazeGame.getExtraCorridorIHM());
-                        	//mazeGame.notifyObservers(mazeGame.getExtraTreasureIHM());
-                        	mazeGame.notifyObservers(mazeGame.getPiecesIHMs());
+                            System.out.println(((MazeGame) reception.get(0)).getColorCurrentPlayer());
+                            if(mazeGame != null) {
+                            	mazeGame.updateFromExternalMazeGame((MazeGame) reception.get(0));
+                            	mazeGame.notifyObservers(mazeGame.getTreasureIHMs());
+                            	mazeGame.notifyObservers(mazeGame.getCouloirIHMs());
+                            	mazeGame.notifyObservers(mazeGame.getExtraCorridorIHM());
+                            	//mazeGame.notifyObservers(mazeGame.getExtraTreasureIHM());
+                            	mazeGame.notifyObservers(mazeGame.getPiecesIHMs());
+                            }
                     	}
                     }
 
@@ -63,11 +67,12 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
     }
     
     private void sendMessage(Object command) {
-        if(command == null) {
+        if(command == null || connexion == null) {
             return;
         }
 
         try{
+        	/*
             ArrayList<Object> objects = new ArrayList<>();
             objects.add(command);
             ObjectOutputStream sortie = new ObjectOutputStream(connexion.getOutputStream());
@@ -76,6 +81,10 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
                 sortie.writeObject(tmp);
             }
             sortie.flush();
+            */
+			ObjectOutputStream sortie = new ObjectOutputStream(connexion.getOutputStream());
+			sortie.writeObject(command);
+			sortie.flush();
         } catch(IOException ex) { ex.printStackTrace(); }
     }
 

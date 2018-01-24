@@ -59,10 +59,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private int yOrigine;
 	private int nbPlayer = 2;
 	private String theme = "green";
-	private boolean playOnline = false;
-	private boolean isServerPlayer = false;
-	private boolean isClientPlayer = false;
-	final JDialog waitDialog = new JDialog();
 	private Component previouslyHoveredComponent;
 	private List<TreasureIHMs> treasureIHMs;
 	private List<CouloirIHM> couloirIHMs;
@@ -75,6 +71,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private boolean mazeAltered = false;
 	private JLabel test;
 	private LinkedList<JLabel> arrowsList;
+	private boolean playOnline = false;
+	private boolean isServerPlayer = false;
+	private boolean isClientPlayer = false;
+	final JDialog waitDialog = new JDialog();
+	final JFrame overlayFrame = new JFrame("Transparent Window");
 
 	
 	public MazeGameGUI(Dimension dim) {
@@ -87,19 +88,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		this.dim = dim; //Dimension du plateau de jeu 
 		Dimension windowSize = new Dimension(950,700); //dimension de la fenetre
 		JRadioButton onlineButton;
-		
-		final JOptionPane optionPane = new JOptionPane(
-			"Attente autre joueur",
-			JOptionPane.INFORMATION_MESSAGE,
-			JOptionPane.DEFAULT_OPTION,
-			null,
-			new Object[]{},
-			null
-		);
-	   	waitDialog.setTitle("Message");
-	   	waitDialog.setModal(true);
-	   	waitDialog.setContentPane(optionPane);
-	   	waitDialog.pack();
 		
 		//JRadioButton onlineButton;
 		JRadioButton severPlayerButton;
@@ -684,8 +672,16 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			this.pawn = new JLabel(
 					new ImageIcon(MazeImageProvider.getImageFile(
 							"Pion",
-							pieceIHM.getCouleur()
+							pieceIHM.getCouleur(),
+							false
 					))
+			);
+			this.pawn.setDisabledIcon(
+				new ImageIcon(MazeImageProvider.getImageFile(
+					"Pion",
+					pieceIHM.getCouleur(),
+					true
+				))
 			);
 
 			this.pawn.setPreferredSize(new Dimension(100, 100));
@@ -1008,7 +1004,26 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Point parentLocation = componentPressed.getParent().getLocation();
 		xAdjustment = parentLocation.x - e.getX();
 		yAdjustment = parentLocation.y - e.getY();
+		
 		this.pawn = (JLabel) componentPressed;
+		if(
+			!this.pawn.isEnabled()
+			||
+			(
+				this.playOnline
+				&& this.isServerPlayer
+				&& this.mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU
+			)
+			||
+			(
+				this.playOnline
+				&& this.isClientPlayer
+				&& this.mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE
+			)
+		) {
+			return;
+		}
+		
 		parent = (JLayeredPane) componentPressed.getParent();
 		xOrigine = e.getX() / (this.mazeBoard.getHeight() / 7);
 		yOrigine = e.getY() / (this.mazeBoard.getHeight() / 7);
@@ -1042,7 +1057,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		 JLayeredPane layeredPane;
 		 JLabel corridorImage;
 
-		if (this.pawn == null) {
+		if (this.pawn == null || !this.pawn.isEnabled()) {
 			return;
 		}
 		this.pawn.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
@@ -1229,11 +1244,11 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				&& this.mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE
 			)
 		) {
-			waitDialog.setVisible(true); ;
+			this.togglePlayerInput(false);
 			return;
 		}
 		else {
-			waitDialog.setVisible(false);
+			this.togglePlayerInput(true);
 		}
 		
 		//Lors d'un changement de score, on met à jour l'affichage du tableau
@@ -1355,9 +1370,20 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					}
 				}
 				// on recrée le pion
-				this.pawn = new JLabel(new ImageIcon(
-						MazeImageProvider.getImageFile("Pion",
-								pieceIHM.getCouleur())));
+				this.pawn = new JLabel(
+					new ImageIcon( MazeImageProvider.getImageFile(
+						"Pion",
+						pieceIHM.getCouleur(),
+						false
+					))
+				);
+				this.pawn.setDisabledIcon(
+					new ImageIcon( MazeImageProvider.getImageFile(
+						"Pion",
+						pieceIHM.getCouleur(),
+						true
+					))
+				);
 				this.pawn.setPreferredSize(new Dimension(100, 100));
 				this.pawn.setBounds(0, 0, 100, 100);
 				this.pawn.setOpaque(false);
@@ -1603,5 +1629,46 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		this.mazeGameControler.alterMaze(command, selectedNumber);
 		return true;
+	}
+
+	private void togglePlayerInput(boolean enable) {
+		
+		/*
+		final JOptionPane optionPane = new JOptionPane(
+			"Attente autre joueur",
+			JOptionPane.INFORMATION_MESSAGE,
+			JOptionPane.DEFAULT_OPTION,
+			null,
+			new Object[]{},
+			null
+		);
+	   	waitDialog.setTitle("Message");
+	   	waitDialog.setModal(true);
+	   	waitDialog.setContentPane(optionPane);
+	   	waitDialog.pack();
+	   	*/
+/*
+        this.overlayFrame.setUndecorated(true);
+        this.overlayFrame.setBackground(new Color(0, 0, 0, 0));
+        this.overlayFrame.setAlwaysOnTop(true);
+        this.overlayFrame.getRootPane().putClientProperty("apple.awt.draggableWindowBackground", false);
+        this.overlayFrame.getContentPane().setLayout(new java.awt.BorderLayout());
+        this.overlayFrame.getContentPane().add(new JTextField("text field north"), java.awt.BorderLayout.NORTH);
+        this.overlayFrame.getContentPane().add(new JTextField("text field south"), java.awt.BorderLayout.SOUTH);
+        this.overlayFrame.setSize(this.getSize());
+        this.overlayFrame.setBounds(this.getBounds());
+        this.overlayFrame.setVisible(true);
+        this.overlayFrame.pack();
+       */
+		Component[] dragLayerComponents = this.mazeBoard.getComponents();
+		/*if(!waitDialog.isVisible()){
+			waitDialog.setVisible(true);
+		}*/
+
+		for(Component component : dragLayerComponents){
+			if(((JLayeredPane)component).getComponentsInLayer(PAWN_LAYER).length > 0) {
+				((JLayeredPane)component).getComponentsInLayer(PAWN_LAYER)[0].setEnabled(enable);
+			}
+		}
 	}
 }

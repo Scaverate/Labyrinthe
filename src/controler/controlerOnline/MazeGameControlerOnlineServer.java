@@ -43,7 +43,7 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 					System.out.println("Traitement de la connexion cliente - côté serveur");
 					sendMessage(mazeGame);
 					while(!serverSocket.isClosed()){
-						//sendMessage("testDepuisServ");
+						//sendMessage(mazeGame);
 						//update(null, null);
 						
 						// reception depuis le client
@@ -135,33 +135,16 @@ public class MazeGameControlerOnlineServer extends MazeGameControlerOnline imple
 		final String IP = "127.0.0.1";
 		final int PORT = 1234;
 		// on détecte si un serveur existe deja
-		try (Socket s = new Socket(IP, PORT)) {
-			s.close();
-			MazeGameControlerOnlineClient mazeGameControlerOnlineClient = new MazeGameControlerOnlineClient(
-				null,
-				IP,
-				1234
-			);
-		} catch (IOException ex) {
-			MazeGameControlerOnlineServer mazeGameControlerOnlineServer = new MazeGameControlerOnlineServer(
-				null,
-				IP,
-				1234
-			);
-		}
-		try (Socket s = new Socket(IP, PORT)) {
-			s.close();
-			MazeGameControlerOnlineClient mazeGameControlerOnlineClient = new MazeGameControlerOnlineClient(
-				null,
-				IP,
-				1234
-			);
-		} catch (IOException ex) {
-			MazeGameControlerOnlineServer mazeGameControlerOnlineServer = new MazeGameControlerOnlineServer(
-				null,
-				IP,
-				1234
-			);
-		}
+
+		MazeGameControlerOnlineServer mazeGameControlerOnlineServer = new MazeGameControlerOnlineServer(
+			null,
+			IP,
+			1234
+		);
+		MazeGameControlerOnlineClient mazeGameControlerOnlineClient = new MazeGameControlerOnlineClient(
+			null,
+			IP,
+			1234
+		);
 	}
 }
