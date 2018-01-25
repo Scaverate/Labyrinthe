@@ -144,11 +144,6 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		// On supprime le trésor sur la pièce supplémentaire de la liste des trésors présents
-		if(this.extraTreasure != null) {
-			this.treasures.remove(this.extraTreasure);
-		}
-
 		this.pushPlayers(position, direction);
 		treasuresPushed = this.pushTreasures(position,direction);
 		couloirPushed = this.pushCorridors(position,direction);
@@ -223,21 +218,9 @@ public class Plateau implements BoardGames {
 			System.out.println("Trésor qui vient d'être inséré : " + oldExtra + "\n");
 
 			treasuresToAdd.add(oldExtra);
-			
-			//Gestion des draws
-			for(Treasures treasure : this.treasureToDraw) {
-				//TODO voir avec Martin
-				if (treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
-					drawableTreasureToRemove.add(treasure);
-					drawableTreasureToAdd.add(oldExtra);
-					System.out.println("Si, l'objet n'est affecté à personne :");
-					System.out.println("drawableTreasureToRemove : " + drawableTreasureToRemove);
-					System.out.println("drawableTreasureToAdd : " + drawableTreasureToAdd + "\n");
-				}
-			}
 
 			// Changement de trésor à attraper
-			for (Jeu game : this.gameList) { //TODO : Potentiellement un bug ici
+			for (Jeu game : this.gameList) {
 				Treasure gameTreasureToCatch = game.getTreasureToCatch();
 				
 				if(gameTreasureToCatch != null) {
@@ -313,13 +296,23 @@ public class Plateau implements BoardGames {
 							treasure.isCatched()
 					);
 				} else {
-					movedTreasure = new Treasure(
-							treasure.getTreasureX() + this.updateX,
-							treasure.getTreasureY() + this.updateY,
-							treasure.getTreasureId(),
-							treasure.getTreasureType(),
-							treasure.isCatched()
-					);
+					if (treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
+						movedTreasure = new Treasure(
+								this.insertX,
+								this.insertY,
+								treasure.getTreasureId(),
+								treasure.getTreasureType(),
+								treasure.isCatched()
+						);
+					} else {
+						movedTreasure = new Treasure(
+								treasure.getTreasureX() + this.updateX,
+								treasure.getTreasureY() + this.updateY,
+								treasure.getTreasureId(),
+								treasure.getTreasureType(),
+								treasure.isCatched()
+						);
+					}
 				}
 
 				drawableTreasureToAdd.add(movedTreasure);
