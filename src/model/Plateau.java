@@ -144,11 +144,6 @@ public class Plateau implements BoardGames {
 			}
 		}
 
-		// On supprime le trésor sur la pièce supplémentaire de la liste des trésors présents
-		if(this.extraTreasure != null) {
-			this.treasures.remove(this.extraTreasure);
-		}
-
 		this.pushPlayers(position, direction);
 		treasuresPushed = this.pushTreasures(position,direction);
 		couloirPushed = this.pushCorridors(position,direction);
@@ -209,35 +204,35 @@ public class Plateau implements BoardGames {
 		}
 		
 		this.updateFromDirection(position, direction);
-		
+
+		Treasure oldExtra;
 		//On regarde si un trésor est présent sur la pièce supplémentaire
 		if (this.extraTreasure != null) {
-			Treasure oldExtra = new Treasure(
-				this.insertX, 
-				this.insertY, 
-				this.extraTreasure.getTreasureId(),
-				this.extraTreasure.getTreasureType(),
-				this.extraTreasure.isCatched()
+			oldExtra = new Treasure(
+					this.insertX,
+					this.insertY,
+					this.extraTreasure.getTreasureId(),
+					this.extraTreasure.getTreasureType(),
+					this.extraTreasure.isCatched()
 			);
+			System.out.println("Trésor qui vient d'être inséré : " + oldExtra + "\n");
+
 			treasuresToAdd.add(oldExtra);
-			
-			//Gestion des draws
-			for(Treasures treasure : this.treasureToDraw) {
-				//TODO voir avec Martin
-				if (treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
-					drawableTreasureToRemove.add(treasure);
-				}
-			}
-			
-			drawableTreasureToAdd.add(oldExtra);
-			
+
 			// Changement de trésor à attraper
-			for (Jeu game : this.gameList) { //TODO : Potentiellement un bug ici
+			for (Jeu game : this.gameList) {
 				Treasure gameTreasureToCatch = game.getTreasureToCatch();
 				
 				if(gameTreasureToCatch != null) {
-					if (this.extraTreasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
-							this.extraTreasure.getTreasureY() == gameTreasureToCatch.getTreasureY()) {
+					if (
+						this.extraTreasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
+						this.extraTreasure.getTreasureY() == gameTreasureToCatch.getTreasureY() &&
+						this.extraTreasure.getTreasureId() == gameTreasureToCatch.getTreasureId()
+					) {
+						System.out.println("extraTreasure = gameTreasureToCatch");
+						System.out.println("extraTreasure : " + extraTreasure);
+						System.out.println("gameTreasureToCatch : " + gameTreasureToCatch + "\n");
+
 						game.setTreasureToCatch(oldExtra);
 	 				}
 				}
@@ -254,7 +249,16 @@ public class Plateau implements BoardGames {
 						(direction.equals("down") && treasure.getTreasureY() == 6) ||
 						(direction.equals("left") && treasure.getTreasureX() == 0) ||
 						(direction.equals("right") && treasure.getTreasureX() == 6)) {
-					this.extraTreasure = (Treasure) treasure;
+					this.extraTreasure = new Treasure(
+							-1,
+							-1,
+							treasure.getTreasureId(),
+							treasure.getTreasureType(),
+							treasure.isCatched()
+					);
+
+					movedTreasure = this.extraTreasure;
+
 				} else {
 					movedTreasure = new Treasure(
 						treasure.getTreasureX() + this.updateX,
@@ -264,19 +268,21 @@ public class Plateau implements BoardGames {
 						treasure.isCatched()
 					);
 					
-					for (Jeu game : this.gameList) {
-						Treasure gameTreasureToCatch = game.getTreasureToCatch();
-						
-						if(gameTreasureToCatch != null) {
-							if(treasure.getTreasureX() == gameTreasureToCatch.getTreasureX() && 
-									treasure.getTreasureY() == gameTreasureToCatch.getTreasureY()) {
-								game.setTreasureToCatch(movedTreasure);
-	 						}
-						}
-						
- 					}
-					
 					treasuresToAdd.add(movedTreasure);
+				}
+
+				for (Jeu game : this.gameList) {
+					Treasure gameTreasureToCatch = game.getTreasureToCatch();
+
+					if(gameTreasureToCatch != null) {
+						if(
+							treasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
+							treasure.getTreasureY() == gameTreasureToCatch.getTreasureY() &&
+							treasure.getTreasureId() == gameTreasureToCatch.getTreasureId()
+						){
+							game.setTreasureToCatch(movedTreasure);
+						}
+					}
 				}
 			}
 		}
@@ -296,14 +302,25 @@ public class Plateau implements BoardGames {
 							treasure.isCatched()
 					);
 				} else {
-					movedTreasure = new Treasure(
-							treasure.getTreasureX() + this.updateX,
-							treasure.getTreasureY() + this.updateY,
-							treasure.getTreasureId(),
-							treasure.getTreasureType(),
-							treasure.isCatched()
-					);
+					if (treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
+						movedTreasure = new Treasure(
+								this.insertX,
+								this.insertY,
+								treasure.getTreasureId(),
+								treasure.getTreasureType(),
+								treasure.isCatched()
+						);
+					} else {
+						movedTreasure = new Treasure(
+								treasure.getTreasureX() + this.updateX,
+								treasure.getTreasureY() + this.updateY,
+								treasure.getTreasureId(),
+								treasure.getTreasureType(),
+								treasure.isCatched()
+						);
+					}
 				}
+
 				drawableTreasureToAdd.add(movedTreasure);
 				drawableTreasureToRemove.add(treasure);
 			}
