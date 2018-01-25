@@ -59,30 +59,28 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 	private Component previouslyHoveredComponent;
 	private List<TreasureIHMs> treasureIHMs;
 	private List<CouloirIHM> couloirIHMs;
-	private Dimension dim;
+	private final Dimension dim;
 	private final Integer COULOIR_LAYER = 0;
 	private final Integer TREASURE_LAYER = 1;
 	private final Integer PAWN_LAYER = 2;
 	private JDialog rulesFrame;
 	private JPanel backgroundPane;
 	private boolean mazeAltered = false;
-	private JLabel test;
 	private LinkedList<JLabel> arrowsList;
 	private boolean playOnline = false;
 	private boolean isServerPlayer = false;
 	private boolean isClientPlayer = false;
 
 	
-	public MazeGameGUI(Dimension dim) {
+	public MazeGameGUI(final Dimension dim) {
 		Box bPlayers,bOK,bMenu,bRules,bTheme,bimgTheme;
 		JButton reglesButton, okButton;
 		ButtonGroup grpButton, grpButton2, grpButton3;
-		JRadioButton nb2Button, nb3Button, nb4Button, theme1, theme2, theme3, imgTheme1, imgTheme2, imgTheme3;
+		final JRadioButton nb2Button, nb3Button, nb4Button, theme1, theme2, theme3, imgTheme1, imgTheme2, imgTheme3;
 		final Font myFont = new Font("Calibri", Font.ITALIC | Font.BOLD, 18);
 
 		this.dim = dim; //Dimension du plateau de jeu 
 		Dimension windowSize = new Dimension(950,700); //dimension de la fenetre
-		JRadioButton onlineButton;
 		
 		//JRadioButton onlineButton;
 		JRadioButton severPlayerButton;
@@ -130,7 +128,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		Border lineRadio = new LineBorder(Color.WHITE);
 		Border marginRadio = new EmptyBorder(8, 35, 8, 35);
-		Border compoundRadio = new CompoundBorder(lineRadio, marginRadio);
+		final Border compoundRadio = new CompoundBorder(lineRadio, marginRadio);
 		
 		nb2Button.setBorder(compoundRadio);
 		nb3Button.setBorder(compoundRadio);
@@ -175,6 +173,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		bPlayers.add(nb2Button);
 		bPlayers.add(nb3Button);
 		bPlayers.add(nb4Button);
+		bPlayers.add(severPlayerButton);
+		bPlayers.add(clientPlayerButton);
 		bPlayers.setBorder(BorderFactory.createMatteBorder(
                 1, 1, 1, 1, Color.WHITE));
 
@@ -1184,7 +1184,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
                 if(playOnline) {
                     // réautoriser les boutons pour le prochain joueur
-                    rotateLeftButton.setEnabled(true);
+    				for(JLabel arrow : arrowsList) {
+    					arrow.setEnabled(true);
+    				}
                     rotateRightButton.setEnabled(true);
                 }
 				this.mazeGameControler.switchPlayer();
@@ -1231,7 +1233,6 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 
                 if(!playOnline) {
                     // réautoriser les boutons pour le prochain joueur
-                    rotateLeftButton.setEnabled(true);
                     rotateRightButton.setEnabled(true);
                 }
 			}
@@ -1669,7 +1670,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			}
 		}
 
-        rotateLeftButton.setEnabled(enable);
+		for(JLabel arrow : arrowsList) {
+			arrow.setEnabled(true);
+		}
         rotateRightButton.setEnabled(enable);
 	}
 }

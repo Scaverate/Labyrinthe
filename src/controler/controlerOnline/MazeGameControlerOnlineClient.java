@@ -45,7 +45,7 @@ public class MazeGameControlerOnlineClient extends MazeGameControlerOnline imple
                     	if(reception.get(0) != null) {
                             if(mazeGame != null) {
                                 mazeGame.updateFromExternalMazeGame((MazeGame) reception.get(0));
-                                view.update(null, mazeGame.getPiecesIHMs());
+                                view.update(null, mazeGame.getPiecesIHM());
                                 view.update(null, mazeGame.getCouloirIHMs());
                                 view.update(null, mazeGame.getExtraCorridorIHM());
                                 view.update(null, mazeGame.getTreasureIHMs());
