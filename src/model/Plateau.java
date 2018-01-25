@@ -204,17 +204,17 @@ public class Plateau implements BoardGames {
 		}
 		
 		this.updateFromDirection(position, direction);
-		
+
+		Treasure oldExtra;
 		//On regarde si un trésor est présent sur la pièce supplémentaire
 		if (this.extraTreasure != null) {
-			Treasure oldExtra = new Treasure(
-				this.insertX, 
-				this.insertY, 
-				this.extraTreasure.getTreasureId(),
-				this.extraTreasure.getTreasureType(),
-				this.extraTreasure.isCatched()
+			oldExtra = new Treasure(
+					this.insertX,
+					this.insertY,
+					this.extraTreasure.getTreasureId(),
+					this.extraTreasure.getTreasureType(),
+					this.extraTreasure.isCatched()
 			);
-
 			System.out.println("Trésor qui vient d'être inséré : " + oldExtra + "\n");
 
 			treasuresToAdd.add(oldExtra);
@@ -224,8 +224,11 @@ public class Plateau implements BoardGames {
 				Treasure gameTreasureToCatch = game.getTreasureToCatch();
 				
 				if(gameTreasureToCatch != null) {
-					if (this.extraTreasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
-							this.extraTreasure.getTreasureY() == gameTreasureToCatch.getTreasureY()) {
+					if (
+						this.extraTreasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
+						this.extraTreasure.getTreasureY() == gameTreasureToCatch.getTreasureY() &&
+						this.extraTreasure.getTreasureId() == gameTreasureToCatch.getTreasureId()
+					) {
 						System.out.println("extraTreasure = gameTreasureToCatch");
 						System.out.println("extraTreasure : " + extraTreasure);
 						System.out.println("gameTreasureToCatch : " + gameTreasureToCatch + "\n");
@@ -272,8 +275,11 @@ public class Plateau implements BoardGames {
 					Treasure gameTreasureToCatch = game.getTreasureToCatch();
 
 					if(gameTreasureToCatch != null) {
-						if(treasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
-								treasure.getTreasureY() == gameTreasureToCatch.getTreasureY()) {
+						if(
+							treasure.getTreasureX() == gameTreasureToCatch.getTreasureX() &&
+							treasure.getTreasureY() == gameTreasureToCatch.getTreasureY() &&
+							treasure.getTreasureId() == gameTreasureToCatch.getTreasureId()
+						){
 							game.setTreasureToCatch(movedTreasure);
 						}
 					}
