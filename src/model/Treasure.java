@@ -26,7 +26,7 @@ public class Treasure extends AbstractTreasure {
 	    if (getClass() != object.getClass()) {
 	    		return false;
 	    }
-	    if(this.getTreasureX() == ((AbstractTreasure) object).getTreasureX() && this.getTreasureY() == ((AbstractTreasure) object).getTreasureY() && this.getTreasureId() == ((AbstractTreasure) object).getTreasureId() && this.getTreasureType().equals(((AbstractTreasure) object).getTreasureType())) {
+	    if(this.getTreasureX() == ((Treasure) object).getTreasureX() && this.getTreasureY() == ((Treasure) object).getTreasureY() && this.getTreasureId() == ((Treasure) object).getTreasureId() && this.getTreasureType().equals(((Treasure) object).getTreasureType())) {
 	    		return true;
 	    }
 	    return false;
