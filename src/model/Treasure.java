@@ -14,4 +14,21 @@ public class Treasure extends AbstractTreasure {
 				treasure.isCatched()
 		);
 	}
+	
+	@Override
+	public boolean equals(Object object){
+		if (this == object) {
+			return true;
+		}
+	    if (object == null) {
+	    		return false;
+	    }
+	    if (getClass() != object.getClass()) {
+	    		return false;
+	    }
+	    if(this.getTreasureX() == ((AbstractTreasure) object).getTreasureX() && this.getTreasureY() == ((AbstractTreasure) object).getTreasureY() && this.getTreasureId() == ((AbstractTreasure) object).getTreasureId() && this.getTreasureType().equals(((AbstractTreasure) object).getTreasureType())) {
+	    		return true;
+	    }
+	    return false;
+	}
 }

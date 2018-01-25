@@ -608,7 +608,16 @@ public class Plateau implements BoardGames {
 
 	public boolean treasureCatched(Treasure treasuresCatched){
 		if(this.jeuCourant.addTreasureCatched(treasuresCatched)){
-			this.treasures.remove(treasuresCatched);
+			Treasure treasureToDelete = null;
+			for(Treasures treasure : this.treasures){
+				if(treasuresCatched.equals(treasure)) {
+					treasureToDelete = (Treasure) treasure;
+				}
+			}
+			if(treasureToDelete == null) {
+				System.out.println("TRESOR PAS SUPPRIMER");
+			}
+			this.treasures.remove(treasureToDelete);
 			this.jeuCourant.setTreasureToCatch(null);
 			if(this.jeuCourant.getScorePlayer() == getScoreMax()){
 				Treasure princess = this.jeuCourant.getPrincessToCatch();
