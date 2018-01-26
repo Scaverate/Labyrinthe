@@ -1,6 +1,8 @@
 package model;
 
-public abstract class AbstractTreasure implements Treasures {
+import java.io.Serializable;
+
+public abstract class AbstractTreasure implements Treasures, Serializable {
 	private int x;
 	private int y;
 	private String type;

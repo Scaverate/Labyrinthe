@@ -2,47 +2,25 @@ package model;
 
 import java.io.Serializable;
 
-
-/**
- * Classe gérant les coordonnées
- */
 public class Coord implements Serializable {
-	
-	/**
-	 * ajout d'une version de série par défaut
-	 */
+
 	private static final long serialVersionUID = 1L;
 	public int x, y;
-	
-	/**
-	 * @param x
-	 * @param y
-	 */
+
 	public Coord(int x, int y) {
 		this.x = x; 
 		this.y = y;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "[x=" + x + ", y=" + y + "]";
 	}
-	
-	/**
-	 * @param x
-	 * @param y
-	 * @return true si les coordonnees sont valides (dans un plateau de 7*7)
-	 */
+
 	public static boolean coordonnees_valides(int x, int y){
 		return ( (x <= 6) && (x >= 0) && ( y<= 6) && (y >=0 ) );
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,22 +30,24 @@ public class Coord implements Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
+		}
 		Coord other = (Coord) obj;
-		if (x != other.x)
+		if (x != other.x){
 			return false;
-		if (y != other.y)
+		}
+		if (y != other.y){
 			return false;
+		}
 		return true;
 	}
 }

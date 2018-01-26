@@ -6,12 +6,6 @@ import java.util.*;
 
 import model.Couleur;
 
-/**
- * Cette classe s'appuie sur MazePieceImage
- * pour fournir les noms des images des pièces
- * qui sont utilisées dans l'IHM 
- *  
- */
 public class MazeImageProvider {
 	
 	private static Map<String, String> mapImage;
@@ -41,18 +35,15 @@ public class MazeImageProvider {
 		}
 	}
 
-	/**
-	 * private pour ne pas instancier d'objets
-	 */
 	private MazeImageProvider() {}
-	
-	public static String getImageFile(String pieceType, Couleur pieceCouleur){
+
+	public static String getImageFile(String pieceType, Couleur pieceCouleur, boolean isGreyTone){
 		String ret, key, value, path;
 		ret = null;
 		key = pieceType + pieceCouleur.name();
 		value = mapImage.get(key);
 		File g = new File("");
-		path = "/src/images/";
+		path = "/src/images/" + (isGreyTone ? "greytone/" : "");
 		ret = g.getAbsolutePath()+ path + value;
 		return ret;		
 	}

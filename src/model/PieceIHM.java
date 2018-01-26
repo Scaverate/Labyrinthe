@@ -1,25 +1,12 @@
 package model;
 
-import model.Pieces;
+import java.io.Serializable;
 
-/**
- * Classe qui permet de retourner des informations sur les pièces
- * en vue d'une utilisation par une IHM
- * 
- * DP Adapter
- * 
- */
-public  class PieceIHM  implements PieceIHMs {
-	 
-	Pieces piece;
-	
+public class PieceIHM implements PieceIHMs, Serializable {
 	public PieceIHM(Pieces piece) {
 		this.piece = piece;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "PieceIHM [name=" + getNamePiece() + ", couleur=" + getCouleur() + ", x="
@@ -45,4 +32,6 @@ public  class PieceIHM  implements PieceIHMs {
 	public Couleur getCouleur() {
 		return piece.getCouleur();
 	}
+
+	private Pieces piece;
 }

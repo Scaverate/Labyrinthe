@@ -1,25 +1,14 @@
 package model;
 
-/**
- * Created by Martin on 10/10/2017.
- */
-public class CouloirIHM implements CouloirIHMs {
+import java.io.Serializable;
+
+public class CouloirIHM implements CouloirIHMs, Serializable {
 
     public CouloirIHM(Couloirs couloir) {
         this.couloir = couloir;
     }
 
-    public boolean isFixed() {
-        boolean isFixed = false;
-        if(this.couloir instanceof CouloirAmovible) {
-            isFixed = false;
-        }
-        else {
-            isFixed = true;
-        }
-
-        return isFixed;
-    }
+    public boolean isFixed() { return !(this.couloir instanceof CouloirAmovible); }
 
     public int getX() { return this.couloir.getX(); }
     public int getY() {

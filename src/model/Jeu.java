@@ -1,13 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 import tools.MazePiecesFactory;
-import tools.MazeTreasureFactory;
 
-public class Jeu implements Game {
+public class Jeu implements Game, Serializable {
 	private Treasure treasureToCatch;
 	private Coord coordInitiale = new Coord(0,0);
 	private Couleur jeuCouleur;
