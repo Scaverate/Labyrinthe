@@ -225,9 +225,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		imgTheme2 = new JRadioButton();
 		imgTheme3 = new JRadioButton();
 		
-		imgTheme1.setIcon(new ImageIcon(getClass().getResource("../images/theme/green/ico.jpg")));
-		imgTheme2.setIcon(new ImageIcon(getClass().getResource("../images/theme/lava/ico.jpg")));
-		imgTheme3.setIcon(new ImageIcon(getClass().getResource("../images/theme/snow/ico.jpg")));
+		imgTheme1.setIcon(new ImageIcon(getClass().getResource("/images/theme/green/ico.jpg")));
+		imgTheme2.setIcon(new ImageIcon(getClass().getResource("/images/theme/lava/ico.jpg")));
+		imgTheme3.setIcon(new ImageIcon(getClass().getResource("/images/theme/snow/ico.jpg")));
 
 		imgTheme1.setOpaque(false);
 		imgTheme2.setOpaque(false);
@@ -309,7 +309,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		Border compound = new CompoundBorder(line, margin);
 		okButton.setBorder(compound);
 		okButton.setFont(myFont);
-		okButton.setIcon(new ImageIcon(getClass().getResource("../images/icon_play.png")));
+		okButton.setIcon(new ImageIcon(getClass().getResource("/images/icon_play.png")));
 		
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -348,15 +348,15 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				
 				//creation du panneau qui va etre ajoute dans la fenetre des regles
 				File f = new File("");
-				String path = "/src/images/theme/green/";
-				String background = f.getAbsolutePath() + path + "bgGame.jpg";
+				String path = "/images/theme/green/";
+				String background = path + "bgGame.jpg";
 				
-				final ImageIcon backgroundImage = new ImageIcon(background);
+				final ImageIcon backgroundImage = new ImageIcon(getClass().getResource(background));
 				backgroundPane = new JPanel(new BorderLayout()) {
 					@Override
 					protected void paintComponent(Graphics g) {
 						super.paintComponent(g);
-						g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+						g.drawImage(new ImageIcon(getClass().getResource(background)).getImage(), 0, 0, getWidth(), getHeight(), this);
 					}
 				};
 				JButton QuitReglesButton;
@@ -424,9 +424,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		bRules.setBorder(new EmptyBorder(200,0,0,0));
 		
 		File g = new File("");
-		String path = "/src/images/";
-		String ret = g.getAbsolutePath() + path + "bg.jpg";
-		contentPane = new ImagePanel(new ImageIcon(ret).getImage());
+		String path = "/images/";
+		String ret = path + "bg.jpg";
+		contentPane = new ImagePanel(new ImageIcon(getClass().getResource(ret)).getImage());
 	    contentPane.add(bMenu);
 		contentPane.setPreferredSize(windowSize);
 		setContentPane(contentPane);	
@@ -546,9 +546,9 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		playerText.setText("JOUEUR  :" + " ");
 		//On initialise le joueur devant jouer à "Mario"
 		File g = new File("");
-		String path = "/src/images/";
-		String ret = g.getAbsolutePath() + path + "pion_rouge.png";
-		bg = new ImageIcon(ret); 
+		String path = "/images/";
+		String ret = path + "pion_rouge.png";
+		bg = new ImageIcon(getClass().getResource(ret));
 		player.setIcon(bg);
 		
 		
@@ -565,7 +565,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		
 		//On cree une image pour la pile des cartes des tresors
-		imageIcon = new ImageIcon(MazeImageProvider.getImageCardTresorsFile("DosJeu", theme));
+		imageIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageCardTresorsFile("DosJeu", theme)));
 		//On cree la zone pour la pile de cartes
 		tresorCard = new JLabel(imageIcon);
 		
@@ -586,7 +586,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		extraCardPane.setPreferredSize(new Dimension(100, 100));
 
 		// on cree une image de couloir pour la piece supplementaire
-		imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+		imageIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 			"Couloir",
 			theme,
 			extraCard.isNorthOpened(),
@@ -594,8 +594,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			extraCard.isEastOpened(),
 			extraCard.isWestOpened(),
 			false
-		));
-		disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+		)));
+		disabledIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 			"Couloir",
 			theme,
 			extraCard.isNorthOpened(),
@@ -603,7 +603,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			extraCard.isEastOpened(),
 			extraCard.isWestOpened(),
 			true
-		));
+		)));
 		extraCardImage = new JLabel(imageIcon);
 		extraCardImage.setDisabledIcon(disabledIcon);
 		
@@ -626,7 +626,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			this.layeredPane.setPreferredSize(new Dimension(100, 100));
 
 			// on cree une image de couloir
-			imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			imageIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 				"Couloir",
 				theme,
 				couloirIHM.isNorthOpened(),
@@ -634,8 +634,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				couloirIHM.isEastOpened(),
 				couloirIHM.isWestOpened(),
 				false
-			));
-			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			)));
+			disabledIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 				"Couloir",
 				theme,
 				couloirIHM.isNorthOpened(),
@@ -643,7 +643,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				couloirIHM.isEastOpened(),
 				couloirIHM.isWestOpened(),
 				true
-			));
+			)));
 			couloir = new JLabel(imageIcon);
 			couloir.setDisabledIcon(disabledIcon);
 			
@@ -664,18 +664,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 			// si on est sur la position d'un pion
 			// on cree un pion a chaque coin du jeu
 			this.pawn = new JLabel(
-					new ImageIcon(MazeImageProvider.getImageFile(
+					new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 							"Pion",
 							pieceIHM.getCouleur(),
 							false
-					))
+					)))
 			);
 			this.pawn.setDisabledIcon(
-				new ImageIcon(MazeImageProvider.getImageFile(
+				new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 					"Pion",
 					pieceIHM.getCouleur(),
 					true
-				))
+				)))
 			);
 
 			this.pawn.setPreferredSize(new Dimension(100, 100));
@@ -687,7 +687,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		
 		for(TreasureIHMs treasureIHM : treasureIHMs){
-			treasure = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasureIHM.getTreasureId())));
+			treasure = new JLabel (new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(treasureIHM.getTreasureId()))));
 			treasure.setPreferredSize(new Dimension(100, 100));
 			treasure.setBounds(0, 0, 100, 100);
 			treasure.setOpaque(false);
@@ -695,19 +695,19 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		Treasure treasureToCatch = this.mazeGameControler
 				.currentTreasureToCatch();
-		imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+		imageTreasureToCatch = new ImageIcon((MazeImageProvider.getImageFile(treasureToCatch.getTreasureId())));
 		//On cree la zone pour la pile de cartes
 		tresorToCatch.setIcon(imageTreasureToCatch);
 		g = new File("");
-		path = "/src/images/theme/" + theme + "/";
-		ret = g.getAbsolutePath() + path + "bgGame.jpg";
-		path = "/src/images/theme/" + theme + "/arrow/";
+		path = "/images/theme/" + theme + "/";
+		ret = path + "bgGame.jpg";
+		path = "/images/theme/" + theme + "/arrow/";
 		
 		//On définit les chemins des images grisées des flèches
-		greyArrowDown = g.getAbsolutePath() + path + "greytone/pushDown.png";
-		greyArrowUp = g.getAbsolutePath() + path + "greytone/pushUp.png";
-		greyArrowLeft = g.getAbsolutePath() + path + "greytone/pushLeft.png";
-		greyArrowRight = g.getAbsolutePath() + path + "greytone/pushRight.png";
+		greyArrowDown = path + "greytone/pushDown.png";
+		greyArrowUp =  path + "greytone/pushUp.png";
+		greyArrowLeft = path + "greytone/pushLeft.png";
+		greyArrowRight = path + "greytone/pushRight.png";
 		
 		bg = new ImageIcon(ret);
 		bgGame = new JLabel(); 
@@ -718,79 +718,79 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		
 		//On crée toutes les flèches avec leurs images et on les ajoute à la liste
 		pushDown2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushDown.png";
-		pd2 = new ImageIcon(ret);
+		ret =  path + "pushDown.png";
+		pd2 = new ImageIcon(getClass().getResource(ret));
 		pushDown2.setIcon(pd2);
-		pushDown2.setDisabledIcon(new ImageIcon(greyArrowDown));
+		pushDown2.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowDown)));
 		arrowsList.add(pushDown2);
 		
 		pushDown4 = new JLabel();
 		pd4 = new ImageIcon(ret);
 		pushDown4.setIcon(pd4);
-		pushDown4.setDisabledIcon(new ImageIcon(greyArrowDown));
+		pushDown4.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowDown)));
 		arrowsList.add(pushDown4);
 		
 		pushDown6 = new JLabel();
-		pd6 = new ImageIcon(ret);
+		pd6 = new ImageIcon(getClass().getResource(ret));
 		pushDown6.setIcon(pd6);
-		pushDown6.setDisabledIcon(new ImageIcon(greyArrowDown));
+		pushDown6.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowDown)));
 		arrowsList.add(pushDown6);
 		
 		pushUp2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushUp.png";
-		pu2 = new ImageIcon(ret);
+		ret =  path + "pushUp.png";
+		pu2 = new ImageIcon(getClass().getResource(ret));
 		pushUp2.setIcon(pu2);
-		pushUp2.setDisabledIcon(new ImageIcon(greyArrowUp));
+		pushUp2.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowUp)));
 		arrowsList.add(pushUp2);
 		
 		pushUp4 = new JLabel();
-		pu4 = new ImageIcon(ret);
+		pu4 = new ImageIcon(getClass().getResource(ret));
 		pushUp4.setIcon(pu4);
-		pushUp4.setDisabledIcon(new ImageIcon(greyArrowUp));
+		pushUp4.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowUp)));
 		arrowsList.add(pushUp4);
 		
 		pushUp6 = new JLabel();
-		pu6 = new ImageIcon(ret);
+		pu6 = new ImageIcon(getClass().getResource(ret));
 		pushUp6.setIcon(pu6);
-		pushUp6.setDisabledIcon(new ImageIcon(greyArrowUp));
+		pushUp6.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowUp)));
 		arrowsList.add(pushUp6);
 		
 		pushRight2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushRight.png";
-		pr2 = new ImageIcon(ret);
+		ret =  path + "pushRight.png";
+		pr2 = new ImageIcon(getClass().getResource(ret));
 		pushRight2.setIcon(pr2);
-		pushRight2.setDisabledIcon(new ImageIcon(greyArrowRight));
+		pushRight2.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowRight)));
 		arrowsList.add(pushRight2);
 		
 		pushRight4 = new JLabel();
-		pr4 = new ImageIcon(ret);
+		pr4 = new ImageIcon(getClass().getResource(ret));
 		pushRight4.setIcon(pr4);
-		pushRight4.setDisabledIcon(new ImageIcon(greyArrowRight));
+		pushRight4.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowRight)));
 		arrowsList.add(pushRight4);
 		
 		pushRight6 = new JLabel();
-		pr6 = new ImageIcon(ret);
+		pr6 = new ImageIcon(getClass().getResource(ret));
 		pushRight6.setIcon(pr6);
-		pushRight6.setDisabledIcon(new ImageIcon(greyArrowRight));
+		pushRight6.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowRight)));
 		arrowsList.add(pushRight6);
 		
 		pushLeft2 = new JLabel();
-		ret = g.getAbsolutePath() + path + "pushLeft.png";
-		pl2 = new ImageIcon(ret);
+		ret =  path + "pushLeft.png";
+		pl2 = new ImageIcon(getClass().getResource(ret));
 		pushLeft2.setIcon(pl2);
-		pushLeft2.setDisabledIcon(new ImageIcon(greyArrowLeft));
+		pushLeft2.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowLeft)));
 		arrowsList.add(pushLeft2);
 		
 		pushLeft4 = new JLabel();
-		pl4 = new ImageIcon(ret);
+		pl4 = new ImageIcon(getClass().getResource(ret));
 		pushLeft4.setIcon(pl4);
-		pushLeft4.setDisabledIcon(new ImageIcon(greyArrowLeft));
+		pushLeft4.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowLeft)));
 		arrowsList.add(pushLeft4);
 		
 		pushLeft6 = new JLabel();
-		pl6 = new ImageIcon(ret);
+		pl6 = new ImageIcon(getClass().getResource(ret));
 		pushLeft6.setIcon(pl6);
-		pushLeft6.setDisabledIcon(new ImageIcon(greyArrowLeft));
+		pushLeft6.setDisabledIcon(new ImageIcon(getClass().getResource(greyArrowLeft)));
 		arrowsList.add(pushLeft6);
 
 		pushDown2.addMouseListener(new MouseAdapter() {
@@ -1159,7 +1159,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 				if(this.mazeGameControler.getCurrentScorePlayer() == this.mazeGameControler.getScoreMax()){
 					Treasure treasurePrincess = mazeGameControler.currentTreasureToCatch();
-					JLabel princessIHM = new JLabel (new ImageIcon(MazeImageProvider.getImageFile(treasurePrincess.getTreasureId())));
+					JLabel princessIHM = new JLabel (new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(treasurePrincess.getTreasureId()))));
 					princessIHM.setPreferredSize(new Dimension(100, 100));
 					princessIHM.setBounds(0, 0, 100, 100);
 					princessIHM.setOpaque(false);
@@ -1192,36 +1192,36 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				this.mazeGameControler.switchPlayer();
 
 				File g = new File("");
-				String path = "/src/images/";
+				String path = "/images/";
 				String ret = "";
 				if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-					ret = g.getAbsolutePath() + path + "pion_rouge.png";
+					ret =  path + "pion_rouge.png";
 				}
 				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-					ret = g.getAbsolutePath() + path + "pion_bleu.png";
+					ret =  path + "pion_bleu.png";
 				}
 				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-					ret = g.getAbsolutePath() + path + "pion_jaune.png";
+					ret =  path + "pion_jaune.png";
 				}
 				else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-					ret = g.getAbsolutePath() + path + "pion_vert.png";
+					ret =  path + "pion_vert.png";
 				}
-				bg = new ImageIcon(ret);
+				bg = new ImageIcon(getClass().getResource(ret));
 				player.setIcon(bg);
 				treasureToCatch = this.mazeGameControler
 						.currentTreasureToCatch();
 
 				if(treasureToCatch != null){
 					if(treasureToCatch.getTreasureId() == 25){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(29));
+						imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(29)));
 					}else if(treasureToCatch.getTreasureId() == 26){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(30));
+						imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(30)));
 					}else if(treasureToCatch.getTreasureId() == 27){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(31));
+						imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(31)));
 					}else if(treasureToCatch.getTreasureId() == 28){
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(32));
+						imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(32)));
 					}else{
-						imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+						imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId())));
 					}	
 				}
 				//On cree la zone pour la pile de cartes
@@ -1286,29 +1286,29 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		if (nbPlayer == 4) {
 			scoreToad.setText("Toad : " + mazeGameControler.getGreenPlayerScore());
 		}File g = new File("");
-		String path = "/src/images/";
+		String path = "/images/";
 		String ret = "";
 		if(mazeGameControler.getColorCurrentPlayer() == Couleur.ROUGE) {
-			ret = g.getAbsolutePath() + path + "pion_rouge.png";
+			ret =  path + "pion_rouge.png";
 		}
 		else if(mazeGameControler.getColorCurrentPlayer() == Couleur.BLEU) {
-			ret = g.getAbsolutePath() + path + "pion_bleu.png";
+			ret =  path + "pion_bleu.png";
 		}
 		else if(mazeGameControler.getColorCurrentPlayer() == Couleur.JAUNE) {
-			ret = g.getAbsolutePath() + path + "pion_jaune.png";
+			ret =  path + "pion_jaune.png";
 		}
 		else if(mazeGameControler.getColorCurrentPlayer() == Couleur.VERT) {
-			ret = g.getAbsolutePath() + path + "pion_vert.png";
+			ret =  path + "pion_vert.png";
 		}
-		bg = new ImageIcon(ret);
+		bg = new ImageIcon(getClass().getResource(ret));
 		player.setIcon(bg);
 		Treasure treasureToCatch = this.mazeGameControler
 				.currentTreasureToCatch();
 
 		if(treasureToCatch != null){
-			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId()));
+			imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(treasureToCatch.getTreasureId())));
 		}else{
-			imageTreasureToCatch = new ImageIcon(MazeImageProvider.getImageFile(-1));
+			imageTreasureToCatch = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(-1)));
 		}
 		//On cree la zone pour la pile de cartes
 		tresorToCatch.setIcon(imageTreasureToCatch);
@@ -1333,7 +1333,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 			}
 			// on cree une image de couloir pour la piece supplementaire
-			imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			imageIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 					"Couloir",
 					theme,
 					extraCard.isNorthOpened(),
@@ -1341,8 +1341,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					extraCard.isEastOpened(),
 					extraCard.isWestOpened(),
 					false
-			));
-			disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+			)));
+			disabledIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 					"Couloir",
 					theme,
 					extraCard.isNorthOpened(),
@@ -1350,7 +1350,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					extraCard.isEastOpened(),
 					extraCard.isWestOpened(),
 					true
-			));
+			)));
 			extraCardImage = new JLabel(imageIcon);
 			extraCardImage.setDisabledIcon(disabledIcon);
 
@@ -1401,18 +1401,18 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 				// on recrée le pion
 				this.pawn = new JLabel(
-					new ImageIcon( MazeImageProvider.getImageFile(
+					new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 						"Pion",
 						pieceIHM.getCouleur(),
 						false
-					))
+					)))
 				);
 				this.pawn.setDisabledIcon(
-					new ImageIcon( MazeImageProvider.getImageFile(
+					new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 						"Pion",
 						pieceIHM.getCouleur(),
 						true
-					))
+					)))
 				);
 				this.pawn.setPreferredSize(new Dimension(100, 100));
 				this.pawn.setBounds(0, 0, 100, 100);
@@ -1467,8 +1467,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 					}
 
 					//On recrée le trésor
-					treasure = new JLabel(new ImageIcon(
-						MazeImageProvider.getImageFile(treasureIHM.getTreasureId())));
+					treasure = new JLabel(new ImageIcon(getClass().getResource(
+						MazeImageProvider.getImageFile(treasureIHM.getTreasureId()))));
 				
 					treasure.setPreferredSize(new Dimension(100, 100));
 					treasure.setBounds(0, 0, 100, 100);
@@ -1514,7 +1514,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 				}
 
 				// on recrée le couloir
-				imageIcon = new ImageIcon(MazeImageProvider.getImageFile(
+				imageIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 						"Couloir",
 						theme,
 						couloirIHM.isNorthOpened(),
@@ -1522,8 +1522,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						couloirIHM.isEastOpened(),
 						couloirIHM.isWestOpened(),
 						false
-				));
-				disabledIcon = new ImageIcon(MazeImageProvider.getImageFile(
+				)));
+				disabledIcon = new ImageIcon(getClass().getResource(MazeImageProvider.getImageFile(
 						"Couloir",
 						theme,
 						couloirIHM.isNorthOpened(),
@@ -1531,7 +1531,7 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 						couloirIHM.isEastOpened(),
 						couloirIHM.isWestOpened(),
 						true
-				));
+				)));
 				couloir = new JLabel(imageIcon);
 				couloir.setDisabledIcon(disabledIcon);
 				couloir.setPreferredSize(new Dimension(100, 100));
@@ -1560,8 +1560,8 @@ public class MazeGameGUI extends JFrame implements MouseListener, MouseMotionLis
 		}
 		// recréation si besoin
 		if(extraTreasureIHM != null) {
-			extraTreasure = new JLabel(new ImageIcon(
-					MazeImageProvider.getImageFile(extraTreasureIHM.getTreasureId())));
+			extraTreasure = new JLabel(new ImageIcon(getClass().getResource(
+					MazeImageProvider.getImageFile(extraTreasureIHM.getTreasureId()))));
 			extraTreasure.setPreferredSize(new Dimension(100, 100));
 			extraTreasure.setBounds(0, 0, 100, 100);
 			extraTreasure.setOpaque(false);

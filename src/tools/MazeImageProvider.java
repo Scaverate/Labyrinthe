@@ -43,8 +43,8 @@ public class MazeImageProvider {
 		key = pieceType + pieceCouleur.name();
 		value = mapImage.get(key);
 		File g = new File("");
-		path = "/src/images/" + (isGreyTone ? "greytone/" : "");
-		ret = g.getAbsolutePath()+ path + value;
+		path = "/images/" + (isGreyTone ? "greytone/" : "");
+		ret = path + value;
 		return ret;		
 	}
 	
@@ -54,8 +54,8 @@ public class MazeImageProvider {
 		key = pieceType;
 		value = mapImageTresorsCard.get(key);
 		File g = new File("");
-		path = "/src/images/theme/" + theme + "/";
-		ret = g.getAbsolutePath() + path + value;
+		path = "/images/theme/" + theme + "/";
+		ret = path + value;
 		return ret;
 	}
 
@@ -65,8 +65,8 @@ public class MazeImageProvider {
 		key = pieceType + "_" + (northOpened ? "1" : "0") + "_" + (eastOpened ? "1" : "0") + "_" + (southOpened ? "1" : "0") + "_" + (westOpened ? "1" : "0");
 		value = mapImageCouloirs.get(key);
 		File g = new File("");
-		path = "/src/images/theme/" + theme + "/" + (isGreyTone ? "greytone/" : "");
-		ret = g.getAbsolutePath()+ path + value;
+		path = "/images/theme/" + theme + "/" + (isGreyTone ? "greytone/" : "");
+		ret = path + value;
 		return ret;
 	}
 	
@@ -79,8 +79,8 @@ public class MazeImageProvider {
 			value = "treasure_" + Integer.toString(treasureID) + ".png";
 		}
 		File g = new File("");
-		path = "/src/images/treasures/";
-		ret = g.getAbsolutePath()+path+value;
+		path = "/images/treasures/";
+		ret = path+value;
 		return ret;
 	}
 }
