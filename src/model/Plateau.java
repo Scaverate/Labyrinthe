@@ -215,7 +215,6 @@ public class Plateau implements BoardGames {
 					this.extraTreasure.getTreasureType(),
 					this.extraTreasure.isCatched()
 			);
-			System.out.println("Trésor qui vient d'être inséré : " + oldExtra + "\n");
 
 			treasuresToAdd.add(oldExtra);
 
@@ -229,10 +228,6 @@ public class Plateau implements BoardGames {
 						this.extraTreasure.getTreasureY() == gameTreasureToCatch.getTreasureY() &&
 						this.extraTreasure.getTreasureId() == gameTreasureToCatch.getTreasureId()
 					) {
-						System.out.println("extraTreasure = gameTreasureToCatch");
-						System.out.println("extraTreasure : " + extraTreasure);
-						System.out.println("gameTreasureToCatch : " + gameTreasureToCatch + "\n");
-
 						game.setTreasureToCatch(oldExtra);
 	 				}
 				}
@@ -267,7 +262,7 @@ public class Plateau implements BoardGames {
 						treasure.getTreasureType(),
 						treasure.isCatched()
 					);
-					
+
 					treasuresToAdd.add(movedTreasure);
 				}
 
@@ -286,46 +281,41 @@ public class Plateau implements BoardGames {
 				}
 			}
 		}
-		
-		for (Treasures treasure : this.treasureToDraw) {
-			if ((this.unchangedAxe.equals("x") && treasure.getTreasureX() == position) || (this.unchangedAxe.equals("y") && treasure.getTreasureY() == position)) {
-				// Suivant le type de push, on vérifie si le couloir est au bord du plateau
-				if ((direction.equals("up") && treasure.getTreasureY() == 0) ||
-						(direction.equals("down") && treasure.getTreasureY() == 6) ||
-						(direction.equals("left") && treasure.getTreasureX() == 0) ||
-						(direction.equals("right") && treasure.getTreasureX() == 6)) {
-					movedTreasure = new Treasure(
-							-1,
-							-1,
-							treasure.getTreasureId(),
-							treasure.getTreasureType(),
-							treasure.isCatched()
-					);
-				} else {
-					if (treasure.getTreasureX() == -1 && treasure.getTreasureY() == -1) {
-						movedTreasure = new Treasure(
-								this.insertX,
-								this.insertY,
-								treasure.getTreasureId(),
-								treasure.getTreasureType(),
-								treasure.isCatched()
+
+		for (Treasures treasureToDraw : this.treasureToDraw) {
+			if (this.extraTreasure != null && this.extraTreasure.getTreasureId() == treasureToDraw.getTreasureId()) {
+				Treasure newTreasure = new Treasure(
+						this.extraTreasure.getTreasureX(),
+						this.extraTreasure.getTreasureY(),
+						treasureToDraw.getTreasureId(),
+						treasureToDraw.getTreasureType(),
+						treasureToDraw.isCatched()
+				);
+
+
+
+			} else {
+				for (Treasures treasureToAdd : treasuresToAdd) {
+					if (
+							treasureToAdd.getTreasureId() == treasureToDraw.getTreasureId() &&
+									(treasureToAdd.getTreasureX() != treasureToDraw.getTreasureX() ||
+											treasureToAdd.getTreasureY() != treasureToDraw.getTreasureY())
+							) {
+						Treasure newTreasure = new Treasure(
+								treasureToAdd.getTreasureX(),
+								treasureToAdd.getTreasureY(),
+								treasureToDraw.getTreasureId(),
+								treasureToDraw.getTreasureType(),
+								treasureToDraw.isCatched()
 						);
-					} else {
-						movedTreasure = new Treasure(
-								treasure.getTreasureX() + this.updateX,
-								treasure.getTreasureY() + this.updateY,
-								treasure.getTreasureId(),
-								treasure.getTreasureType(),
-								treasure.isCatched()
-						);
+
+						drawableTreasureToAdd.add(newTreasure);
+						drawableTreasureToRemove.add(treasureToDraw);
 					}
 				}
-
-				drawableTreasureToAdd.add(movedTreasure);
-				drawableTreasureToRemove.add(treasure);
 			}
 		}
-		
+
 		this.treasureToDraw.removeAll(drawableTreasureToRemove);
 		this.treasureToDraw.addAll(drawableTreasureToAdd);
 		
@@ -632,7 +622,7 @@ public class Plateau implements BoardGames {
 				}
 			}
 			if(treasureToDelete == null) {
-				System.out.println("TRESOR PAS SUPPRIMER");
+				System.err.println("Le trésor n'est pas supprimé");
 			}
 			this.treasures.remove(treasureToDelete);
 			this.jeuCourant.setTreasureToCatch(null);
@@ -691,75 +681,4 @@ public class Plateau implements BoardGames {
 	private String unchangedAxe = "";
 	private int updateX = 0;
 	private int updateY = 0;
-
-
-	// tests
-	public static void main(String[] args){
-		System.out.println("Class Plateau.java\n");
-		Plateau plateau = new Plateau(2);
-		Comparator compareCouloirs = new Comparator<Couloirs>() {
-			@Override
-			public int compare(Couloirs couloir1, Couloirs couloir2) {
-				int compare;
-				if(couloir1.getX() == couloir2.getX()) {
-					if(couloir1.getY() == couloir2.getY()) {
-						compare = 0;
-					}
-					else if (couloir1.getY() > couloir2.getY()){
-						compare = 1;
-					}
-					else {
-						compare = -1;
-					}
-				}
-				else if(couloir1.getX() > couloir2.getX()){
-					compare = 1;
-				}
-				else {
-					compare = -1;
-				}
-				return compare;
-			}
-		};
-		Comparator compareTreasures = new Comparator<Treasures>() {
-			@Override
-			public int compare(Treasures treasure1, Treasures treasure2) {
-				int compare;
-				if(treasure1.getTreasureX() == treasure2.getTreasureX()) {
-					if(treasure1.getTreasureY() == treasure2.getTreasureY()) {
-						compare = 0;
-					}
-					else if (treasure1.getTreasureY() > treasure2.getTreasureY()){
-						compare = 1;
-					}
-					else {
-						compare = -1;
-					}
-				}
-				else if(treasure1.getTreasureX() > treasure2.getTreasureX()){
-					compare = 1;
-				}
-				else {
-					compare = -1;
-				}
-				return compare;
-			}
-		};
-
-		List<Treasures> moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
-
-		Collections.sort(moveableTreasures, compareTreasures);
-		System.out.println(moveableTreasures);
-
-		plateau.alterMaze(1, "up");
-		moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
-		Collections.sort(moveableTreasures, compareTreasures);
-		System.out.println(moveableTreasures);
-
-		plateau.alterMaze(1, "up");
-		moveableTreasures = plateau.getMoveableTreasures(plateau.treasureToDraw);
-		Collections.sort(moveableTreasures, compareTreasures);
-		System.out.println(moveableTreasures);
-	}
-
 }
